@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZGCVehicleBaseConfigViewController" customModule="Carcheck" customModuleProvider="target">
+            <connections>
+                <outlet property="baseConfigTableView" destination="7Z1-6f-ueN" id="Vu4-Gf-3Hx"/>
+                <outlet property="carTypeTitleLabel" destination="4k4-xE-g4L" id="YKW-RK-siG"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7Z1-6f-ueN">
+                    <rect key="frame" x="0.0" y="40" width="320" height="528"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4k4-xE-g4L">
+                    <rect key="frame" x="40" y="0.0" width="280" height="40"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="config_car" translatesAutoresizingMaskIntoConstraints="NO" id="eQN-Yf-WBi">
+                    <rect key="frame" x="11" y="11" width="18" height="18"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="7Z1-6f-ueN" secondAttribute="bottom" id="4f1-Yh-ly6"/>
+                <constraint firstItem="4k4-xE-g4L" firstAttribute="leading" secondItem="eQN-Yf-WBi" secondAttribute="trailing" constant="11" id="BTM-ss-V3K"/>
+                <constraint firstAttribute="trailing" secondItem="4k4-xE-g4L" secondAttribute="trailing" id="EVe-xG-4OY"/>
+                <constraint firstItem="eQN-Yf-WBi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="11" id="VxY-i1-ScJ"/>
+                <constraint firstAttribute="trailing" secondItem="7Z1-6f-ueN" secondAttribute="trailing" id="WM3-4U-EvR"/>
+                <constraint firstItem="7Z1-6f-ueN" firstAttribute="top" secondItem="eQN-Yf-WBi" secondAttribute="bottom" constant="11" id="gD4-R0-f84"/>
+                <constraint firstItem="7Z1-6f-ueN" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="40" id="lVe-0J-Aad"/>
+                <constraint firstItem="eQN-Yf-WBi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="11" id="nsx-rf-Twf"/>
+                <constraint firstItem="4k4-xE-g4L" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ntB-ZJ-lYM"/>
+                <constraint firstItem="4k4-xE-g4L" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="ooE-bh-txW"/>
+                <constraint firstItem="7Z1-6f-ueN" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="x97-4f-GU7"/>
+                <constraint firstItem="7Z1-6f-ueN" firstAttribute="top" secondItem="4k4-xE-g4L" secondAttribute="bottom" id="ylf-qF-IUW"/>
+            </constraints>
+            <point key="canvasLocation" x="426" y="294"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="config_car" width="19" height="19"/>
+    </resources>
+</document>

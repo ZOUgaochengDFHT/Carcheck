@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="PWp-Qd-vNf">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Base Tab Bar Controller-->
+        <scene sceneID="7eb-bk-WUT">
+            <objects>
+                <tabBarController id="PWp-Qd-vNf" customClass="ZGCBaseTabBarController" customModule="Carcheck" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="6BD-8Y-Ln2">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="979-ck-GLL" kind="relationship" relationship="viewControllers" id="In1-0V-wpq"/>
+                        <segue destination="yxP-Kv-pBD" kind="relationship" relationship="viewControllers" id="dUO-tb-fcU"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bww-60-D1K" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="477.86666666666667" y="752.60000000000002"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="9fl-LS-wW7">
+            <objects>
+                <navigationController id="979-ck-GLL" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="tabbar_home_n" selectedImage="tabbar_home_h" id="Pk6-Un-N4a">
+                        <inset key="imageInsets" minX="-40" minY="7" maxX="40" maxY="-7"/>
+                    </tabBarItem>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="V0v-Pd-Plp">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="hth-EK-oaL" kind="relationship" relationship="rootViewController" id="RyI-go-pIz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6B9-4u-5ST" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="909.86666666666667" y="391.92000000000002"/>
+        </scene>
+        <!--Home Page View Controller-->
+        <scene sceneID="KIm-ut-b13">
+            <objects>
+                <viewController id="hth-EK-oaL" customClass="ZGCHomePageViewController" customModule="Carcheck" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Wpr-qo-2BB"/>
+                        <viewControllerLayoutGuide type="bottom" id="peB-Qn-fSE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cR4-Ll-dYr">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XUn-Nd-mhw">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="peB-Qn-fSE" firstAttribute="top" secondItem="XUn-Nd-mhw" secondAttribute="bottom" constant="-49" id="YRs-ek-g0g"/>
+                            <constraint firstItem="XUn-Nd-mhw" firstAttribute="leading" secondItem="cR4-Ll-dYr" secondAttribute="leadingMargin" constant="-16" id="bEh-gm-fYq"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="XUn-Nd-mhw" secondAttribute="trailing" constant="-16" id="lYO-Tz-TCP"/>
+                            <constraint firstItem="XUn-Nd-mhw" firstAttribute="top" secondItem="cR4-Ll-dYr" secondAttribute="topMargin" id="rOQ-da-EqB"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="VOK-Wp-0pd"/>
+                    <connections>
+                        <outlet property="homeTableView" destination="XUn-Nd-mhw" id="QKP-uN-dRA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UF0-e1-9LE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1293" y="391"/>
+        </scene>
+        <!--Setting View Controller-->
+        <scene sceneID="fvH-6G-nZI">
+            <objects>
+                <viewController id="ZG1-g5-LRq" customClass="ZGCSettingViewController" customModule="Carcheck" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="345-K2-lpM"/>
+                        <viewControllerLayoutGuide type="bottom" id="ClH-wb-caR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="qaz-Wq-Qp9">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="130" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="nd2-MV-4Rg">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ClH-wb-caR" firstAttribute="top" secondItem="nd2-MV-4Rg" secondAttribute="bottom" constant="-49" id="MG9-Ao-Mcn"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nd2-MV-4Rg" secondAttribute="trailing" constant="-16" id="OBb-i3-kcA"/>
+                            <constraint firstItem="nd2-MV-4Rg" firstAttribute="top" secondItem="345-K2-lpM" secondAttribute="bottom" id="Ro0-Ob-hN1"/>
+                            <constraint firstItem="nd2-MV-4Rg" firstAttribute="leading" secondItem="qaz-Wq-Qp9" secondAttribute="leadingMargin" constant="-16" id="mzV-KP-tYK"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="EJi-eo-zz4"/>
+                    <connections>
+                        <outlet property="settingListTableView" destination="nd2-MV-4Rg" id="Jsd-Kz-Udn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0xT-RY-GbF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1293" y="1117"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="bM3-GE-Mwh">
+            <objects>
+                <navigationController id="yxP-Kv-pBD" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="tabbar_setting_n" selectedImage="tabbar_setting_h" id="Wbw-eq-Cmh">
+                        <inset key="imageInsets" minX="40" minY="7" maxX="-40" maxY="-7"/>
+                    </tabBarItem>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="El7-fA-sem">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ZG1-g5-LRq" kind="relationship" relationship="rootViewController" id="DZ1-cd-IMW"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wlc-kh-TA1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="909.86666666666667" y="1117.0666666666666"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="tabbar_home_h" width="25" height="36"/>
+        <image name="tabbar_home_n" width="25" height="36"/>
+        <image name="tabbar_setting_h" width="25" height="36"/>
+        <image name="tabbar_setting_n" width="25" height="36"/>
+    </resources>
+</document>

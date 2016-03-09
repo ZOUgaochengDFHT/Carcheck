@@ -34,7 +34,7 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
         UserDefault.setObject(tableNameArr[index], forKey: "tableName")
         UserDefault.synchronize()
         
-        let unUploadArr = ZGCUnUploadManager.shareInstance().selectUnUploads() as NSArray
+        let unUploadArr = ZGCUnUploadManager().selectUnUploads() as NSArray
         if unUploadArr.count > 0 {
             unUploadArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                 self.modelArr.addObject(object)
@@ -97,7 +97,6 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
         let rateAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "查看" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             UserDefault.setObject(notuploadModel.databasePath, forKey: "subDir")
             UserDefault.synchronize()
-            
             let configDetailVC = ZGCCarValueDetailViewController()
             self.navigationController?.pushViewController(configDetailVC, animated: true)
         })

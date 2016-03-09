@@ -76,48 +76,31 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
         
     
         
-//        Alamofire.upload(.POST, BaseURLString.stringByAppendingString("pingche/illegal"), headers: ["token":UserDefault.objectForKey("token") as! String], multipartFormData: { multipartFormData in
-//        
-//            multipartFormData.appendBodyPart(data: "冀JKX715".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "carnum")
-//            multipartFormData.appendBodyPart(data: "A1D9867B2794016".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "vin")
-//            multipartFormData.appendBodyPart(data: "02".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "type")
-//
-//            
-//            }, encodingMemoryThreshold: 0) { encodingResult in
-//                switch encodingResult {
-//                case .Success(let upload, _, _):
-//                    upload.responseJSON { response in
-//                        debugPrint(response)
-//                    }
-//                case .Failure(let encodingError):
-//                    print(encodingError)
-//                }
-//                
-//        }
+        Alamofire.upload(.POST, BaseURLString.stringByAppendingString("pingche/illegal"), headers: ["token":UserDefault.objectForKey("token") as! String], multipartFormData: { multipartFormData in
         
-        
-        Alamofire.upload(.POST, BaseURLString.stringByAppendingString("brand/valuation"), headers: ["token":UserDefault.objectForKey("token") as! String], multipartFormData: { multipartFormData in
-            
-            multipartFormData.appendBodyPart(data: "邹高成".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "username")
-            multipartFormData.appendBodyPart(data: String(3361).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "styleId")
-            
-            multipartFormData.appendBodyPart(data: "2015-12-12".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "date")
-            multipartFormData.appendBodyPart(data: String(2000).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "milage")
-            
+            multipartFormData.appendBodyPart(data: "冀JKX715".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "carnum")
+            multipartFormData.appendBodyPart(data: "A1D9867B2794016".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "vin")
+            multipartFormData.appendBodyPart(data: "02".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "type")
             
             }, encodingMemoryThreshold: 0) { encodingResult in
                 switch encodingResult {
                 case .Success(let upload, _, _):
                     upload.responseJSON { response in
                         if let json = response.result.value {
-                            print(json.objectForKey("message"))
+                            print(json)
+
+                            let staticModel = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
+                            print(staticModel.message)
                         }
+                        
                     }
                 case .Failure(let encodingError):
                     print(encodingError)
                 }
                 
         }
+        
+        
         
 //        let url = BaseURLString.stringByAppendingString("recognize/drivingLicense")
 //        

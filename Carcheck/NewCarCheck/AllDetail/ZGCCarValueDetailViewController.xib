@@ -17,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mh3-Xe-35N" customClass="ZGCPhotosListTableView" customModule="Carcheck" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                    <rect key="frame" x="0.0" y="49" width="320" height="470"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
@@ -25,7 +25,7 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="Mh3-Xe-35N" secondAttribute="trailing" id="4V3-K0-eEW"/>
                 <constraint firstAttribute="bottom" secondItem="Mh3-Xe-35N" secondAttribute="bottom" constant="49" id="dxi-x8-5SU"/>
-                <constraint firstItem="Mh3-Xe-35N" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="tav-eK-AXv"/>
+                <constraint firstItem="Mh3-Xe-35N" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="49" id="tav-eK-AXv"/>
                 <constraint firstItem="Mh3-Xe-35N" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="xGu-yj-1xQ"/>
             </constraints>
             <point key="canvasLocation" x="427" y="258"/>

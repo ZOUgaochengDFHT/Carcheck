@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
+class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate,  UITextFieldDelegate {
     
     var carBaseScrollView: ZGCCarBaseScrollView!
     @IBOutlet weak var photosListTableView: UITableView!
@@ -23,9 +23,17 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
     var photoDeleteBarView: ZGCPhotoDeleteBarView!
     
     var configDetailScrollView: ZGCVehicleConfigDetailScrollView!
+    
+    var configDetailTableView: ZGCConfigDetailTableView!
     var allTotalCount = 0
     
-    var tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度","右前45度"] as NSArray
+    var rightTextField: UITextField!
+    
+    var picturesArr = NSMutableArray()
+    var attri2DArr = NSMutableArray()
+    var array2D = NSMutableArray()
+    
+    var tabTitleArr = ["车辆正面车主合照","左前45度","左后45度","右后45度","右前45度"] as NSArray
 
     
     let preTitleArr = ["业务类型", "车主姓名", "联系方式", "车牌号", "车辆所在地", "车辆VIN码", "发动机号", "注册日期", "车辆型号", "车辆排量", "变速器类型", "驱动方式", "燃油类型", "出厂日期", "车牌类型", "环保标准", "行驶里程", "车身颜色", "车钥匙"] as NSArray
@@ -60,7 +68,8 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         self.initRightBtn()
         
 
-    
+//        self.getSqliteOrDocumentsData()
+        
         photosListTableView.delegate = self
         photosListTableView.dataSource = self
         photosListTableView.registerClass(ZGCPhotosListTableViewCell.self, forCellReuseIdentifier: identifier)
@@ -72,67 +81,139 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         
         
         
-        carBaseScrollView = ZGCCarBaseScrollView.init(frame: CGRectMake(0, 0, KScreenWidth, KScreenHeight - NavAndStausHeight - 49), tar:self, sel:"tapAction:")
+        carBaseScrollView = ZGCCarBaseScrollView.init(frame: CGRectMake(0, 49, KScreenWidth, KScreenHeight - NavAndStausHeight - 98), tar:self, sel:"tapAction:")
         carBaseScrollView.backgroundColor = UIColor.clearColor()
         self.view.addSubview(carBaseScrollView)
         carBaseScrollView.delegate = self
-        carBaseScrollView.setSelfViewBoundsOriginYHandler = {
-            (Y:CGFloat) -> Void in
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.setSelfViewBoundsOriginY(Y)
-            })
-        }
         
-    
-        configDetailScrollView = ZGCVehicleConfigDetailScrollView.init(frame: CGRectMake(0, 0, KScreenWidth, KScreenHeight - NavAndStausHeight - 49), tar:self, sel:"tapAction:")
-        configDetailScrollView.backgroundColor = UIColor.clearColor()
-        configDetailScrollView.hidden = true
-        self.view.addSubview(configDetailScrollView)
-        configDetailScrollView.delegate = self
-        configDetailScrollView.toBaseConfigVCHandler = {
-            let vehicleBaseConfigVC = ZGCVehicleBaseConfigViewController()
-            self.navigationController?.pushViewController(vehicleBaseConfigVC, animated: true)
-        }
+
+        
+        configDetailTableView = ZGCConfigDetailTableView(frame: CGRectMake(0, carBaseScrollView.top, KScreenWidth, carBaseScrollView.height), style: UITableViewStyle.Plain)
+        configDetailTableView.tar = self
+        configDetailTableView.sel = "tapAction:"
+        self.configDetailTableView.array2D = array2D
+        self.configDetailTableView.attri2DArr = attri2DArr
+        configDetailTableView.hidden = true
+        self.view.addSubview(configDetailTableView)
         
         self.initUpOrNextView(NSArray(), imgArr: ["detail_save", "detail_upload"])
+        
+        let bgView = UIView(frame: CGRectMake(0, 0, KScreenWidth, 49))
+        bgView.backgroundColor = UIColor(red: 89/255.0, green: 79/255.0, blue: 77/255.0, alpha: 1.0)
+        self.view.addSubview(bgView)
+        
+        let preTitleLabel = UILabel()
+        preTitleLabel.frame = CGRectMake(0 , 3, (KScreenWidth-20)/4, 43)
+        preTitleLabel.font = UIFont.systemFontOfSize(13.0)
+        preTitleLabel.backgroundColor = UIColor.clearColor()
+        preTitleLabel.textAlignment = NSTextAlignment.Right
+        preTitleLabel.textColor = UIColor.whiteColor()
+        preTitleLabel.text = "贷款需求"
+        bgView.addSubview(preTitleLabel)
+        
+        
+        rightTextField = UITextField.init(frame: CGRectMake(preTitleLabel.right + 10, preTitleLabel.top, (KScreenWidth - 20)/2, preTitleLabel.height))
+        rightTextField.delegate = self
+        rightTextField.borderStyle = UITextBorderStyle.None
+        rightTextField.layer.borderColor = UIColor(red: 212/255.0, green: 213/255.0, blue: 213/255.0, alpha: 1.0).CGColor
+        rightTextField.layer.borderWidth = 1.0
+        rightTextField.layer.cornerRadius = 8.0
+        rightTextField.tintColor = UIColor.whiteColor()
+        rightTextField.textColor = UIColor.whiteColor()
+        rightTextField.returnKeyType = UIReturnKeyType.Done
+        bgView.addSubview(rightTextField)
+        
+        
+        let suffixTitleLabel = UILabel()
+        suffixTitleLabel.frame = CGRectMake(rightTextField.right + 10 , rightTextField.top, (KScreenWidth - 20)/4, preTitleLabel.height)
+        suffixTitleLabel.font = UIFont.systemFontOfSize(13.0)
+        suffixTitleLabel.backgroundColor = UIColor.clearColor()
+        suffixTitleLabel.textColor = UIColor.whiteColor()
+        suffixTitleLabel.text = "万元"
+        bgView.addSubview(suffixTitleLabel)
+
+        
+        (ZGCImageTwoDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop4) -> Void in
+            let image = object as! Image
+            print(image.path!)
+        })
+        
+        
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        self.attri2DArr.removeAllObjects()
+        self.picturesArr.removeAllObjects()
+        self.getSqliteOrDocumentsData()
+    }
+    
+    func getSqliteOrDocumentsData () {
+        (ZGCConfigDBManager().selectConfigs() as NSArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+            let config = object as! Config
+            let attriArr = NSMutableArray()
+            attriArr.addObject(config.name!)
+            attriArr.addObject(config.instruction!)
+            self.attri2DArr.addObject(attriArr.mutableCopy())
+        }
+        
+        let dir = UserDefault.objectForKey("subDir")?.stringByAppendingPathComponent("车辆配置-加装配置")
+        
+        if FileManager.isExecutableFileAtPath(dir!) {
+            
+            (ZGCImageDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                let image = object as! Image
+                print(image.path)
+                let aImage = UIImage(named: image.path!)
+                self.picturesArr.addObject(aImage!)
+                
+            })
+            
+            self.createArray2D()
+//            if self.picturesArr.count > 1 {
+//                self.rightBtn.hidden = false
+//            }else {
+//                self.rightBtn.hidden = true
+//            }
+            
+        }
+        
         
         if totalStoreImgArr.count > 0 {
             self.createArray3D()
         }else {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                
-                self.tabTitleArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
-                    let dir = NSString(string: UserDefault.objectForKey("subDir")!.stringByAppendingString("/拍照列表")).stringByAppendingPathComponent(self.tabTitleArr[index] as! String)
-                    
-                    if FileManager.isExecutableFileAtPath(dir) {
-                        let currentDirArr:NSArray!
-                        do {
-                            try currentDirArr = FileManager.contentsOfDirectoryAtPath(dir)
-                            
-                            let currentStoreImgArr = NSMutableArray()
-                            
-                            currentDirArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                                let image = UIImage(named: dir.stringByAppendingString("/").stringByAppendingString(object as! String))
-                                currentStoreImgArr.addObject(image!)
-                            })
-                            
-                            self.totalStoreImgArr.addObject(currentStoreImgArr)
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                self.createArray3D()
-                                
-                            })
-                        } catch let error as NSError {
-                            NSLog("\(error.localizedDescription)")
-                        }
-                    }
-                }
-            })
             
-
+            self.tabTitleArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+                let dir = NSString(string: UserDefault.objectForKey("subDir")!.stringByAppendingString("/拍照列表")).stringByAppendingPathComponent(object as! String)
+                
+                if FileManager.isExecutableFileAtPath(dir) {
+                    self.rightBtn.hidden = false
+                    let currentDirArr:NSArray!
+                    do {
+                        try currentDirArr = FileManager.contentsOfDirectoryAtPath(dir)
+                        
+                        let currentStoreImgArr = NSMutableArray()
+                        
+                        currentDirArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                            let image = UIImage(named: dir.stringByAppendingString("/").stringByAppendingString(object as! String))
+                            print(dir.stringByAppendingString("/").stringByAppendingString(object as! String))
+                            currentStoreImgArr.addObject(image!)
+                        })
+                        
+                        self.totalStoreImgArr.addObject(currentStoreImgArr)
+                    } catch let error as NSError {
+                        NSLog("\(error.localizedDescription)")
+                    }
+                }else {
+                    self.totalStoreImgArr.addObject(NSMutableArray())
+                }
+            }
+            self.createArray3D()
         }
-        
 
-        // Do any additional setup after loading the view.
     }
     
     func initRightBtn() {
@@ -176,13 +257,13 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
     func segmentedControlIndexChange(segmentedControl:UISegmentedControl) {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            configDetailScrollView.hidden = true
+            configDetailTableView.hidden = true
             carBaseScrollView.hidden = false
             photosListTableView.hidden = true
             rightBtn.hidden = true
             break
         case 1:
-            configDetailScrollView.hidden = true
+            configDetailTableView.hidden = true
             photosListTableView.hidden = false
             carBaseScrollView.hidden = true
             if self.totalStoreImgArr.count > 0 {
@@ -192,7 +273,7 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
             }
             break
         case 2:
-            configDetailScrollView.hidden = false
+            configDetailTableView.hidden = false
             carBaseScrollView.hidden = true
             rightBtn.hidden = true
             if photosListTableView != nil {
@@ -284,6 +365,9 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        if rightTextField.text != nil {
+            carBaseScrollView.setLastStr(rightTextField.text!)
+        }
         self.view.endEditing(true)
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             self.setSelfViewBoundsOriginY(0)
@@ -322,22 +406,38 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
                            self.deleteAllImage()
                         }else {
                             let copyImgArr = self.totalStoreImgArr.mutableCopy() as! NSMutableArray
+                            
                             self.deleteOrAddImgArr.enumerateObjectsUsingBlock( { (object, index, stop) -> Void in
                                 let deleteImg = object as! UIImage
                                 
-                                
-                                self.totalStoreImgArr.enumerateObjectsUsingBlock({ (object: AnyObject!, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                                self.totalStoreImgArr.enumerateObjectsUsingBlock({ (object, index, stop1) -> Void in
                                     let shouldStop: ObjCBool = true
-
-                                    let mArr = object as! NSMutableArray
+                                    let mArr = (object as! NSMutableArray).mutableCopy()
                                     let selectedIndex = index
-                                   (object as! NSMutableArray).enumerateObjectsUsingBlock({ (object, index, stop1) -> Void in
+                                    
+                                   (object as! NSMutableArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                                     
                                         let img = object as! UIImage
                                         if img == deleteImg {
                                             mArr.removeObjectAtIndex(index)
                                             copyImgArr.replaceObjectAtIndex(selectedIndex, withObject: mArr.mutableCopy())
-                                            stop.initialize(shouldStop)
+                                            
+                                            
+                                            (ZGCImageTwoDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                                                let image = object as! Image
+                                                let aImage:UIImage = UIImage(named: image.path!)!
+                                                
+                                                if aImage == deleteImg {
+                                                    do {
+                                                        try FileManager.removeItemAtPath(image.path!)
+                                                        ZGCImageTwoDBManager().deleteImage(image)
+                                                    } catch let error as NSError {
+                                                        NSLog("\(error.localizedDescription)")
+                                                    }
+                                                    stop1.initialize(shouldStop)
+                                                }
+                                            })
+                         
                                         }
                                     })
                                 })
@@ -372,6 +472,30 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         self.rightButtonClicked(self.rightBtn)
         self.rightBtn.hidden = true
         self.deleteOrAddImgArr.removeAllObjects()
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            (ZGCImageTwoDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                let image = object as! Image
+                print(image.path!)
+                ZGCImageTwoDBManager().deleteImage(image)
+                
+                do {
+                    try FileManager.removeItemAtPath(image.path!)
+                } catch let error as NSError {
+                    NSLog("\(error.localizedDescription)")
+                }
+            })
+            //
+            //            print(ZGCImageDBManager.shareInstance().selectImages())
+            //            let currentDirArr:NSArray!
+            //            do {
+            //                try currentDirArr = FileManager.contentsOfDirectoryAtPath(self.dir)
+            //                print(currentDirArr)
+            //
+            //            } catch let error as NSError {
+            //                NSLog("\(error.localizedDescription)")
+            //            }
+        })
     }
     
     func createArray3D () {
@@ -409,6 +533,34 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         photosListTableView.reloadData()
 
     }
+    
+    func createArray2D () {        
+        let array2DCount:Int = 3
+        self.array2D.removeAllObjects()
+        
+        var array = NSMutableArray(capacity: array2DCount)
+        self.picturesArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+            
+            array.addObject(object)
+            if array.count % array2DCount  == 0 && index != 0 {
+                self.array2D.addObject(array.mutableCopy())
+                array = NSMutableArray(capacity: array2DCount)
+            }else if self.picturesArr.count % array2DCount  < array2DCount && self.picturesArr.count == index + 1 {
+                self.array2D.addObject(array.mutableCopy())
+            }
+        }
+        
+        self.configDetailTableView.reloadData()
+
+    }
+
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        carBaseScrollView.setLastStr(textField.text!)
+        self.view.endEditing(true)
+        return true
+    }
+    
     
     /*
     // MARK: - Navigation

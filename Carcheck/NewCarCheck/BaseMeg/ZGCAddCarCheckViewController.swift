@@ -21,6 +21,7 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     var contentArr = NSMutableArray()
     var conLabel: UILabel!
     var customDatePickerView: ZGCCustomDatePickerView!
+    var licenseTypeNum = 0
     
     var isCreateNew = false
     var dbManager: ZGCPersonDBManager!
@@ -30,15 +31,18 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     let preTitleArr = ["业务类型", "车主姓名", "联系方式", "车牌号", "车辆所在地", "车辆VIN码", "发动机号", "注册日期", "车辆型号", "车辆排量", "变速器类型", "驱动方式", "燃油类型", "出厂日期", "车牌类型", "环保标准", "行驶里程", "车身颜色", "车钥匙"] as NSArray
 
     func selectAtIndex(index: Int32, inCombox _combox: LMComBoxView!) {
-        print(_combox.tag)
+        print(index)
         let comboxIndex = _combox.tag - 200
-        let titleArr = self.totalTitleListArr[comboxIndex] as! NSMutableArray
+        let titleArr = _combox.titlesList
         let comboxStr = titleArr[Int(index)]
         if comboxIndex == 3 {
             let mStr = NSMutableString(string: self.contentArr[comboxIndex] as! String)
             mStr.replaceCharactersInRange(NSMakeRange(0, 1), withString: comboxStr as! String)
             self.contentArr.replaceObjectAtIndex(comboxIndex, withObject: mStr)
         }else {
+            if comboxIndex == 14 {
+                licenseTypeNum = Int(index)
+            }
             self.contentArr.replaceObjectAtIndex(comboxIndex, withObject: comboxStr)
         }
 
@@ -68,9 +72,20 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 comBox.arrowImgName = "down_dark0.png"
                 comBox.delegate = self
                 comBox.titlesList = self.totalTitleListArr[i] as! NSMutableArray
+                if self.isCreateNew == false {
+                    let str = self.conArr[index] as! String
+                    comBox.titlesList.enumerateObjectsUsingBlock({ (object: AnyObject!, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                        let shouldStop: ObjCBool = true
+                        if (str == String(object) && index != 3) || (index == 3 && (str as NSString).substringToIndex(1) == String(object)) {
+                            comBox.defaultIndex = Int32(idx)
+                            stop.initialize(shouldStop)
+                        }
+                    })
+                }
+                
                 comBox.supView = self.comboxScrollView
                 comBox.defaultSettings()
-                comBox.tag = 200 + i
+                comBox.tag = 200 + index
                 i = i + 1
 
                 
@@ -107,7 +122,14 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         rightTextField.layer.borderWidth = 0.5
         rightTextField.layer.cornerRadius = 4
         rightTextField.clipsToBounds = true
-        rightTextField.text = "qq"
+        if isCreateNew == true {
+            rightTextField.text = "qq"
+        }else {
+            rightTextField.text = conArr[index] as? String
+            if index == 3 {
+                rightTextField.text = (conArr[index] as! NSString).substringFromIndex(1)
+            }
+        }
         rightTextField.textColor = UIColor.darkGrayColor()
         rightTextField.font = UIFont.systemFontOfSize(12.0)
         rightTextField.tag = 600 + index
@@ -168,7 +190,13 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         conLabel.layer.borderColor = kBorderColor.CGColor;
         conLabel.layer.borderWidth = 0.5
         conLabel.layer.cornerRadius = 4
-        conLabel.text = ""
+        conLabel.numberOfLines = 0
+        conLabel.textColor = UIColor.darkGrayColor()
+        if isCreateNew == true {
+            conLabel.text = ""
+        }else {
+            conLabel.text = conArr[index] as? String
+        }
         self.contentArr.insertObject(conLabel.text!, atIndex: index)
         self.comboxScrollView.addSubview(conLabel)
         conLabel.userInteractionEnabled = true
@@ -212,7 +240,8 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         
 
         if self.isCreateNew == false {
-            conArr = ZGCPersonDBManager.shareInstance().selectPersons() as NSArray
+            dbManager = ZGCPersonDBManager()
+            conArr = dbManager.selectPersons()
         }
 
         self.showLoadingStatusHUD("")
@@ -269,39 +298,14 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 self.totalTitleListArr = [typeArr, chepaiArr, biansuqiArr, qudongArr, ranyouArr, chepaiArray,  huanbaoArr, keysArr]
                 
                 self.initViews()
-            }
-        }
-        
-        
-        if isCreateNew == true {
-            
-            if UserDefault.objectForKey("indexArr") == nil {
                 
-                let indexArr = NSMutableArray()
-                let d:Double = 1000
-                indexArr.addObject(d)
-                UserDefault.setObject(NSArray(object: indexArr), forKey: "indexArr")
-            }else {
-                
-                let indexArr = (UserDefault.objectForKey("indexArr")?.lastObject)!.mutableCopy()
-                var d = indexArr.lastObject as! Double
-                d = d + 1
-                indexArr.addObject(d)
-                UserDefault.setObject(NSArray(object: indexArr), forKey: "indexArr")
-            }
-            UserDefault.synchronize()
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                let subDir = CreateSubDocumentsDirectory()
-                self.dbManager = ZGCPersonDBManager()
-                
-                let dateStr = GetCurrentDateTransformToDateStr()
-                let unUpload = UnUpload(name: "", saveTime: dateStr, state: "未上传", licenseNo: "", vehicleType: "", databasePath:subDir)
-                ZGCUnUploadManager.shareInstance().addUnUpload(unUpload, tableName: "T_UnUpload")
+               
 
-            })
+            }
         }
-        // Do any additional setup after loading the view.
+        
+        
+                // Do any additional setup after loading the view.
     }
     
     
@@ -396,20 +400,23 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         
         comboxScrollView.closeAllTheComBoxView()
         if tap.view!.tag == 335 {
-            preTitleArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                if index != 0 && index != 18 && index != 15 && index != 14 && (index < 10 || index > 12) && index != 8 {
-                    let rightTextField = self.comboxScrollView.viewWithTag(600 + index) as! UITextField
-                    if index == 3 {
-                        let mStr = NSMutableString(string: self.contentArr[index] as! String)
-                        mStr.replaceCharactersInRange(NSMakeRange(1, mStr.length - 1), withString: rightTextField.text!)
-                        self.contentArr.replaceObjectAtIndex(index, withObject: mStr)
-                    }else {
-                        self.contentArr.replaceObjectAtIndex(index, withObject: rightTextField.text!)
+            if isCreateNew == true {
+                preTitleArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                    if index != 0 && index != 18 && index != 15 && index != 14 && (index < 10 || index > 12) && index != 8 {
+                        let rightTextField = self.comboxScrollView.viewWithTag(600 + index) as! UITextField
+                        if index == 3 {
+                            let mStr = NSMutableString(string: self.contentArr[index] as! String)
+                            mStr.replaceCharactersInRange(NSMakeRange(1, mStr.length - 1), withString: rightTextField.text!)
+                            self.contentArr.replaceObjectAtIndex(index, withObject: mStr)
+                        }else {
+                            self.contentArr.replaceObjectAtIndex(index, withObject: rightTextField.text!)
+                        }
+                    }else if index == 8 {
+                        self.contentArr.replaceObjectAtIndex(index, withObject: self.conLabel.text!)
                     }
-                }else if index == 8 {
-                    self.contentArr.replaceObjectAtIndex(index, withObject: self.conLabel.text!)
-                }
-            })
+                })
+
+            }
             
             if contentArr.count > 19 {
                 contentArr.removeLastObject()
@@ -430,16 +437,47 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
             
    
             // -MARK:- 添加数据到数据库
-            let person = Person(type: contentArr[0] as? String, name: contentArr[1] as? String, phone: contentArr[2] as? String, licenseNo: contentArr[3] as? String, location: contentArr[4] as? String, vin: contentArr[5] as? String, engineNo: contentArr[6] as? String, regisDate: contentArr[7] as? String, vehicleType: contentArr[8] as? String, vehicleEmiss: contentArr[9] as? String, transmType: contentArr[10] as? String, driveWay: contentArr[11] as? String, fuelType: contentArr[12] as? String, manufacDate: contentArr[13] as? String, licenseType: contentArr[14] as? String, envirProStand: contentArr[15] as? String, mileage: contentArr[15] as? String, bodyColor: contentArr[16] as? String, carKeys: contentArr[17] as? String, pid:"person")
+            let person = Person(type: contentArr[0] as? String, name: contentArr[1] as? String, phone: contentArr[2] as? String, licenseNo: contentArr[3] as? String, location: contentArr[4] as? String, vin: contentArr[5] as? String, engineNo: contentArr[6] as? String, regisDate: contentArr[7] as? String, vehicleType: contentArr[8] as? String, vehicleEmiss: contentArr[9] as? String, transmType: contentArr[10] as? String, driveWay: contentArr[11] as? String, fuelType: contentArr[12] as? String, manufacDate: contentArr[13] as? String, licenseType: contentArr[14] as? String, envirProStand: contentArr[15] as? String, mileage: contentArr[16] as? String, bodyColor: contentArr[17] as? String, carKeys: contentArr[18] as? String, pid:"person")
             
+            if self.isCreateNew == true {
+                isCreateNew = false
+                
+                if UserDefault.objectForKey("indexArr") == nil {
+                    
+                    let indexArr = NSMutableArray()
+                    let d:Double = 1000
+                    indexArr.addObject(d)
+                    UserDefault.setObject(NSArray(object: indexArr), forKey: "indexArr")
+                }else {
+                    
+                    let indexArr = (UserDefault.objectForKey("indexArr")?.lastObject)!.mutableCopy()
+                    var d = indexArr.lastObject as! Double
+                    d = d + 1
+                    indexArr.addObject(d)
+                    UserDefault.setObject(NSArray(object: indexArr), forKey: "indexArr")
+                }
+                UserDefault.synchronize()
+                
+                let subDir = CreateSubDocumentsDirectory()
+                self.dbManager = ZGCPersonDBManager()
+                
+                let dateStr = GetCurrentDateTransformToDateStr()
+                let unUpload = UnUpload(name: "", saveTime: dateStr, state: "未上传", licenseNo: "", vehicleType: "", databasePath:subDir)
+                ZGCUnUploadManager().addUnUpload(unUpload, tableName: "T_UnUpload")
+                
+                let other = Other(styleId:UserDefault.objectForKey("Value") as? String, licenseTypeNum: String(licenseTypeNum))
+                let otherDBManager = ZGCOtherDBManager()
+                otherDBManager.addOther(other)
+                
+            }
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+
                 if self.dbManager.selectPersons().count > 0 {
                     self.dbManager.updatePerson(person)
                 }else {
-                    self.dbManager.addPerson(person)
+                    self.dbManager.addPerson(person)                    
                 }
-                print(self.dbManager.selectPersons())
             })
 
             

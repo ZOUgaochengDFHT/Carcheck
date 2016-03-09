@@ -76,6 +76,7 @@ func CreateSubDocumentsDirectory () -> String{
 func CreateSubDirectories (dir:String) {
     do {
         try FileManager.createDirectoryAtPath(dir, withIntermediateDirectories: false, attributes: nil)
+        print(dir)
     } catch let error as NSError {
         NSLog("\(error.localizedDescription)")
     }
@@ -85,7 +86,6 @@ func WriteImageDataToFile (image:UIImage, dir:String, imgName:String) {
     let savePath = dir + "/".stringByAppendingString(imgName).stringByAppendingString(".png")
     let data = UIImagePNGRepresentation(image)
     NSFileManager.defaultManager().createFileAtPath(savePath, contents: data, attributes: nil)
-    print(savePath)
 }
 
 func GetFormateDate (date:NSDate) -> String {

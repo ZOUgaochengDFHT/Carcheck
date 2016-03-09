@@ -53,7 +53,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
 
         
         
-        (ZGCConfigDBManager.shareInstance().selectConfigs() as NSArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+        (ZGCConfigDBManager().selectConfigs() as NSArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
             let config = object as! Config
             let attriArr = NSMutableArray()
             attriArr.addObject(config.name!)
@@ -86,11 +86,11 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
         if FileManager.isExecutableFileAtPath(self.dir) {
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                (ZGCImageDBManager.shareInstance().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                (ZGCImageDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                     let image = object as! Image
                     let aImage = UIImage(named: image.path!)
                     self.picturesArr.addObject(aImage!)
-                    
+                    self.imageModelArr.addObject(image)
                 })
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -293,7 +293,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         let attriArr = self.attri2DArr[indexPath.row] as! NSMutableArray
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            let configDBManager =  ZGCConfigDBManager.shareInstance()
+            let configDBManager =  ZGCConfigDBManager()
             let config = Config(name: attriArr[0] as? String, instruction: attriArr[1] as? String, pid:String(indexPath.row))
             configDBManager.deleteConfig(config)
             //更新配置项pid、删除旧数据、重新写入
@@ -351,7 +351,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                 self.vehicleConfigTableView.reloadData()
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    let configDBManager =  ZGCConfigDBManager.shareInstance()
+                    let configDBManager =  ZGCConfigDBManager()
                     let config = Config(name: attriArr[0] as? String, instruction: attriArr[1] as? String, pid:String (self.attri2DArr.count - 1))
                     if self.selectedIndex == 500 {
                         configDBManager.addConfig(config)
@@ -373,7 +373,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                             self.deleteAllImage()
                         }else {
                             let copyImgArr = self.picturesArr.mutableCopy() as! NSMutableArray
-                            self.deleteOrAddImgArr.enumerateObjectsUsingBlock( { (object: AnyObject!, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                            self.deleteOrAddImgArr.enumerateObjectsUsingBlock( {(object, index, stop) -> Void in
                                 let deleteImg = object as! UIImage
                                 self.picturesArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                                     let shouldStop: ObjCBool = true
@@ -383,7 +383,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                                         copyImgArr.removeObject(deleteImg)
                                         let image = self.imageModelArr[index] as! Image
                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                                            ZGCImageDBManager.shareInstance().deleteImage(image)
+                                            ZGCImageDBManager().deleteImage(image)
                                             do {
                                                 try FileManager.removeItemAtPath(image.path!)
                                             } catch let error as NSError {
@@ -474,9 +474,9 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
         self.rightBtn.hidden = true
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            (ZGCImageDBManager.shareInstance().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+            (ZGCImageDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                 let image = object as! Image
-                ZGCImageDBManager.shareInstance().deleteImage(image)
+                ZGCImageDBManager().deleteImage(image)
                 
                 do {
                 try FileManager.removeItemAtPath(image.path!)

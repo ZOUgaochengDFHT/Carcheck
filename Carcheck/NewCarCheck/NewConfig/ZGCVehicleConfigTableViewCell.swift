@@ -26,6 +26,8 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
     var takePhotoView :ZGCTakePhotoView!
     var deleteOrAddImgHandler :ZGCPassDeleteOrAddImgBlock!
 
+    var takePhotoViewHidden = false
+    var editImgViewhidden = false
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -97,7 +99,7 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
                         iconImgView.setSelectedImgViewHiddenisTure(self.permitEditing)
 
                         
-                        if self.tag == self.maxCountThree && index == self.dataListArr.count - 1{
+                        if self.tag == self.maxCountThree && index == self.dataListArr.count - 1 && self.takePhotoViewHidden == false {
                             self.takePhotoView.frame = iconImgView.frame
                             self.takePhotoView.initWithTarget(self.tar, sel: self.sel)
                             self.takePhotoView.hidden = false
@@ -163,18 +165,21 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
                         
                     }
                     
-                    let editImg = UIImage(named: "config_edit")
-                    editImgView.frame = CGRectMake(KScreenWidth - (editImg?.size.width)! - 10, (40 - (editImg?.size.height)!)/2, (editImg?.size.width)!, (editImg?.size.height)!)
-                    editImgView.image = editImg
-                    editImgView.hidden = false
-                    addImgView.hidden = true
-                    editImgView.userInteractionEnabled = true
-                    if self.permitEditing == true {
-                        editImgView.userInteractionEnabled = false
+                    if editImgViewhidden == false {
+                        let editImg = UIImage(named: "config_edit")
+                        editImgView.frame = CGRectMake(KScreenWidth - (editImg?.size.width)! - 10, (40 - (editImg?.size.height)!)/2, (editImg?.size.width)!, (editImg?.size.height)!)
+                        editImgView.image = editImg
+                        editImgView.hidden = false
+                        addImgView.hidden = true
+                        editImgView.userInteractionEnabled = true
+                        if self.permitEditing == true {
+                            editImgView.userInteractionEnabled = false
+                        }
+                        editImgView.tag = 600 + self.tag
+                        let tap = UITapGestureRecognizer(target: tar, action: sel)
+                        editImgView.addGestureRecognizer(tap)
                     }
-                    editImgView.tag = 600 + self.tag
-                    let tap = UITapGestureRecognizer(target: tar, action: sel)
-                    editImgView.addGestureRecognizer(tap)
+                    
                     
                 }
                 

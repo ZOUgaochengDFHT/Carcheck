@@ -22,7 +22,7 @@ enum HPhotoType{
 typealias takeEndAction = (UIImage?,HTakeStatus,String?) -> Void
 
 /// HImagePickerUtils 对象必须为全局变量，不然UIImagePickerController代理方法不会执行
-class HImagePickerUtils: NSObject,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class HImagePickerUtils: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var pickPhotoEnd: takeEndAction?
     
@@ -87,13 +87,25 @@ class HImagePickerUtils: NSObject,UIImagePickerControllerDelegate,UINavigationCo
     
     //MARK: UIImagePickerControllerDelegate
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
         let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         if mediaType.isEqualToString(kUTTypeImage as String) {
-            let theImage : UIImage!
+            
+            var theImage : UIImage!
             if picker.allowsEditing{
                 theImage = info[UIImagePickerControllerEditedImage] as! UIImage
             }else{
                 theImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+            }
+            
+            // 原始图片可以根据照相时的角度来显示，但UIImage无法判定，于是出现获取的图片会向左转９０度的现象。
+            // 以下为调整图片角度的部分
+            let imageOrientation = theImage.imageOrientation
+            if imageOrientation != UIImageOrientation.Up {
+                UIGraphicsBeginImageContext(theImage.size)
+                theImage.drawInRect(CGRectMake(0, 0, theImage.size.width, theImage.size.height))
+                theImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
             }
             
             if self.pickPhotoEnd != nil {

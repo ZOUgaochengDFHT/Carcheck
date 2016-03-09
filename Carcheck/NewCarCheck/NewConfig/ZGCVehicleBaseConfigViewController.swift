@@ -55,8 +55,11 @@ class ZGCVehicleBaseConfigViewController: ZGCBaseViewController, UITableViewDele
                 
             }
             
+            let other = (ZGCOtherDBManager().selectOthers() as NSArray).lastObject as! Other
             
-            Alamofire.request(.GET, BaseURLString.stringByAppendingString("brand/params?styleId=").stringByAppendingString(UserDefault.objectForKey("Value") as! String), parameters: nil, encoding: .JSON, headers: ["token" : UserDefault.objectForKey("token") as! String]).responseJSON {
+
+            
+            Alamofire.request(.GET, BaseURLString.stringByAppendingString("brand/params?styleId=").stringByAppendingString(other.styleId! as String), parameters: nil, encoding: .JSON, headers: ["token" : UserDefault.objectForKey("token") as! String]).responseJSON {
                 response in
                 
                 if let json = response.result.value {

@@ -145,16 +145,12 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
             response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if let json = response.result.value {
-                print(json)
                 let loginResponseModel = ZGCLoginResonseModel.init(contentWithDic: json as! [NSObject : AnyObject])
                 if loginResponseModel.success == 1 {
                     UserDefault.setObject(loginResponseModel.data, forKey: "token")
                     UserDefault.synchronize()
                     let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
                     self.view.window?.rootViewController = mainStoryBoard.instantiateInitialViewController()
-                    print(loginResponseModel.data)
-                    
-                    DataService.requestDataWithToken(String(loginResponseModel.data))
                     
                 }else {
                     self.showHUD(loginResponseModel.message, image: UIImage(), withHiddenDelay: 2.0)

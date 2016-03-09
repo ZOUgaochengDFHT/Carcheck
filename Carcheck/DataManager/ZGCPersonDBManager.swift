@@ -73,7 +73,7 @@ class ZGCPersonDBManager: NSObject {
         if !self.dbBase.executeUpdate("insert into T_Person (type ,name, phone,licenseNo, location, vin,engineNo, regisDate, vehicleType,vehicleEmiss, transmType, driveWay,fuelType, manufacDate,licenseType,envirProStand,mileage, bodyColor, carKeys, pid) values (?, ?, ?,?, ?, ?,?, ?, ?,?, ?, ?,?, ?, ?,?, ?,?, ?, ?)", withArgumentsInArray: arr) {
             print("添加1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
-            print("添加1条数据成功！: \(p.pid)")
+            print("添加1条数据成功！: \(p.carKeys)")
             
         }
         
@@ -101,13 +101,13 @@ class ZGCPersonDBManager: NSObject {
     func updatePerson(p:Person) {
         dbBase.open();
         
-        let arr:[AnyObject] = [p.type!,p.name!,p.phone!,p.licenseNo!,p.location!,p.vin!,p.engineNo!,p.regisDate!,p.vehicleType!,p.vehicleEmiss!,p.transmType!,p.driveWay!,p.fuelType!,p.manufacDate!,p.envirProStand!,p.mileage!,p.bodyColor!,p.carKeys!, p.pid!];
+        let arr:[AnyObject] = [p.type!,p.name!,p.phone!,p.licenseNo!,p.location!,p.vin!,p.engineNo!,p.regisDate!,p.vehicleType!,p.vehicleEmiss!,p.transmType!,p.driveWay!,p.fuelType!,p.manufacDate!,p.licenseType!,p.envirProStand!,p.mileage!,p.bodyColor!,p.carKeys!, p.pid!];
         
         
-        if !self.dbBase .executeUpdate("update T_Person set type = (?), name = (?),phone = (?),licenseNo = (?),location = (?),vin = (?),engineNo = (?),regisDate = (?),vehicleType = (?),vehicleEmiss = (?),transmType = (?),driveWay = (?),fuelType = (?),manufacDate = (?),envirProStand = (?),mileage = (?),bodyColor = (?), carKeys = (?) where pid = (?)", withArgumentsInArray:arr) {
+        if !self.dbBase .executeUpdate("update T_Person set type = (?), name = (?),phone = (?),licenseNo = (?),location = (?),vin = (?),engineNo = (?),regisDate = (?),vehicleType = (?),vehicleEmiss = (?),transmType = (?),driveWay = (?),fuelType = (?),manufacDate = (?),licenseType = (?),envirProStand = (?),mileage = (?),bodyColor = (?), carKeys = (?) where pid = (?)", withArgumentsInArray:arr) {
             print("修改1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
-            print("修改1条数据成功！: \(p.pid)")
+            print("修改1条数据成功！: \(p.licenseType)")
             
         }
         dbBase.close();

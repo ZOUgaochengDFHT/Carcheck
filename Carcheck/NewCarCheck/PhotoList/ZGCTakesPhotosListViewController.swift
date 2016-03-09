@@ -28,6 +28,7 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
 
     var dir: String!
     var attri2DArr =  NSMutableArray()
+
     
     
 //    let tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度","右前45度","车辆铭牌","发动机舱内车架号","组合仪表","仪表台","前排座椅","后排座椅","后备箱备胎工具","发动机舱","发动机舱后侧防火墙","左前大灯框架","右前大灯框架","左前减震座","右前减震座","左纵梁","右纵梁"] as NSArray
@@ -94,48 +95,54 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
         
         self.currentStoreImgArr.removeAllObjects()
         
-        if self.totalStoreImgArr.count > 0 {
-            if Int(number) < self.totalStoreImgArr.count  {
-                self.currentStoreImgArr = self.totalStoreImgArr[Int(number)] as! NSMutableArray
-                self.createArray2D()
-            }
- 
-
-        }else {
+        let listDir = (UserDefault.objectForKey("subDir")?.stringByAppendingPathComponent("拍照列表"))!
+        
+        if !FileManager.isExecutableFileAtPath(listDir) {
             CreateSubDirectories((UserDefault.objectForKey("subDir")?.stringByAppendingPathComponent("拍照列表"))!)
-            
-            dir = NSString(string: UserDefault.objectForKey("subDir")!.stringByAppendingString("/拍照列表")).stringByAppendingPathComponent(self.tabTitleArr[selectedIndex] as! String)
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                if FileManager.isExecutableFileAtPath(self.dir) {
-                    let currentDirArr:NSArray!
-                    do {
-                        try currentDirArr = FileManager.contentsOfDirectoryAtPath(self.dir)
-                        self.currentStoreImgArr.removeLastObject()
-                        
-                        currentDirArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                            let image = UIImage(named: self.dir.stringByAppendingString("/").stringByAppendingString(object as! String))
-                            self.currentStoreImgArr.addObject(image!)
-                        })
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.createArray2D()
-                            self.setPhotoListBarView()
-                            
-                        })
-                    } catch let error as NSError {
-                        NSLog("\(error.localizedDescription)")
-                    }
-                }else {
-                    CreateSubDirectories(self.dir)
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.setPhotoListBarView()
-                    })
-                    
-                }
-            })
-
         }
+        
+        dir = NSString(string: UserDefault.objectForKey("subDir")!.stringByAppendingString("/拍照列表")).stringByAppendingPathComponent(self.tabTitleArr[selectedIndex] as! String)
+        
+        if FileManager.isExecutableFileAtPath(self.dir) {
+            self.currentStoreImgArr = self.totalStoreImgArr[selectedIndex] as! NSMutableArray
+//            let currentDirArr:NSArray!
+//            do {
+//                try currentDirArr = FileManager.contentsOfDirectoryAtPath(self.dir)
+//                self.currentStoreImgArr.removeLastObject()
+//                
+//                currentDirArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+//                    let image = UIImage(named: self.dir.stringByAppendingString("/").stringByAppendingString(object as! String))
+//                    self.currentStoreImgArr.addObject(image!)
+//                })
+//                
+//                self.createArray2D()
+//                self.setPhotoListBarView()
+//            } catch let error as NSError {
+//                NSLog("\(error.localizedDescription)")
+//            }
+        }else {
+            CreateSubDirectories(self.dir)
+            self.setPhotoListBarView()
+        }
+
+        
+//        if self.totalStoreImgArr.count > 0 {
+//            dir = NSString(string: UserDefault.objectForKey("subDir")!.stringByAppendingString("/拍照列表")).stringByAppendingPathComponent(self.tabTitleArr[selectedIndex] as! String)
+//            if Int(number) < self.totalStoreImgArr.count  {
+//                self.currentStoreImgArr = self.totalStoreImgArr[Int(number)] as! NSMutableArray
+//                self.createArray2D()
+//            }else {
+//                if !FileManager.isExecutableFileAtPath(self.dir) {
+//                    CreateSubDirectories(self.dir)
+//                    print(dir)
+//                    self.setPhotoListBarView()
+//                }
+//                
+//            }
+//        }else {
+//        
+//           
+//        }
     
     }
     
@@ -158,36 +165,23 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
     
     
     func presentImagePickerSheet() {
-        
-//        weak var weakSelf = self
+        let copyDir = (self.dir as NSString).mutableCopy() //使用mutableCopy深复制对象，是深复制后得到的变量不回受原变量的改变而变化
         imagePicker = HImagePickerUtils()// HImagePickerUtils 对象必须为全局变量，不然UIImagePickerController代理方法不会执行
         imagePicker.pickPhotoEnd = {a,b,c in
             if b == HTakeStatus.Success {
-//                self.takesPhotosTableView = self.takesPhotosTableViewArr[self.selectedIndex] as! ZGCTakePhotosTableView
-//                self.takesPhotosTableView.photoImg = a
+
                 self.currentImg = a
                 self.currentStoreImgArr.addObject(self.currentImg)
-                
                 self.attri2DArr.addObject("")
-//                
-//                self.createArray2D()
-//                
-//                self.takesPhotosTableView.reloadData()
-
-//
-//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-//                    WriteImageDataToFile(a!, dir: self.dir, imgName: String(self.currentStoreImgArr.count - 1))
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                        self.createArray2D()
-//                        if self.currentStoreImgArr.count == 0 {
-//                            self.photoListBarView.setNextHidden(true)
-//                        }else {
-//                            self.photoListBarView.setNextHidden(false)
-//                        }
-//                    })
-//
-//                })
                 
+                //当处于最后一项下
+                if self.selectedIndex + 1 == self.tabTitleArr.count {
+                    if self.totalStoreImgArr.count < self.tabTitleArr.count {
+                        self.totalStoreImgArr.addObject(self.currentStoreImgArr)
+                    }else {
+                        self.totalStoreImgArr.replaceObjectAtIndex(self.selectedIndex, withObject: self.currentStoreImgArr)
+                    }
+                }
                 
                 self.createArray2D()
                 if self.currentStoreImgArr.count == 0 {
@@ -195,10 +189,11 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                 }else {
                     self.photoListBarView.setNextHidden(false)
                 }
-
                 
+                
+                //这样处理不会阻塞主线程
+
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    
                     
                     if UserDefault.objectForKey("ImageIndexArr") == nil {
                         
@@ -219,21 +214,15 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                     let indexArr = (UserDefault.objectForKey("ImageIndexArr")?.lastObject)!.mutableCopy()
                     let d = indexArr.lastObject as! Double
                     
-                    WriteImageDataToFile(a!, dir: self.dir, imgName: String(d))
-                    
-                    let image = Image(path: self.dir.stringByAppendingString("/").stringByAppendingString(String(d)).stringByAppendingString(".png"), pid: String(d))
+                    WriteImageDataToFile(a!, dir: copyDir as! String, imgName: String(d))
+                    let image = Image(path: copyDir.stringByAppendingString("/").stringByAppendingString(String(d)).stringByAppendingString(".png"), pid: String(d))
                     let manager = ZGCImageTwoDBManager()
                     manager.addImage(image)
+                    
                 })
+                
 
                 
-//                if self.tabTitleArr.count == self.totalStoreImgArr.count + 1 {
-//                    /**
-//                    *  完成
-//                    */
-//                    self.takesPhotosTableView.btnTitle = "完成"
-//                    self.takesPhotosFinished = true
-//                }
             }
         }
         
@@ -249,43 +238,39 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
     override func tabBarTapAction(tap: UITapGestureRecognizer) {
         if tap.view?.tag == 334 {
             self.presentImagePickerSheet()
-        }else if tap.view!.tag == 335 {
-            
+        }else {
             if self.selectedIndex + 1 > self.totalStoreImgArr.count {
                 self.totalStoreImgArr.addObject(self.currentStoreImgArr.mutableCopy())
             }else {
                 self.totalStoreImgArr.replaceObjectAtIndex(self.selectedIndex, withObject: self.currentStoreImgArr.mutableCopy())
             }
             
-            
-            if self.selectedIndex == tabTitleArr.count - 1 {
-                let carDetailVC = ZGCCarValueDetailViewController()
-                carDetailVC.totalStoreImgArr = self.totalStoreImgArr
-                carDetailVC.tabTitleArr = self.tabTitleArr
-                self.navigationController?.pushViewController(carDetailVC, animated: true)
-            }else {
-                /**
-                 *  下一项
-                 */
-                self.setSlideSwicthViewAniamtionWithSelectedIndex(self.selectedIndex + 1)
-            }
-   
-        }else {
-            if self.selectedIndex == 0 {
-                super.tabBarTapAction(tap)
-            }else {
-                /**
-                 *  上一项
-                 */
-                if self.selectedIndex + 1 > self.totalStoreImgArr.count {
-                    self.totalStoreImgArr.addObject(self.currentStoreImgArr.mutableCopy())
+
+            if tap.view!.tag == 335 {
+                if self.selectedIndex == tabTitleArr.count - 1 {
+                    let carDetailVC = ZGCCarValueDetailViewController()
+                    carDetailVC.totalStoreImgArr = self.totalStoreImgArr
+                    self.navigationController?.pushViewController(carDetailVC, animated: true)
                 }else {
-                    self.totalStoreImgArr.replaceObjectAtIndex(self.selectedIndex, withObject: self.currentStoreImgArr.mutableCopy())
+                    /**
+                    *  下一项
+                    */
+                    self.setSlideSwicthViewAniamtionWithSelectedIndex(self.selectedIndex + 1)
                 }
-                self.setSlideSwicthViewAniamtionWithSelectedIndex(self.selectedIndex - 1)
-     
+                
+            }else {
+                if self.selectedIndex == 0 {
+                    super.tabBarTapAction(tap)
+                }else {
+                    /**
+                    *  上一项
+                    */
+                    self.setSlideSwicthViewAniamtionWithSelectedIndex(self.selectedIndex - 1)
+                    
+                }
+                
             }
-      
+
         }
     }
     

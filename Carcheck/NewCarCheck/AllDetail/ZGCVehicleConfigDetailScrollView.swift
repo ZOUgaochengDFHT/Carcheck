@@ -15,9 +15,7 @@ class ZGCVehicleConfigDetailScrollView: UIScrollView {
     
     init(frame: CGRect, tar:AnyObject, sel:Selector) {
         super.init(frame: frame)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: "UIKeyboardWillShowNotification", object: nil)
-        
+                
         
         let mPreArr = NSMutableArray()
         let conArr = NSMutableArray()
@@ -25,7 +23,7 @@ class ZGCVehicleConfigDetailScrollView: UIScrollView {
         mPreArr.addObject("配置名称")
         conArr.addObject("配置说明")
         
-        (ZGCConfigDBManager.shareInstance().selectConfigs() as NSArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+        (ZGCConfigDBManager().selectConfigs() as NSArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
             let config = object as! Config
             mPreArr.addObject(config.name!)
             conArr.addObject(config.instruction!)

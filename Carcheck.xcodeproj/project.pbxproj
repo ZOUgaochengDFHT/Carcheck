@@ -114,6 +114,11 @@
 		BC9E0BA11C7422650017ED00 /* UIView+Genie.m in Sources */ = {isa = PBXBuildFile; fileRef = BC9E0BA01C7422650017ED00 /* UIView+Genie.m */; };
 		BC9EDD3D1C8F3D9B002F7842 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9EDD3C1C8F3D9B002F7842 /* DataService.swift */; };
 		BC9EDD3F1C8F41D7002F7842 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9EDD3E1C8F41D7002F7842 /* Network.swift */; };
+		BCBDFF751C8FE278001D4C03 /* ZGCConfigDetailTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBDFF741C8FE278001D4C03 /* ZGCConfigDetailTableView.swift */; };
+		BCBDFF781C8FFEEA001D4C03 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBDFF761C8FFEEA001D4C03 /* CustomTextField.swift */; };
+		BCBDFF791C8FFEEA001D4C03 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBDFF771C8FFEEA001D4C03 /* CustomSearchBar.swift */; };
+		BCBDFF7B1C9006DB001D4C03 /* Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBDFF7A1C9006DB001D4C03 /* Other.swift */; };
+		BCBDFF7D1C900754001D4C03 /* ZGCOtherDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBDFF7C1C900754001D4C03 /* ZGCOtherDBManager.swift */; };
 		BCD5790B1C743FFD000D7EE8 /* UIViewExt.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD5790A1C743FFD000D7EE8 /* UIViewExt.m */; };
 		BCD579141C7448D7000D7EE8 /* ZGCNotUploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD579121C7448D7000D7EE8 /* ZGCNotUploadViewController.swift */; };
 		BCD579151C7448D7000D7EE8 /* ZGCNotUploadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCD579131C7448D7000D7EE8 /* ZGCNotUploadViewController.xib */; };
@@ -271,6 +276,11 @@
 		BC9E0BA01C7422650017ED00 /* UIView+Genie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Genie.m"; sourceTree = "<group>"; };
 		BC9EDD3C1C8F3D9B002F7842 /* DataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		BC9EDD3E1C8F41D7002F7842 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		BCBDFF741C8FE278001D4C03 /* ZGCConfigDetailTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCConfigDetailTableView.swift; sourceTree = "<group>"; };
+		BCBDFF761C8FFEEA001D4C03 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		BCBDFF771C8FFEEA001D4C03 /* CustomSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
+		BCBDFF7A1C9006DB001D4C03 /* Other.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Other.swift; sourceTree = "<group>"; };
+		BCBDFF7C1C900754001D4C03 /* ZGCOtherDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCOtherDBManager.swift; sourceTree = "<group>"; };
 		BCD579041C742C85000D7EE8 /* Carcheck-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Carcheck-Bridging-Header.h"; sourceTree = "<group>"; };
 		BCD579091C743FFD000D7EE8 /* UIViewExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewExt.h; sourceTree = "<group>"; };
 		BCD5790A1C743FFD000D7EE8 /* UIViewExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewExt.m; sourceTree = "<group>"; };
@@ -373,6 +383,7 @@
 			children = (
 				BC126AAD1C841AF500897F03 /* ZGCCarValueDetailViewController.swift */,
 				BC126AAE1C841AF500897F03 /* ZGCCarValueDetailViewController.xib */,
+				BCBDFF741C8FE278001D4C03 /* ZGCConfigDetailTableView.swift */,
 				BC126AAC1C841AF500897F03 /* ZGCCarBaseScrollView.swift */,
 				BC126AB01C841AF500897F03 /* ZGCPhotosListTableViewCell.swift */,
 				BC7FC43D1C8D7845008CA7A8 /* ZGCPhotoImgView.swift */,
@@ -447,6 +458,8 @@
 				BC71E4261C84F6A60080E7E5 /* Config.swift */,
 				BC77BD711C8E604100C64AC7 /* UnUpload.swift */,
 				BC77BD731C8E9B9900C64AC7 /* Image.swift */,
+				BCBDFF7A1C9006DB001D4C03 /* Other.swift */,
+				BCBDFF7C1C900754001D4C03 /* ZGCOtherDBManager.swift */,
 				BC77BD771C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift */,
 				BC77BD751C8E9C0500C64AC7 /* ZGCImageDBManager.swift */,
 				BC77BD6F1C8E601300C64AC7 /* ZGCUnUploadManager.swift */,
@@ -575,6 +588,8 @@
 				BCD579121C7448D7000D7EE8 /* ZGCNotUploadViewController.swift */,
 				BCD579131C7448D7000D7EE8 /* ZGCNotUploadViewController.xib */,
 				BCD5791A1C744DB7000D7EE8 /* ZGCNotUploadTableViewCell.swift */,
+				BCBDFF761C8FFEEA001D4C03 /* CustomTextField.swift */,
+				BCBDFF771C8FFEEA001D4C03 /* CustomSearchBar.swift */,
 			);
 			name = HomePage;
 			path = Carcheck/HomePage;
@@ -847,6 +862,7 @@
 				BC6904F81C8687F500C2877E /* ZGCCustomTxtField.swift in Sources */,
 				BC71E42E1C852CAA0080E7E5 /* ZGCVehicleBaseConfigViewController.swift in Sources */,
 				BCD579141C7448D7000D7EE8 /* ZGCNotUploadViewController.swift in Sources */,
+				BCBDFF7B1C9006DB001D4C03 /* Other.swift in Sources */,
 				BC4B3B961C7C1C91007CDE24 /* SKZoomingScrollView.swift in Sources */,
 				BC126AE01C841AF500897F03 /* ZGCAddConfigView.swift in Sources */,
 				BC126AE11C841AF500897F03 /* ZGCVehicleConfigListScrollView.swift in Sources */,
@@ -856,14 +872,17 @@
 				BC7FC43C1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift in Sources */,
 				BC6337951C70530400E0A3E7 /* Common.swift in Sources */,
 				BC6904FA1C868EE200C2877E /* ZGCCustomDatePickerView.swift in Sources */,
+				BCBDFF751C8FE278001D4C03 /* ZGCConfigDetailTableView.swift in Sources */,
 				BC9E0B9D1C740F7E0017ED00 /* ZGCIconTableViewCell.swift in Sources */,
 				BC126ADD1C841AF500897F03 /* ZGCVehicleTypeViewController.swift in Sources */,
 				BC63379D1C705C5800E0A3E7 /* ZGCBaseNavigationController.swift in Sources */,
 				BC6337A21C705CBC00E0A3E7 /* ZGCSettingViewController.swift in Sources */,
 				BC9898901C898D37009AF856 /* ZGCEditPhotoView.swift in Sources */,
 				BC301B791C75C54F00E8F4B7 /* LMComBoxView.m in Sources */,
+				BCBDFF7D1C900754001D4C03 /* ZGCOtherDBManager.swift in Sources */,
 				BCD579331C7597EE000D7EE8 /* ZGCInfoModel.m in Sources */,
 				BC301BA21C76F48000E8F4B7 /* EGORefreshTableFooterView.m in Sources */,
+				BCBDFF781C8FFEEA001D4C03 /* CustomTextField.swift in Sources */,
 				BCD5791B1C744DB7000D7EE8 /* ZGCNotUploadTableViewCell.swift in Sources */,
 				BC63379F1C705CA500E0A3E7 /* ZGCHomePageViewController.swift in Sources */,
 				BC301B8C1C76F27B00E8F4B7 /* BaseTableView.m in Sources */,
@@ -880,6 +899,7 @@
 				BCD579301C75872D000D7EE8 /* ZGCLoginResonseModel.m in Sources */,
 				BC9898801C8940E7009AF856 /* ZGCPhotoDeleteBarView.swift in Sources */,
 				BC126B001C844CAE00897F03 /* Person.swift in Sources */,
+				BCBDFF791C8FFEEA001D4C03 /* CustomSearchBar.swift in Sources */,
 				BC126ACC1C841AF500897F03 /* ZGCCarValueDetailViewController.swift in Sources */,
 				BC126AD01C841AF500897F03 /* ZGCVehicleConfigDetailScrollView.swift in Sources */,
 				BC63379B1C705C3900E0A3E7 /* ZGCBaseViewController.swift in Sources */,

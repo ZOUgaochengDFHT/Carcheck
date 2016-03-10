@@ -426,7 +426,7 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
                                             (ZGCImageTwoDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                                                 let image = object as! Image
                                                 let aImage:UIImage = UIImage(named: image.path!)!
-                                                
+                                                print(aImage)
                                                 if aImage == deleteImg {
                                                     do {
                                                         try FileManager.removeItemAtPath(image.path!)

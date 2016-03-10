@@ -132,6 +132,7 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
             titleLabel.font = UIFont.systemFontOfSize(14.0)
             view.addSubview(titleLabel)
         }
+        
         if section == 0 {
             let editImg = UIImage(named: "detail_edit")
             

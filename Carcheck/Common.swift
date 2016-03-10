@@ -62,9 +62,7 @@ func CreateSubDocumentsDirectory () -> String{
 //    var paths: [AnyObject] = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
 //    documentsDirectory = paths[0] as? String
     
-    let indexArr = (UserDefault.objectForKey("indexArr")?.lastObject)!.mutableCopy()
-    let d = indexArr.lastObject as! Double
-    let subDir = (DocumentsDirectory as NSString).stringByAppendingPathComponent(String(d))
+    let subDir = (DocumentsDirectory as NSString).stringByAppendingPathComponent(GetCurrentDateTransformToDateStrTwo())
     
     UserDefault.setObject(subDir, forKey: "subDir")
     UserDefault.synchronize()
@@ -99,6 +97,13 @@ func GetFormateDate (date:NSDate) -> String {
 func GetCurrentDateTransformToDateStr () -> String {
     let dateFormatter = NSDateFormatter() as NSDateFormatter
     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let currentDateStr = dateFormatter.stringFromDate(NSDate())
+    return currentDateStr
+}
+
+func GetCurrentDateTransformToDateStrTwo () -> String {
+    let dateFormatter = NSDateFormatter() as NSDateFormatter
+    dateFormatter.dateFormat = "yyyyMMddHHmmss"
     let currentDateStr = dateFormatter.stringFromDate(NSDate())
     return currentDateStr
 }

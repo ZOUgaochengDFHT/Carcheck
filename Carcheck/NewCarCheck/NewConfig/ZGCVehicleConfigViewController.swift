@@ -430,28 +430,31 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                         
                         
-                        if UserDefault.objectForKey("configImageIndexArr") == nil {
-                            
-                            let indexArr = NSMutableArray()
-                            let d:Double = 0
-                            indexArr.addObject(d)
-                            UserDefault.setObject(NSArray(object: indexArr), forKey: "configImageIndexArr")
-                        }else {
-                            
-                            let indexArr = (UserDefault.objectForKey("configImageIndexArr")?.lastObject)!.mutableCopy()
-                            var d = indexArr.lastObject as! Double
-                            d = d + 1
-                            indexArr.addObject(d)
-                            UserDefault.setObject(NSArray(object: indexArr), forKey: "configImageIndexArr")
-                        }
-                        UserDefault.synchronize()
+//                        if UserDefault.objectForKey("configImageIndexArr") == nil {
+//                            
+//                            let indexArr = NSMutableArray()
+//                            let d:Double = 0
+//                            indexArr.addObject(d)
+//                            UserDefault.setObject(NSArray(object: indexArr), forKey: "configImageIndexArr")
+//                        }else {
+//                            
+//                            let indexArr = (UserDefault.objectForKey("configImageIndexArr")?.lastObject)!.mutableCopy()
+//                            var d = indexArr.lastObject as! Double
+//                            d = d + 1
+//                            indexArr.addObject(d)
+//                            UserDefault.setObject(NSArray(object: indexArr), forKey: "configImageIndexArr")
+//                        }
+//                        UserDefault.synchronize()
+//                        
+//                        let indexArr = (UserDefault.objectForKey("configImageIndexArr")?.lastObject)!.mutableCopy()
+//                        let d = indexArr.lastObject as! Double
                         
-                        let indexArr = (UserDefault.objectForKey("configImageIndexArr")?.lastObject)!.mutableCopy()
-                        let d = indexArr.lastObject as! Double
+                        let copyStr = (GetCurrentDateTransformToDateStrTwo() as NSString).mutableCopy() //使用mutableCopy深复制对象，是深复制后得到的变量不回受原变量的改变而变化
                         
-                        WriteImageDataToFile(a!, dir: self.dir, imgName: String(d))
+                        print(copyStr)
+                        WriteImageDataToFile(a!, dir: self.dir, imgName:copyStr as! String)
 
-                        let image = Image(path: self.dir.stringByAppendingString("/").stringByAppendingString(String(d)).stringByAppendingString(".png"), pid: String(d))
+                        let image = Image(path: self.dir.stringByAppendingString("/").stringByAppendingString(copyStr as! String).stringByAppendingString(".png"), pid: copyStr as? String, instruction:"")
                         let manager = ZGCImageDBManager()
                         manager.addImage(image)
                         

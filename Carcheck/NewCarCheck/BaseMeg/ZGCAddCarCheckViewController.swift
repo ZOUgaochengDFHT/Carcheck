@@ -442,22 +442,6 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
             if self.isCreateNew == true {
                 isCreateNew = false
                 
-                if UserDefault.objectForKey("indexArr") == nil {
-                    
-                    let indexArr = NSMutableArray()
-                    let d:Double = 1000
-                    indexArr.addObject(d)
-                    UserDefault.setObject(NSArray(object: indexArr), forKey: "indexArr")
-                }else {
-                    
-                    let indexArr = (UserDefault.objectForKey("indexArr")?.lastObject)!.mutableCopy()
-                    var d = indexArr.lastObject as! Double
-                    d = d + 1
-                    indexArr.addObject(d)
-                    UserDefault.setObject(NSArray(object: indexArr), forKey: "indexArr")
-                }
-                UserDefault.synchronize()
-                
                 let subDir = CreateSubDocumentsDirectory()
                 self.dbManager = ZGCPersonDBManager()
                 

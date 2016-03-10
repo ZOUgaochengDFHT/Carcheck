@@ -45,7 +45,7 @@ class ZGCImageDBManager: NSObject {
         
         //打开数据库
         if dbBase.open(){
-            let createSql:String = "CREATE TABLE IF NOT EXISTS T_Image (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, path TEXT, pid TEXT)"
+            let createSql:String = "CREATE TABLE IF NOT EXISTS T_Image (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, path TEXT, instruction TEXT, pid TEXT)"
             if dbBase.executeUpdate(createSql, withArgumentsInArray: nil){
                 print("数据库创建成功！")
             }else{
@@ -65,9 +65,9 @@ class ZGCImageDBManager: NSObject {
         
         dbBase.open();
         
-        let arr:[AnyObject] = [c.path!, c.pid!];
+        let arr:[AnyObject] = [c.path!, c.pid!, c.instruction!];
         
-        if !self.dbBase.executeUpdate("insert into T_Image (path , pid) values (?, ?)", withArgumentsInArray: arr) {
+        if !self.dbBase.executeUpdate("insert into T_Image (path ,instruction, pid) values (?, ?, ?)", withArgumentsInArray: arr) {
             print("添加1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
             print("添加1条数据成功！: \(c.path)")
@@ -98,10 +98,10 @@ class ZGCImageDBManager: NSObject {
     func updateImage(c:Image) {
         dbBase.open();
         
-        let arr:[AnyObject] = [c.path!, c.pid!];
+        let arr:[AnyObject] = [c.path!, c.pid!, c.instruction!];
         
         
-        if !self.dbBase .executeUpdate("update T_Image set path = (?) where pid = (?)", withArgumentsInArray:arr) {
+        if !self.dbBase .executeUpdate("update T_Image set path = (?), instruction = (?) where pid = (?)", withArgumentsInArray:arr) {
             print("修改1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
             print("修改1条数据成功！: \(c.pid)")
@@ -114,16 +114,17 @@ class ZGCImageDBManager: NSObject {
     // MARK: >> 查
     func selectImages() -> Array<Image> {
         dbBase.open();
-        var configs=[Image]()
+        var configs = [Image]()
         
-        if let rs = dbBase.executeQuery("select path, pid from T_Image", withArgumentsInArray: nil) {
+        if let rs = dbBase.executeQuery("select path, instruction, pid from T_Image", withArgumentsInArray: nil) {
             while rs.next() {
                 
                 let path:String = rs.stringForColumn("path") as String
                 let pid:String = rs.stringForColumn("pid") as String
+                let instruction:String = rs.stringForColumn("instruction") as String
+
                 
-                
-                let c:Image = Image(path: path , pid: pid)
+                let c:Image = Image(path: path , pid: pid, instruction:instruction)
                 configs.append(c)
             }
         } else {

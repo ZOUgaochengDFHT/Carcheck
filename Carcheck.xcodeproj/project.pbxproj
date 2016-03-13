@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		8E79F5B5FA2F46FDACC7DE06 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F150C6E80DD9E533C818FC7 /* Pods.framework */; };
+		BC05EA921C9542F5008BE0A1 /* UIImageView+AsyncReader.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA8D1C9542F5008BE0A1 /* UIImageView+AsyncReader.m */; };
+		BC05EA931C9542F5008BE0A1 /* ZGCAsyncImageReader.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA8F1C9542F5008BE0A1 /* ZGCAsyncImageReader.m */; };
+		BC05EA941C9542F5008BE0A1 /* ZGCImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA911C9542F5008BE0A1 /* ZGCImageCache.m */; };
+		BC05EA9A1C95491D008BE0A1 /* LMComBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA971C95491D008BE0A1 /* LMComBoxView.m */; };
+		BC05EA9B1C95491D008BE0A1 /* LMContainsLMComboxScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA991C95491D008BE0A1 /* LMContainsLMComboxScrollView.m */; };
+		BC05EA9F1C954948008BE0A1 /* SUNSlideSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA9E1C954948008BE0A1 /* SUNSlideSwitchView.m */; };
 		BC126ACB1C841AF500897F03 /* ZGCCarBaseScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC126AAC1C841AF500897F03 /* ZGCCarBaseScrollView.swift */; };
 		BC126ACC1C841AF500897F03 /* ZGCCarValueDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC126AAD1C841AF500897F03 /* ZGCCarValueDetailViewController.swift */; };
 		BC126ACD1C841AF500897F03 /* ZGCCarValueDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC126AAE1C841AF500897F03 /* ZGCCarValueDetailViewController.xib */; };
@@ -32,8 +38,6 @@
 		BC126AE11C841AF500897F03 /* ZGCVehicleConfigListScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC126AC51C841AF500897F03 /* ZGCVehicleConfigListScrollView.swift */; };
 		BC126AE91C84255500897F03 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BC126AE81C84255500897F03 /* libsqlite3.0.tbd */; };
 		BC126B001C844CAE00897F03 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC126AFF1C844CAE00897F03 /* Person.swift */; };
-		BC301B791C75C54F00E8F4B7 /* LMComBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC301B761C75C54F00E8F4B7 /* LMComBoxView.m */; };
-		BC301B7A1C75C54F00E8F4B7 /* LMContainsLMComboxScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC301B781C75C54F00E8F4B7 /* LMContainsLMComboxScrollView.m */; };
 		BC301B8C1C76F27B00E8F4B7 /* BaseTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC301B8B1C76F27B00E8F4B7 /* BaseTableView.m */; };
 		BC301B8F1C76F28900E8F4B7 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = BC301B8E1C76F28900E8F4B7 /* UIView+Additions.m */; };
 		BC301B9E1C76F48000E8F4B7 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = BC301B911C76F48000E8F4B7 /* blackArrow.png */; };
@@ -46,7 +50,6 @@
 		BC301BA51C76F48000E8F4B7 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BC301B9B1C76F48000E8F4B7 /* grayArrow@2x.png */; };
 		BC301BA61C76F48000E8F4B7 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = BC301B9C1C76F48000E8F4B7 /* whiteArrow.png */; };
 		BC301BA71C76F48000E8F4B7 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BC301B9D1C76F48000E8F4B7 /* whiteArrow@2x.png */; };
-		BC301BB11C77119D00E8F4B7 /* SUNSlideSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC301BB01C77119D00E8F4B7 /* SUNSlideSwitchView.m */; };
 		BC301BDC1C7AD0B000E8F4B7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC301BDB1C7AD0B000E8F4B7 /* CoreLocation.framework */; };
 		BC301BDE1C7AD0B800E8F4B7 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC301BDD1C7AD0B800E8F4B7 /* CoreTelephony.framework */; };
 		BC301BE01C7AD0C000E8F4B7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC301BDF1C7AD0C000E8F4B7 /* AVFoundation.framework */; };
@@ -100,6 +103,8 @@
 		BC77BD741C8E9B9900C64AC7 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC77BD731C8E9B9900C64AC7 /* Image.swift */; };
 		BC77BD761C8E9C0500C64AC7 /* ZGCImageDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC77BD751C8E9C0500C64AC7 /* ZGCImageDBManager.swift */; };
 		BC77BD781C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC77BD771C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift */; };
+		BC7F052C1C91286F00C7635A /* ZGCillegalValueDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7F052B1C91286F00C7635A /* ZGCillegalValueDBManager.swift */; };
+		BC7F052E1C91299600C7635A /* ValueOrIllegal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7F052D1C91299600C7635A /* ValueOrIllegal.swift */; };
 		BC7FC43C1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7FC43B1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift */; };
 		BC7FC43E1C8D7845008CA7A8 /* ZGCPhotoImgView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7FC43D1C8D7845008CA7A8 /* ZGCPhotoImgView.swift */; };
 		BC89F8B51C7AE2270055CB47 /* HImagePickerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC89F8B41C7AE2270055CB47 /* HImagePickerUtils.swift */; };
@@ -112,7 +117,6 @@
 		BC9898901C898D37009AF856 /* ZGCEditPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC98988F1C898D37009AF856 /* ZGCEditPhotoView.swift */; };
 		BC9E0B9D1C740F7E0017ED00 /* ZGCIconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9E0B9B1C740F7E0017ED00 /* ZGCIconTableViewCell.swift */; };
 		BC9E0BA11C7422650017ED00 /* UIView+Genie.m in Sources */ = {isa = PBXBuildFile; fileRef = BC9E0BA01C7422650017ED00 /* UIView+Genie.m */; };
-		BC9EDD3D1C8F3D9B002F7842 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9EDD3C1C8F3D9B002F7842 /* DataService.swift */; };
 		BC9EDD3F1C8F41D7002F7842 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9EDD3E1C8F41D7002F7842 /* Network.swift */; };
 		BCBDFF751C8FE278001D4C03 /* ZGCConfigDetailTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBDFF741C8FE278001D4C03 /* ZGCConfigDetailTableView.swift */; };
 		BCBDFF781C8FFEEA001D4C03 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBDFF761C8FFEEA001D4C03 /* CustomTextField.swift */; };
@@ -128,6 +132,9 @@
 		BCD5792D1C756479000D7EE8 /* ZGCLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BCD5792B1C756479000D7EE8 /* ZGCLoginViewController.xib */; };
 		BCD579301C75872D000D7EE8 /* ZGCLoginResonseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD5792F1C75872D000D7EE8 /* ZGCLoginResonseModel.m */; };
 		BCD579331C7597EE000D7EE8 /* ZGCInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD579321C7597EE000D7EE8 /* ZGCInfoModel.m */; };
+		BCE7C7031C921F7200607485 /* DataService.m in Sources */ = {isa = PBXBuildFile; fileRef = BCE7C7021C921F7200607485 /* DataService.m */; };
+		BCE7C70A1C926FBE00607485 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = BCE7C7091C926FBE00607485 /* Util.m */; };
+		BCE7C70C1C928E9100607485 /* ZGCCustomPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE7C70B1C928E9100607485 /* ZGCCustomPickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +157,18 @@
 /* Begin PBXFileReference section */
 		4F150C6E80DD9E533C818FC7 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		916A3067ABD04C107A4F304C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		BC05EA8C1C9542F5008BE0A1 /* UIImageView+AsyncReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AsyncReader.h"; sourceTree = "<group>"; };
+		BC05EA8D1C9542F5008BE0A1 /* UIImageView+AsyncReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AsyncReader.m"; sourceTree = "<group>"; };
+		BC05EA8E1C9542F5008BE0A1 /* ZGCAsyncImageReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCAsyncImageReader.h; sourceTree = "<group>"; };
+		BC05EA8F1C9542F5008BE0A1 /* ZGCAsyncImageReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCAsyncImageReader.m; sourceTree = "<group>"; };
+		BC05EA901C9542F5008BE0A1 /* ZGCImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCImageCache.h; sourceTree = "<group>"; };
+		BC05EA911C9542F5008BE0A1 /* ZGCImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCImageCache.m; sourceTree = "<group>"; };
+		BC05EA961C95491D008BE0A1 /* LMComBoxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMComBoxView.h; sourceTree = "<group>"; };
+		BC05EA971C95491D008BE0A1 /* LMComBoxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMComBoxView.m; sourceTree = "<group>"; };
+		BC05EA981C95491D008BE0A1 /* LMContainsLMComboxScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContainsLMComboxScrollView.h; sourceTree = "<group>"; };
+		BC05EA991C95491D008BE0A1 /* LMContainsLMComboxScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContainsLMComboxScrollView.m; sourceTree = "<group>"; };
+		BC05EA9D1C954948008BE0A1 /* SUNSlideSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUNSlideSwitchView.h; sourceTree = "<group>"; };
+		BC05EA9E1C954948008BE0A1 /* SUNSlideSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUNSlideSwitchView.m; sourceTree = "<group>"; };
 		BC126AAC1C841AF500897F03 /* ZGCCarBaseScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCCarBaseScrollView.swift; sourceTree = "<group>"; };
 		BC126AAD1C841AF500897F03 /* ZGCCarValueDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCCarValueDetailViewController.swift; sourceTree = "<group>"; };
 		BC126AAE1C841AF500897F03 /* ZGCCarValueDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZGCCarValueDetailViewController.xib; sourceTree = "<group>"; };
@@ -175,10 +194,6 @@
 		BC126AC51C841AF500897F03 /* ZGCVehicleConfigListScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCVehicleConfigListScrollView.swift; sourceTree = "<group>"; };
 		BC126AE81C84255500897F03 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		BC126AFF1C844CAE00897F03 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
-		BC301B751C75C54F00E8F4B7 /* LMComBoxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMComBoxView.h; sourceTree = "<group>"; };
-		BC301B761C75C54F00E8F4B7 /* LMComBoxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMComBoxView.m; sourceTree = "<group>"; };
-		BC301B771C75C54F00E8F4B7 /* LMContainsLMComboxScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContainsLMComboxScrollView.h; sourceTree = "<group>"; };
-		BC301B781C75C54F00E8F4B7 /* LMContainsLMComboxScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContainsLMComboxScrollView.m; sourceTree = "<group>"; };
 		BC301B8A1C76F27B00E8F4B7 /* BaseTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableView.h; sourceTree = "<group>"; };
 		BC301B8B1C76F27B00E8F4B7 /* BaseTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableView.m; sourceTree = "<group>"; };
 		BC301B8D1C76F28900E8F4B7 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
@@ -196,8 +211,6 @@
 		BC301B9B1C76F48000E8F4B7 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
 		BC301B9C1C76F48000E8F4B7 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		BC301B9D1C76F48000E8F4B7 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
-		BC301BAF1C77119D00E8F4B7 /* SUNSlideSwitchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUNSlideSwitchView.h; sourceTree = "<group>"; };
-		BC301BB01C77119D00E8F4B7 /* SUNSlideSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUNSlideSwitchView.m; sourceTree = "<group>"; };
 		BC301BD91C7AD09700E8F4B7 /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iflyMSC.framework; path = ../../Downloads/iOS_voice_1123_56ca8f8a/lib/iflyMSC.framework; sourceTree = "<group>"; };
 		BC301BDB1C7AD0B000E8F4B7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BC301BDD1C7AD0B800E8F4B7 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -261,6 +274,8 @@
 		BC77BD731C8E9B9900C64AC7 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		BC77BD751C8E9C0500C64AC7 /* ZGCImageDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCImageDBManager.swift; sourceTree = "<group>"; };
 		BC77BD771C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCImageTwoDBManager.swift; sourceTree = "<group>"; };
+		BC7F052B1C91286F00C7635A /* ZGCillegalValueDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCillegalValueDBManager.swift; sourceTree = "<group>"; };
+		BC7F052D1C91299600C7635A /* ValueOrIllegal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueOrIllegal.swift; sourceTree = "<group>"; };
 		BC7FC43B1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCGeneralDetailView.swift; sourceTree = "<group>"; };
 		BC7FC43D1C8D7845008CA7A8 /* ZGCPhotoImgView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCPhotoImgView.swift; sourceTree = "<group>"; };
 		BC89F8B41C7AE2270055CB47 /* HImagePickerUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HImagePickerUtils.swift; sourceTree = "<group>"; };
@@ -274,7 +289,6 @@
 		BC9E0B9B1C740F7E0017ED00 /* ZGCIconTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCIconTableViewCell.swift; sourceTree = "<group>"; };
 		BC9E0B9F1C7422650017ED00 /* UIView+Genie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Genie.h"; sourceTree = "<group>"; };
 		BC9E0BA01C7422650017ED00 /* UIView+Genie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Genie.m"; sourceTree = "<group>"; };
-		BC9EDD3C1C8F3D9B002F7842 /* DataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		BC9EDD3E1C8F41D7002F7842 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		BCBDFF741C8FE278001D4C03 /* ZGCConfigDetailTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCConfigDetailTableView.swift; sourceTree = "<group>"; };
 		BCBDFF761C8FFEEA001D4C03 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
@@ -295,6 +309,11 @@
 		BCD5792F1C75872D000D7EE8 /* ZGCLoginResonseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCLoginResonseModel.m; sourceTree = "<group>"; };
 		BCD579311C7597EE000D7EE8 /* ZGCInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCInfoModel.h; sourceTree = "<group>"; };
 		BCD579321C7597EE000D7EE8 /* ZGCInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCInfoModel.m; sourceTree = "<group>"; };
+		BCE7C7011C921F7200607485 /* DataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataService.h; sourceTree = "<group>"; };
+		BCE7C7021C921F7200607485 /* DataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataService.m; sourceTree = "<group>"; };
+		BCE7C7081C926FBE00607485 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		BCE7C7091C926FBE00607485 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		BCE7C70B1C928E9100607485 /* ZGCCustomPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCCustomPickerView.swift; sourceTree = "<group>"; };
 		FF2E46ED2C637A24AF54E5CD /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -366,6 +385,39 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		BC05EA8B1C9542F5008BE0A1 /* ZGCImageReader */ = {
+			isa = PBXGroup;
+			children = (
+				BC05EA8C1C9542F5008BE0A1 /* UIImageView+AsyncReader.h */,
+				BC05EA8D1C9542F5008BE0A1 /* UIImageView+AsyncReader.m */,
+				BC05EA8E1C9542F5008BE0A1 /* ZGCAsyncImageReader.h */,
+				BC05EA8F1C9542F5008BE0A1 /* ZGCAsyncImageReader.m */,
+				BC05EA901C9542F5008BE0A1 /* ZGCImageCache.h */,
+				BC05EA911C9542F5008BE0A1 /* ZGCImageCache.m */,
+			);
+			path = ZGCImageReader;
+			sourceTree = "<group>";
+		};
+		BC05EA951C95491D008BE0A1 /* LMComBoxView */ = {
+			isa = PBXGroup;
+			children = (
+				BC05EA961C95491D008BE0A1 /* LMComBoxView.h */,
+				BC05EA971C95491D008BE0A1 /* LMComBoxView.m */,
+				BC05EA981C95491D008BE0A1 /* LMContainsLMComboxScrollView.h */,
+				BC05EA991C95491D008BE0A1 /* LMContainsLMComboxScrollView.m */,
+			);
+			path = LMComBoxView;
+			sourceTree = "<group>";
+		};
+		BC05EA9C1C954948008BE0A1 /* SUNSlideSwitchView */ = {
+			isa = PBXGroup;
+			children = (
+				BC05EA9D1C954948008BE0A1 /* SUNSlideSwitchView.h */,
+				BC05EA9E1C954948008BE0A1 /* SUNSlideSwitchView.m */,
+			);
+			path = SUNSlideSwitchView;
+			sourceTree = "<group>";
+		};
 		BC126AAA1C841AF500897F03 /* NewCarCheck */ = {
 			isa = PBXGroup;
 			children = (
@@ -398,6 +450,7 @@
 				BC126AB31C841AF500897F03 /* ZGCAddCarCheckViewController.swift */,
 				BC6904F71C8687F500C2877E /* ZGCCustomTxtField.swift */,
 				BC6904F91C868EE200C2877E /* ZGCCustomDatePickerView.swift */,
+				BCE7C70B1C928E9100607485 /* ZGCCustomPickerView.swift */,
 				BC126AB41C841AF500897F03 /* ZGCCarBrandListTableViewCell.swift */,
 				BC126AB51C841AF500897F03 /* ZGCCarBrandListTableViewCell.xib */,
 				BC126AB61C841AF500897F03 /* ZGCCarBrandModel.h */,
@@ -459,6 +512,8 @@
 				BC77BD711C8E604100C64AC7 /* UnUpload.swift */,
 				BC77BD731C8E9B9900C64AC7 /* Image.swift */,
 				BCBDFF7A1C9006DB001D4C03 /* Other.swift */,
+				BC7F052D1C91299600C7635A /* ValueOrIllegal.swift */,
+				BC7F052B1C91286F00C7635A /* ZGCillegalValueDBManager.swift */,
 				BCBDFF7C1C900754001D4C03 /* ZGCOtherDBManager.swift */,
 				BC77BD771C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift */,
 				BC77BD751C8E9C0500C64AC7 /* ZGCImageDBManager.swift */,
@@ -629,19 +684,19 @@
 				BCD5790A1C743FFD000D7EE8 /* UIViewExt.m */,
 				BCD5791C1C7454E7000D7EE8 /* BaseModel.h */,
 				BCD5791D1C7454E7000D7EE8 /* BaseModel.m */,
-				BC301B751C75C54F00E8F4B7 /* LMComBoxView.h */,
-				BC301B761C75C54F00E8F4B7 /* LMComBoxView.m */,
-				BC301B771C75C54F00E8F4B7 /* LMContainsLMComboxScrollView.h */,
-				BC301B781C75C54F00E8F4B7 /* LMContainsLMComboxScrollView.m */,
-				BC301BAF1C77119D00E8F4B7 /* SUNSlideSwitchView.h */,
-				BC301BB01C77119D00E8F4B7 /* SUNSlideSwitchView.m */,
 				BC301B8A1C76F27B00E8F4B7 /* BaseTableView.h */,
 				BC301B8B1C76F27B00E8F4B7 /* BaseTableView.m */,
 				BC301B8D1C76F28900E8F4B7 /* UIView+Additions.h */,
 				BC301B8E1C76F28900E8F4B7 /* UIView+Additions.m */,
 				BC89F8B41C7AE2270055CB47 /* HImagePickerUtils.swift */,
-				BC9EDD3C1C8F3D9B002F7842 /* DataService.swift */,
 				BC9EDD3E1C8F41D7002F7842 /* Network.swift */,
+				BCE7C7011C921F7200607485 /* DataService.h */,
+				BCE7C7021C921F7200607485 /* DataService.m */,
+				BCE7C7081C926FBE00607485 /* Util.h */,
+				BCE7C7091C926FBE00607485 /* Util.m */,
+				BC05EA9C1C954948008BE0A1 /* SUNSlideSwitchView */,
+				BC05EA951C95491D008BE0A1 /* LMComBoxView */,
+				BC05EA8B1C9542F5008BE0A1 /* ZGCImageReader */,
 				BC4B3B831C7C1C91007CDE24 /* SKPhotoBrowser */,
 				BC301B901C76F48000E8F4B7 /* EGOTableViewPullRefresh */,
 			);
@@ -855,7 +910,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC71E4351C8543380080E7E5 /* ZGCBaseConfigTableViewCell.swift in Sources */,
-				BC301BB11C77119D00E8F4B7 /* SUNSlideSwitchView.m in Sources */,
 				BCD5790B1C743FFD000D7EE8 /* UIViewExt.m in Sources */,
 				BC77BD741C8E9B9900C64AC7 /* Image.swift in Sources */,
 				BC126ADB1C841AF500897F03 /* ZGCVehicleTypeTableViewCell.swift in Sources */,
@@ -871,14 +925,15 @@
 				BCD5791E1C7454E7000D7EE8 /* BaseModel.m in Sources */,
 				BC7FC43C1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift in Sources */,
 				BC6337951C70530400E0A3E7 /* Common.swift in Sources */,
+				BCE7C7031C921F7200607485 /* DataService.m in Sources */,
 				BC6904FA1C868EE200C2877E /* ZGCCustomDatePickerView.swift in Sources */,
 				BCBDFF751C8FE278001D4C03 /* ZGCConfigDetailTableView.swift in Sources */,
+				BC05EA9F1C954948008BE0A1 /* SUNSlideSwitchView.m in Sources */,
 				BC9E0B9D1C740F7E0017ED00 /* ZGCIconTableViewCell.swift in Sources */,
 				BC126ADD1C841AF500897F03 /* ZGCVehicleTypeViewController.swift in Sources */,
 				BC63379D1C705C5800E0A3E7 /* ZGCBaseNavigationController.swift in Sources */,
 				BC6337A21C705CBC00E0A3E7 /* ZGCSettingViewController.swift in Sources */,
 				BC9898901C898D37009AF856 /* ZGCEditPhotoView.swift in Sources */,
-				BC301B791C75C54F00E8F4B7 /* LMComBoxView.m in Sources */,
 				BCBDFF7D1C900754001D4C03 /* ZGCOtherDBManager.swift in Sources */,
 				BCD579331C7597EE000D7EE8 /* ZGCInfoModel.m in Sources */,
 				BC301BA21C76F48000E8F4B7 /* EGORefreshTableFooterView.m in Sources */,
@@ -890,15 +945,17 @@
 				BC301B8F1C76F28900E8F4B7 /* UIView+Additions.m in Sources */,
 				BC126AD41C841AF500897F03 /* ZGCCarBrandModel.m in Sources */,
 				BC89F8B51C7AE2270055CB47 /* HImagePickerUtils.swift in Sources */,
-				BC301B7A1C75C54F00E8F4B7 /* LMContainsLMComboxScrollView.m in Sources */,
+				BC7F052E1C91299600C7635A /* ValueOrIllegal.swift in Sources */,
 				BC4F42041C802ED100C023F2 /* ZGCCarItemView.swift in Sources */,
 				BC4B3B951C7C1C91007CDE24 /* SKPhotoBrowser.swift in Sources */,
 				BC126ADF1C841AF500897F03 /* ZGCAddConfigScrollView.swift in Sources */,
 				BC126ACB1C841AF500897F03 /* ZGCCarBaseScrollView.swift in Sources */,
+				BC05EA931C9542F5008BE0A1 /* ZGCAsyncImageReader.m in Sources */,
 				BC77BD761C8E9C0500C64AC7 /* ZGCImageDBManager.swift in Sources */,
 				BCD579301C75872D000D7EE8 /* ZGCLoginResonseModel.m in Sources */,
 				BC9898801C8940E7009AF856 /* ZGCPhotoDeleteBarView.swift in Sources */,
 				BC126B001C844CAE00897F03 /* Person.swift in Sources */,
+				BCE7C70A1C926FBE00607485 /* Util.m in Sources */,
 				BCBDFF791C8FFEEA001D4C03 /* CustomSearchBar.swift in Sources */,
 				BC126ACC1C841AF500897F03 /* ZGCCarValueDetailViewController.swift in Sources */,
 				BC126AD01C841AF500897F03 /* ZGCVehicleConfigDetailScrollView.swift in Sources */,
@@ -910,11 +967,13 @@
 				BC301BA31C76F48000E8F4B7 /* EGORefreshTableHeaderView.m in Sources */,
 				BC6337641C70204200E0A3E7 /* AppDelegate.swift in Sources */,
 				BC9EDD3F1C8F41D7002F7842 /* Network.swift in Sources */,
+				BCE7C70C1C928E9100607485 /* ZGCCustomPickerView.swift in Sources */,
 				BC71E4291C84F77E0080E7E5 /* ZGCPersonDBManager.swift in Sources */,
 				BC126AD51C841AF500897F03 /* ZGCVehicleStyleTableViewCell.swift in Sources */,
 				BC4B3B8F1C7C1C91007CDE24 /* SKCaptionView.swift in Sources */,
 				BCD5792C1C756479000D7EE8 /* ZGCLoginViewController.swift in Sources */,
-				BC9EDD3D1C8F3D9B002F7842 /* DataService.swift in Sources */,
+				BC05EA921C9542F5008BE0A1 /* UIImageView+AsyncReader.m in Sources */,
+				BC7F052C1C91286F00C7635A /* ZGCillegalValueDBManager.swift in Sources */,
 				BC98988B1C898ACF009AF856 /* ZGCTakePhotosTableView.swift in Sources */,
 				BC98988C1C898ACF009AF856 /* ZGCTakesPhotosListViewController.swift in Sources */,
 				BC4B3B901C7C1C91007CDE24 /* SKDetectingImageView.swift in Sources */,
@@ -924,7 +983,9 @@
 				BC9369EB1C73275A003E829C /* ZGCCheckBox.swift in Sources */,
 				BC126AD91C841AF500897F03 /* ZGCVehicleTypeListViewController.swift in Sources */,
 				BC7FC43E1C8D7845008CA7A8 /* ZGCPhotoImgView.swift in Sources */,
+				BC05EA9A1C95491D008BE0A1 /* LMComBoxView.m in Sources */,
 				BC71E4271C84F6A60080E7E5 /* Config.swift in Sources */,
+				BC05EA941C9542F5008BE0A1 /* ZGCImageCache.m in Sources */,
 				BC6904FD1C86B41000C2877E /* ZGCVehicleConfigViewController.swift in Sources */,
 				BC126AD71C841AF500897F03 /* ZGCVehicleStyleViewController.swift in Sources */,
 				BC77BD781C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift in Sources */,
@@ -932,6 +993,7 @@
 				BC126AD21C841AF500897F03 /* ZGCCarBrandListTableViewCell.swift in Sources */,
 				BC6337971C70535000E0A3E7 /* ZGCBaseTabBarController.swift in Sources */,
 				BC71E4321C853C7F0080E7E5 /* ZGCFieldsModel.m in Sources */,
+				BC05EA9B1C95491D008BE0A1 /* LMContainsLMComboxScrollView.m in Sources */,
 				BC4B3B921C7C1C91007CDE24 /* SKIndicatorView.swift in Sources */,
 				BC77BD721C8E604100C64AC7 /* UnUpload.swift in Sources */,
 				BC6905041C86CBD600C2877E /* ZGCTakePhotoView.swift in Sources */,
@@ -1082,7 +1144,8 @@
 				INFOPLIST_FILE = Carcheck/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zgc.Carcheck;
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zrxh.ios.chejian;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Carcheck/Carcheck-Bridging-Header.h";
 			};
@@ -1098,7 +1161,7 @@
 				INFOPLIST_FILE = Carcheck/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zgc.Carcheck;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zrxh.ios.chejian;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Carcheck/Carcheck-Bridging-Header.h";
 			};

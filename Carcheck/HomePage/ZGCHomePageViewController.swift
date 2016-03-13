@@ -20,6 +20,7 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
     
     let addImg = UIImage(named: "base_add")
 
+
     var addImgViewWidth: CGFloat!
 
     override func viewDidLoad() {
@@ -33,15 +34,13 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
             (tableNameArr as NSArray).enumerateObjectsUsingBlock({ (object, index , stop) -> Void in
                 UserDefault.setObject(object, forKey: "tableName")
                 UserDefault.synchronize()
-                if index == 0{
-                    ZGCUnUploadManager.shareInstance()
-                }else {
-                    let manager = ZGCUnUploadManager()
-                    print(manager.selectUnUploads())
-                }
+                let manager = ZGCUnUploadManager()
+                print(manager)
             })
+            
         })
         
+
         
         addImgViewWidth = KScreenWidth/2 < (addImg?.size.width)! ? KScreenWidth/2 : (addImg?.size.width)!
 
@@ -65,7 +64,7 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if let json = response.result.value {
                 self.staticsModel = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
-                if self.staticsModel.code == 200 {
+                if self.staticsModel.code == 200 && self.staticsModel.success == 1 {
                     let dic = self.staticsModel.data as NSDictionary
                     self.attriArr = [["pre":"累积采集次数：", "txt":String(dic.objectForKey("collect")!)], ["pre":"车辆通过数：", "txt":String(dic.objectForKey("pass")!)], ["pre":"车辆未通过数：", "txt":String(dic.objectForKey("unpass")!)], ["pre":"通过率：", "txt":String(dic.objectForKey("rate")!)], ["pre":"平均采集时间：", "txt":String(dic.objectForKey("avgtime")!)]]
                     self.homeTableView.reloadData()
@@ -74,72 +73,40 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
         }
         
         
-    
-        
-        Alamofire.upload(.POST, BaseURLString.stringByAppendingString("pingche/illegal"), headers: ["token":UserDefault.objectForKey("token") as! String], multipartFormData: { multipartFormData in
-        
-            multipartFormData.appendBodyPart(data: "冀JKX715".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "carnum")
-            multipartFormData.appendBodyPart(data: "A1D9867B2794016".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "vin")
-            multipartFormData.appendBodyPart(data: "02".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "type")
-            
-            }, encodingMemoryThreshold: 0) { encodingResult in
-                switch encodingResult {
-                case .Success(let upload, _, _):
-                    upload.responseJSON { response in
-                        if let json = response.result.value {
-                            print(json)
-
-                            let staticModel = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
-                            print(staticModel.message)
-                        }
-                        
-                    }
-                case .Failure(let encodingError):
-                    print(encodingError)
-                }
-                
-        }
-        
-        
-        
-//        let url = BaseURLString.stringByAppendingString("recognize/drivingLicense")
-//        
-//        Alamofire.request(.POST, url, parameters: ["image" : "license.png"], encoding: .JSON, headers: ["token" : UserDefault.objectForKey("token") as! String]).responseJSON {
-//            response in
-//            if let json = response.result.value {
-//                print(json)
-//            }
-//        }
-        
-//        Alamofire.upload(.POST, BaseURLString.stringByAppendingString("recognize/drivingLicense"), headers: ["token":UserDefault.objectForKey("token") as! String], multipartFormData: { multipartFormData in
-//            
-////            multipartFormData.appendBodyPart(data: "冀JKX715".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "carnum")
-////            multipartFormData.appendBodyPart(data: "A1D9867B2794016".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "vin")
-////            multipartFormData.appendBodyPart(data: "02".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "type")
-//            multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(UIImage(named: "base_license.png")!)!, name: "image", fileName: "base_license.png", mimeType: "image/png")
-//            
+//        let request = NSMutableURLRequest(URL: NSURL(string: BaseURLString.stringByAppendingString("pingche/illegal"))!)
+//        request.HTTPMethod = "POST"
+//        let postString = "carnum=冀JKX715&vin=A1D9867B2794016&type=02"
+//        request.setValue(UserDefault.objectForKey("token") as? String, forHTTPHeaderField: "token")
+//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 //
-////            multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(UIImage(named: "base_license")!)!, name: "image")
-////            multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(UIImage(named: "license.png")!)!, name: <#T##String#>, fileName: <#T##String#>, mimeType: <#T##String#>)
-//         
+//        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+//        request.addValue("application/json", forHTTPHeaderField: "Accept")
+//
+//        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
+//            guard error == nil && data != nil else {                                                          // check for fundamental networking error
+//                print("error=\(error)")
+//                return
+//            }
 //            
-//            }, encodingMemoryThreshold: 0) { encodingResult in
-//                switch encodingResult {
-//                case .Success(let upload, _, _):
-//                    upload.responseJSON { response in
-//                        debugPrint(response)
-//                    }
-//                case .Failure(let encodingError):
-//                    print(encodingError)
-//                }
-//                
+//            if let httpStatus = response as? NSHTTPURLResponse where httpStatus.statusCode != 200 {           // check for http errors
+//                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+//                print("response = \(response)")
+//            }
+//            
+//            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//            print("responseString = \(responseString)")
 //        }
+//        task.resume()
         
-      
+        
+        
     }
     
-
     
+   
+
+
+
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1

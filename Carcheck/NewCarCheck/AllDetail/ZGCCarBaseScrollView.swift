@@ -15,6 +15,12 @@ class ZGCCarBaseScrollView: UIScrollView {
     init(frame: CGRect, tar:AnyObject, sel:Selector) {
         super.init(frame: frame)
         
+        if ZGCillegalValueDBManager().selectValueOrIllegals().count == 0 {
+            let valueOrIllegalModel = ValueOrIllegal(illegalScore: "", illegalTimes: "", illegalPenalty: "", valueBad: "", valueNormal: "", valueGood: "", valueNew: "", demandLoans: "")
+            ZGCillegalValueDBManager().addValueOrIllegal(valueOrIllegalModel)
+            
+        }
+        
         let preArr = ["违规扣分", "违章次数","违章罚款", "车况较差","正常磨损", "车况良好","新车价格", "贷款需求"] 
         
         let mPreArr = UserDefault.objectForKey("baseInfoPreTitleArr")?.mutableCopy() as! NSMutableArray
@@ -136,7 +142,12 @@ class ZGCCarBaseScrollView: UIScrollView {
                     b2cArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                         let contentLabel = self.viewWithTag(500 + self.conArr.count - b2cArr.count + index - 1) as! UILabel
                         contentLabel.text = (object as? String)?.stringByAppendingString("万元")
+                        valueArr.addObject(contentLabel.text!)
                     })
+                    
+                    let valueOrIllegalModel = ValueOrIllegal(illegalScore: publishArr[0] as? String, illegalTimes: publishArr[1] as? String, illegalPenalty: publishArr[2] as? String, valueBad: valueArr[0] as? String, valueNormal: valueArr[1] as? String, valueGood: valueArr[2] as? String, valueNew: valueArr[3] as? String, demandLoans: "")
+                    
+                    ZGCillegalValueDBManager().updateValueOrIllegal(valueOrIllegalModel)
                 }
             }
             
@@ -148,6 +159,8 @@ class ZGCCarBaseScrollView: UIScrollView {
         if str != "" {
             let contentLabel = self.viewWithTag(500 + conArr.count - 1) as! UILabel
             contentLabel.text = str.stringByAppendingString("万元")
+            
+            
         }
     }
     

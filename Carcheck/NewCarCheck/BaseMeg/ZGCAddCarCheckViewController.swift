@@ -21,6 +21,9 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     var contentArr = NSMutableArray()
     var conLabel: UILabel!
     var customDatePickerView: ZGCCustomDatePickerView!
+    
+    var customPickerView: ZGCCustomPickerView!
+
     var licenseTypeNum = 0
     
     var isCreateNew = false
@@ -31,7 +34,6 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     let preTitleArr = ["业务类型", "车主姓名", "联系方式", "车牌号", "车辆所在地", "车辆VIN码", "发动机号", "注册日期", "车辆型号", "车辆排量", "变速器类型", "驱动方式", "燃油类型", "出厂日期", "车牌类型", "环保标准", "行驶里程", "车身颜色", "车钥匙"] as NSArray
 
     func selectAtIndex(index: Int32, inCombox _combox: LMComBoxView!) {
-        print(index)
         let comboxIndex = _combox.tag - 200
         let titleArr = _combox.titlesList
         let comboxStr = titleArr[Int(index)]
@@ -96,6 +98,12 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 comBox.clipsToBounds = true
                 self.comboxScrollView.addSubview(comBox)
                 
+                self.comboxScrollView.tapToClose = {
+                    UIView.animateWithDuration(0.25) { () -> Void in
+                        self.setSelfViewBoundsOriginY(0)
+                    }
+                }
+                
                 comBox.tapLMComBoxViewHandler = {
                     self.view.endEditing(true)
                     UIView.animateWithDuration(0.25) { () -> Void in
@@ -103,7 +111,7 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                     }
                 };
             }else {
-                if index == 8 {
+                if index == 8 || index == 9 {
                     self.initVehicleTypeChooseLabel(comBoxWidth, index: index, leftMargin: leftMargin, height:height)
                 }else {
                     self.initrightTextField(comBoxWidth, index: index, leftMargin: leftMargin, height:height)
@@ -119,6 +127,12 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         self.comboxScrollView.addSubview(rightTextField)
         rightTextField.returnKeyType = UIReturnKeyType.Done
         rightTextField.layer.borderColor = kBorderColor.CGColor;
+        if index == 2 {
+            rightTextField.keyboardType = UIKeyboardType.NumberPad
+        }else if index == 16  {
+            rightTextField.keyboardType = UIKeyboardType.DecimalPad
+
+        }
         rightTextField.layer.borderWidth = 0.5
         rightTextField.layer.cornerRadius = 4
         rightTextField.clipsToBounds = true
@@ -165,6 +179,23 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
 
         if tap.view?.tag == 603 {
             self.presentImagePickerSheet()
+        }else if tap.view?.tag == 408 {
+            let vehicleTypeVC = ZGCVehicleTypeListViewController()
+            self.navigationController?.pushViewController(vehicleTypeVC, animated: true)
+
+        }else if tap.view?.tag == 409 {
+            if customPickerView == nil {
+                customPickerView = ZGCCustomPickerView(frame: CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64))
+                self.view.addSubview(customPickerView)
+            }
+            customPickerView.coverViewPresnt()
+            customPickerView.getFormatStrHandler = {
+                (str:String) -> Void in
+                self.conLabel = self.comboxScrollView.viewWithTag(409) as! UILabel
+                self.conLabel.text = str
+                self.contentArr.replaceObjectAtIndex(9, withObject: self.conLabel.text!)
+            }
+            
         }else {
             
             if customDatePickerView == nil {
@@ -191,6 +222,7 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         conLabel.layer.borderWidth = 0.5
         conLabel.layer.cornerRadius = 4
         conLabel.numberOfLines = 0
+        conLabel.tag = 400 + index
         conLabel.textColor = UIColor.darkGrayColor()
         if isCreateNew == true {
             conLabel.text = ""
@@ -200,14 +232,10 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         self.contentArr.insertObject(conLabel.text!, atIndex: index)
         self.comboxScrollView.addSubview(conLabel)
         conLabel.userInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: "tapToVehicleTypeVC")
+        let tap = UITapGestureRecognizer(target: self, action: "tapAction:")
         conLabel.addGestureRecognizer(tap)
     }
-    
-    func tapToVehicleTypeVC() {
-        let vehicleTypeVC = ZGCVehicleTypeListViewController()
-        self.navigationController?.pushViewController(vehicleTypeVC, animated: true)
-    }
+
     
     // - MARK - 行驶证扫描
     func initScanningBtn (index:Int) {
@@ -292,19 +320,14 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                     chepaiArray.addObject(value!)
                 })
                 
-                let chepaiArr = ["京", "沪", "津","渝", "翼", "晋","辽", "吉", "黑","苏", "浙", "皖","闽", "赣", "鲁","豫", "鄂", "琼","川","贵", "云", "陕","甘", "青", "蒙","桂", "藏","宁", "新", "港","澳", "台"] as NSMutableArray
+                let chepaiArr = ["京", "沪", "津","渝", "冀", "晋","辽", "吉", "黑","苏", "浙", "皖","闽", "赣", "鲁","豫", "鄂", "琼","川","贵", "云", "陕","甘", "青", "蒙","桂", "藏","宁", "新", "港","澳", "台"] as NSMutableArray
                 let keysArr = ["1把", "2把", "3把"] as NSMutableArray
                 
                 self.totalTitleListArr = [typeArr, chepaiArr, biansuqiArr, qudongArr, ranyouArr, chepaiArray,  huanbaoArr, keysArr]
                 
                 self.initViews()
-                
-               
-
             }
         }
-        
-        
                 // Do any additional setup after loading the view.
     }
     
@@ -344,22 +367,71 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         imagePicker.pickPhotoEnd = {a,b,c in
             if b == HTakeStatus.Success {
                 
-                let url = BaseURLString.stringByAppendingString("recognize/drivingLicense")
-                
-                Alamofire.request(.POST, url, parameters: ["image" : "license.png"], encoding: .JSON, headers: ["token" : UserDefault.objectForKey("token") as! String]).responseJSON {
-                    response in
-                    if let json = response.result.value {
-                        print(json)
-                    }
+                let jpgImage = Util.convertPngToJpg(UIImage(named: "base_license")!)
+                let image = ImageWithImageSimple(jpgImage, scaledToSize: CGSizeMake(KScreenWidth, KScreenWidth))
+                Alamofire.upload(.POST, BaseURLString.stringByAppendingString("recognize/drivingLicense"), headers: ["token":UserDefault.objectForKey("token") as! String], multipartFormData: { multipartFormData in
+                    
+                    multipartFormData.appendBodyPart(data: UIImageJPEGRepresentation(image, 0.5)!, name: "image", fileName: "license.jpg", mimeType: "image/jpg")
+                    
+                    }, encodingMemoryThreshold: 0) { encodingResult in
+                        switch encodingResult {
+                        case .Success(let upload, _, _):
+                            upload.responseJSON { response in
+                                debugPrint(response)
+                                if let json = response.result.value {
+                                    let model = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
+                                    if model.success == 1 {
+                                        self.contentArr.replaceObjectAtIndex(3, withObject: (model.data as NSDictionary).objectForKey("carnum")!)
+                                        self.contentArr.replaceObjectAtIndex(4, withObject: (model.data as NSDictionary).objectForKey("location")!)
+                                        self.contentArr.replaceObjectAtIndex(5, withObject: (model.data as NSDictionary).objectForKey("vin")!)
+                                        self.contentArr.replaceObjectAtIndex(6, withObject: (model.data as NSDictionary).objectForKey("engineSN")!)
+                                        self.contentArr.replaceObjectAtIndex(7, withObject: (model.data as NSDictionary).objectForKey("regDate")!)
+                                        
+                                        self.resetRightTextFieldtext()
+                                        self.resetComboxContent((model.data as NSDictionary).objectForKey("carnum")! as! String)
+                                    }
+                                }
+                                
+                            }
+                        case .Failure(let encodingError):
+                            print(encodingError)
+                        }
+                        
                 }
             }
         }
         
         imagePicker.takePhoto(self)
     }
-
     
-    // - MARK - 
+    func resetRightTextFieldtext () {
+        for index in 3...7 {
+            let rightTextField = self.comboxScrollView.viewWithTag(600 + index) as! UITextField!
+            rightTextField.text = self.contentArr[index] as? String
+            if index == 3 {
+                rightTextField.text = (contentArr[index] as! NSString).substringFromIndex(1)
+            }
+        }
+    }
+    
+    func resetComboxContent (text:String) {
+        let comBox = self.comboxScrollView.viewWithTag(203) as! LMComBoxView
+        
+        comBox.titlesList.enumerateObjectsUsingBlock({ (object: AnyObject!, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+            let shouldStop: ObjCBool = true
+            if ((text as NSString).substringToIndex(1) == String(object)) {
+                comBox.defaultIndex = Int32(idx)
+                comBox.reloadData()
+                stop.initialize(shouldStop)
+            }
+        })
+    }
+
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.view.endEditing(true)
+    }
+    
+    // - MARK -
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         comboxScrollView.closeAllTheComBoxView()
@@ -392,17 +464,18 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     }
     
     func changeVehicleType() {
+        self.conLabel = self.comboxScrollView.viewWithTag(408) as! UILabel
         conLabel.text = UserDefault.objectForKey("brand")?.stringByAppendingString((UserDefault.objectForKey("model") as! String).stringByAppendingString(UserDefault.objectForKey("style") as! String))
     }
     
     override func tabBarTapAction(tap: UITapGestureRecognizer) {
         super.tabBarTapAction(tap)
-        
         comboxScrollView.closeAllTheComBoxView()
+        
         if tap.view!.tag == 335 {
             if isCreateNew == true {
                 preTitleArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                    if index != 0 && index != 18 && index != 15 && index != 14 && (index < 10 || index > 12) && index != 8 {
+                    if index != 0 && index != 18 && index != 15 && index != 14 && (index < 10 || index > 12) && index != 8 && index != 9 {
                         let rightTextField = self.comboxScrollView.viewWithTag(600 + index) as! UITextField
                         if index == 3 {
                             let mStr = NSMutableString(string: self.contentArr[index] as! String)
@@ -411,12 +484,24 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                         }else {
                             self.contentArr.replaceObjectAtIndex(index, withObject: rightTextField.text!)
                         }
-                    }else if index == 8 {
+                    }else if index == 8 || index == 9 {
+                        self.conLabel = self.comboxScrollView.viewWithTag(400 + index) as! UILabel
                         self.contentArr.replaceObjectAtIndex(index, withObject: self.conLabel.text!)
                     }
                 })
 
             }
+            
+//            if Util.verificationMobile(self.contentArr[2] as! String) == false {
+//                self.showHUD("您输入的联系方式不合法", image: UIImage(), withHiddenDelay: 1.0)
+//                return
+//            }
+//            
+//            if Util.validateCarNo((contentArr[3] as! NSString).substringFromIndex(1)) == false {
+//                self.showHUD("您输入的车牌号不合法", image: UIImage(), withHiddenDelay: 1.0)
+//                return
+//            }
+            
             
             if contentArr.count > 19 {
                 contentArr.removeLastObject()
@@ -440,7 +525,6 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
             let person = Person(type: contentArr[0] as? String, name: contentArr[1] as? String, phone: contentArr[2] as? String, licenseNo: contentArr[3] as? String, location: contentArr[4] as? String, vin: contentArr[5] as? String, engineNo: contentArr[6] as? String, regisDate: contentArr[7] as? String, vehicleType: contentArr[8] as? String, vehicleEmiss: contentArr[9] as? String, transmType: contentArr[10] as? String, driveWay: contentArr[11] as? String, fuelType: contentArr[12] as? String, manufacDate: contentArr[13] as? String, licenseType: contentArr[14] as? String, envirProStand: contentArr[15] as? String, mileage: contentArr[16] as? String, bodyColor: contentArr[17] as? String, carKeys: contentArr[18] as? String, pid:"person")
             
             if self.isCreateNew == true {
-                isCreateNew = false
                 
                 let subDir = CreateSubDocumentsDirectory()
                 self.dbManager = ZGCPersonDBManager()
@@ -456,6 +540,34 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
             }
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                
+                if self.isCreateNew == true {
+                    self.isCreateNew = false
+
+                    CreateSubDirectories((UserDefault.objectForKey("subDir")?.stringByAppendingPathComponent("拍照列表"))!)
+
+                    let tabTitleArr = ["车辆正面车主合照","左前45度","左后45度","右后45度","右前45度"] as NSArray
+                    
+                    
+                    let imgTwoTableNameArr = NSMutableArray(capacity: tabTitleArr.count)
+                    
+                    tabTitleArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                        imgTwoTableNameArr.addObject(String("\("T_ImageTwo")\(index)"))
+                        let  dir = NSString(string: UserDefault.objectForKey("subDir")!.stringByAppendingString("/拍照列表")).stringByAppendingPathComponent(object as! String)
+                        CreateSubDirectories(dir)
+                    })
+                    
+                    imgTwoTableNameArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                        UserDefault.setObject(object, forKey: "ImageTwoTableName")
+                        UserDefault.synchronize()
+                        let manager = ZGCImageTwoDBManager()
+                        print(manager)
+                        
+                        
+                    })
+                }
+                
+       
 
                 if self.dbManager.selectPersons().count > 0 {
                     self.dbManager.updatePerson(person)

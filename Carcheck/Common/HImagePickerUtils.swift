@@ -98,6 +98,8 @@ class HImagePickerUtils: NSObject, UIImagePickerControllerDelegate, UINavigation
                 theImage = info[UIImagePickerControllerOriginalImage] as! UIImage
             }
             
+            
+            
             // 原始图片可以根据照相时的角度来显示，但UIImage无法判定，于是出现获取的图片会向左转９０度的现象。
             // 以下为调整图片角度的部分
             let imageOrientation = theImage.imageOrientation

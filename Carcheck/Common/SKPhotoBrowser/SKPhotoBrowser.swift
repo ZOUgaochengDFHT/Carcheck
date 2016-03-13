@@ -102,7 +102,11 @@ public class SKPhotoBrowser: UIViewController, UIScrollViewDelegate, UIActionShe
     
     var attri2DArr: NSMutableArray!
     
+    var currentImageModelArr = NSMutableArray()
+    
     var isExist = false
+    
+    var isNewConfig = false
     
     // MARK - Initializer
     required public init?(coder aDecoder: NSCoder) {
@@ -748,28 +752,31 @@ public class SKPhotoBrowser: UIViewController, UIScrollViewDelegate, UIActionShe
             visiblePages.insert(page)
             pagingScrollView.addSubview(page)
             
-            
-            let bgView = UIView(frame: CGRectMake((KScreenWidth + 20) * CGFloat(index), page.bottom - 140, KScreenWidth + 20, 80))
-            bgView.backgroundColor = UIColor(red: 70/255.0, green: 64/255.0, blue: 62/255.0, alpha: 1.0)
-            
-            let contentLabel = UILabel(frame: CGRectMake(20, 10, KScreenWidth - 40, 60))
-            contentLabel.textColor = UIColor.whiteColor()
-            contentLabel.text = self.attri2DArr[index] as? String
-            bgView.hidden = false
-            if contentLabel.text == "" {
-                bgView.hidden = true
-            }
-            contentLabel.font = UIFont.systemFontOfSize(14.0)
-            contentLabel.numberOfLines = 0
-            contentLabel.tag = 100 + index
-            bgView.addSubview(contentLabel)
-            
-            bgView.tag = 500 + index
-            self.pagingScrollView.addSubview(bgView)
-            
-            let tap = UITapGestureRecognizer(target: self, action: "tapAction:")
-            bgView.addGestureRecognizer(tap)
+            if isNewConfig == false {
+                let bgView = UIView(frame: CGRectMake((KScreenWidth + 20) * CGFloat(index), page.bottom - 140, KScreenWidth + 20, 80))
+                bgView.backgroundColor = UIColor(red: 70/255.0, green: 64/255.0, blue: 62/255.0, alpha: 1.0)
+                
+                let contentLabel = UILabel(frame: CGRectMake(20, 10, KScreenWidth - 40, 60))
+                contentLabel.textColor = UIColor.whiteColor()
+                
+                contentLabel.text = self.attri2DArr[index] as? String
+                bgView.hidden = false
+                if contentLabel.text == "" {
+                    bgView.hidden = true
+                }
+                contentLabel.font = UIFont.systemFontOfSize(14.0)
+                contentLabel.numberOfLines = 0
+                contentLabel.tag = 100 + index
+                bgView.addSubview(contentLabel)
+                
+                bgView.tag = 500 + index
+                self.pagingScrollView.addSubview(bgView)
+                
+                let tap = UITapGestureRecognizer(target: self, action: "tapAction:")
+                bgView.addGestureRecognizer(tap)
+                
 
+            }
             
             // if exists caption, insert
             if let captionView = captionViewForPhotoAtIndex(index) {
@@ -788,6 +795,10 @@ public class SKPhotoBrowser: UIViewController, UIScrollViewDelegate, UIActionShe
         generalDetailView.sureOrCancelHandler = {
             (attriArr:NSMutableArray)-> Void in
             self.attri2DArr.replaceObjectAtIndex(tagIndex, withObject: attriArr.lastObject!)
+//            let imageModel = self.currentImageModelArr[tagIndex] as! Image
+//            let changeImageModel = Image(path: imageModel.path, instruction: attriArr.lastObject! as? String, location: imageModel.location, pid: imageModel.pid)
+//            ZGCImageTwoDBManager().updateImage(changeImageModel)
+//            self.currentImageModelArr.replaceObjectAtIndex(tagIndex, withObject: changeImageModel)
             
             let bgView = self.pagingScrollView.viewWithTag(tagIndex + 500)! as UIView
             let contentLabel = bgView.viewWithTag(100 + tagIndex) as! UILabel
@@ -866,9 +877,6 @@ public class SKPhotoBrowser: UIViewController, UIScrollViewDelegate, UIActionShe
     }
     
     public func setControlsHidden(hidden: Bool, animated: Bool, permanent: Bool) {
-        print(permanent)
-        print(animated)
-        print(hidden)
         
 
         cancelControlHiding()

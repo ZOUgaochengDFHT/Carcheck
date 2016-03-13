@@ -7,10 +7,7 @@
 //
 
 import UIKit
-
-import UIKit
-
-class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate, UITableViewDataSource {
+class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate {
     
     @IBOutlet weak var vehicleConfigTableView: UITableView!
     
@@ -25,9 +22,13 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     
     let identifier = "ZGCVehicleConfigTableViewCell"
     
+    var imageModelsArr = NSMutableArray()
     var picturesArr = NSMutableArray()
+    var noCompressArr = NSMutableArray()
 
     var array2D = NSMutableArray()
+    
+    var arrayPic2D = NSMutableArray()
     
     var rowHeight: CGFloat!
     
@@ -37,11 +38,11 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     
     var photoDeleteBarView: ZGCPhotoDeleteBarView!
     
-    var deleteOrAddImgArr = NSMutableArray()
+    var deleteOrAddImgPidArr = NSMutableArray()
     
     var dir:String!
     
-    var imageModelArr = NSMutableArray()
+    var images = [SKPhoto]()
 
     
     override func viewDidLoad() {
@@ -51,7 +52,8 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
         
         self.rowHeight = (KScreenWidth - 40)/3 + 10
 
-        
+        imagePicker = HImagePickerUtils()// HImagePickerUtils 对象必须为全局变量，不然UIImagePickerController代理方法不会执行
+
         
         (ZGCConfigDBManager().selectConfigs() as NSArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
             let config = object as! Config
@@ -75,7 +77,8 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     
 
         if array2D.count == 0 {
-            array2D.addObject(NSMutableArray(object: UIImage(named: "config_takePic")!))
+            array2D.addObject(NSMutableArray(object: Image(path: "", instruction: "", location: "", pid: "")))
+            arrayPic2D.addObject(NSMutableArray(object: UIImage(named: "config_takePic")!))
         }
         
         self.initUpOrNextView(["334"], imgArr: NSArray())
@@ -89,13 +92,14 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                 (ZGCImageDBManager().selectImages() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                     let image = object as! Image
                     let aImage = UIImage(named: image.path!)
-                    self.picturesArr.addObject(aImage!)
-                    self.imageModelArr.addObject(image)
+                    self.noCompressArr.addObject(aImage!)
+                    self.picturesArr.addObject(UIImage(named: "config_takePic")!)
+                    self.imageModelsArr.addObject(image)
                 })
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.createArray2D()
-                    if self.picturesArr.count > 1 {
+                    if self.noCompressArr.count > 0 {
                         self.rightBtn.hidden = false
                     }else {
                         self.rightBtn.hidden = true
@@ -159,7 +163,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            if self.picturesArr.count > 0 {
+            if self.imageModelsArr.count > 0 {
                 return self.array2D.count
             }
             return 1
@@ -207,14 +211,40 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
             }
         }else {
             cell.maxCountThree = array2D.count - 1
-            cell.dataListArr = array2D[indexPath.row] as! NSMutableArray
+            cell.modelListArr = array2D[indexPath.row] as! NSMutableArray
+            cell.dataListArr = arrayPic2D[indexPath.row] as! NSMutableArray
             cell.deleteOrAddImgHandler = {
-                (image:UIImage, isdelete:Bool) -> Void in
-                if isdelete == true {
-                    self.deleteOrAddImgArr.addObject(image)
+                (image:UIImage, isdelete:Bool, imgView:ZGCPhotoImgView, tag:Int) -> Void in
+                
+                if self.permitEditing == true {
+                    if isdelete == true {
+                        self.deleteOrAddImgPidArr.addObject(imgView.pid)
+                    }else {
+                        self.deleteOrAddImgPidArr.removeObject(imgView.pid)
+                    }
                 }else {
-                    self.deleteOrAddImgArr.removeObject(image)
+                    
+                    self.images.removeAll()
+                    
+                    self.noCompressArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                        let photo = SKPhoto.photoWithImage(object as! UIImage)
+                        self.images.append(photo)
+                    })
+                    let index = tag - 1000
+                    let browser = SKPhotoBrowser(originImage: self.noCompressArr[index] as! UIImage, photos: self.images, animatedFromView: imgView)
+                    browser.isNewConfig = true
+                    browser.initializePageIndex(index)
+                    browser.delegate = self
+                    
+                    // Can hide the action button by setting to false
+                    browser.displayAction = true
+                    
+                    // Optional action button titles (if left off, it uses activity controller
+                    // browser.actionButtonTitles = ["Do One Action", "Do Another Action"]
+                    
+                    self.presentViewController(browser, animated: true, completion: {})
                 }
+                
             }
         }
         
@@ -351,8 +381,17 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                 self.vehicleConfigTableView.reloadData()
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                    
                     let configDBManager =  ZGCConfigDBManager()
-                    let config = Config(name: attriArr[0] as? String, instruction: attriArr[1] as? String, pid:String (self.attri2DArr.count - 1))
+                    var pid:String!
+                    if self.selectedIndex == 500 {
+                        pid = String (self.attri2DArr.count - 1)
+                    }else {
+                        pid = String (self.selectedIndex - 600)
+
+                    }
+
+                    let config = Config(name: attriArr[0] as? String, instruction: attriArr[1] as? String, pid:pid)
                     if self.selectedIndex == 500 {
                         configDBManager.addConfig(config)
                     }else {
@@ -366,38 +405,57 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                     self.deleteAllImage()
                 })
             }else {
-                if self.deleteOrAddImgArr.count > 0 {
+                if self.deleteOrAddImgPidArr.count > 0 {
                     self.showActionSheet("删除所选图片？", completionBlock: { (finished) -> Void in
                         
-                        if self.deleteOrAddImgArr.count == self.picturesArr.count - 1 {
+                        if self.deleteOrAddImgPidArr.count == self.imageModelsArr.count - 1 {
                             self.deleteAllImage()
                         }else {
-                            let copyImgArr = self.picturesArr.mutableCopy() as! NSMutableArray
-                            self.deleteOrAddImgArr.enumerateObjectsUsingBlock( {(object, index, stop) -> Void in
-                                let deleteImg = object as! UIImage
-                                self.picturesArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                            let copyImgArr = self.imageModelsArr.mutableCopy() as! NSMutableArray
+                            let copyPicArr = self.picturesArr.mutableCopy() as! NSMutableArray
+                            let deleteIndexArr = NSMutableArray()
+                            self.deleteOrAddImgPidArr.enumerateObjectsUsingBlock( {(object, index, stop) -> Void in
+                                let deleteImgPid:String = object as! String
+                                self.imageModelsArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                                     let shouldStop: ObjCBool = true
                                     
-                                    let img = object as! UIImage
-                                    if img == deleteImg {
-                                        copyImgArr.removeObject(deleteImg)
-                                        let image = self.imageModelArr[index] as! Image
-                                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                                            ZGCImageDBManager().deleteImage(image)
-                                            do {
-                                                try FileManager.removeItemAtPath(image.path!)
-                                            } catch let error as NSError {
-                                                NSLog("\(error.localizedDescription)")
-                                            }
-                                        })
+                                    let img = object as! Image
+                                    if img.pid == deleteImgPid {
+                                        deleteIndexArr.addObject(index)
+                                        
+                                        ZGCImageDBManager().deleteImage(img)
+                                        do {
+                                            try FileManager.removeItemAtPath(img.path!)
+                                        } catch let error as NSError {
+                                            NSLog("\(error.localizedDescription)")
+                                        }
+                                        
                                         stop.initialize(shouldStop)
                                     }
                                 })
                                 
                             })
-                            self.deleteOrAddImgArr.removeAllObjects()
+                            
+                            var copyDeleteIndexArr = NSArray()
+                            
+                            copyDeleteIndexArr = deleteIndexArr.sortedArrayUsingComparator({ (obj1:AnyObject, obj2:AnyObject) -> NSComparisonResult in
+                                if Int(obj1 as! NSNumber) < Int(obj2 as! NSNumber) {
+                                    return NSComparisonResult.OrderedDescending
+                                }else {
+                                    return NSComparisonResult.OrderedSame
+                                }
+                            })
+                            
+                            copyDeleteIndexArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                                copyImgArr.removeObjectAtIndex(Int(object as! NSNumber))
+                                copyPicArr.removeObjectAtIndex(Int(object as! NSNumber))
+                            })
+                            
+                            self.deleteOrAddImgPidArr.removeAllObjects()
                             copyImgArr.removeLastObject()
-                            self.picturesArr = copyImgArr.mutableCopy() as! NSMutableArray
+                            copyPicArr.removeLastObject()
+                            self.imageModelsArr = copyImgArr.mutableCopy() as! NSMutableArray
+                            self.picturesArr = copyPicArr.mutableCopy() as! NSMutableArray
                             self.createArray2D()
                             
                         }
@@ -410,55 +468,36 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
             }
             
         } else if indexTap == 444 {
-
-         
             
-            imagePicker = HImagePickerUtils()// HImagePickerUtils 对象必须为全局变量，不然UIImagePickerController代理方法不会执行
             imagePicker.pickPhotoEnd = {a,b,c in
                 
                 if b == HTakeStatus.Success {
                     self.rightBtn.hidden = false
 
-                    if self.picturesArr.count > 0 {
+                    if self.imageModelsArr.count > 0 {
+                        self.imageModelsArr.removeLastObject()
                         self.picturesArr.removeLastObject()
                     }
                     
-                    self.picturesArr.addObject(a!)
+                    self.noCompressArr.addObject(a!)
+                    
+                    
+                    let copyStr = (GetCurrentDateTransformToDateStrTwo() as NSString).mutableCopy() //使用mutableCopy深复制对象，是深复制后得到的变量不会因原变量的改变而变化
+
+                    
+                    let image = Image(path: self.dir.stringByAppendingString("/").stringByAppendingString(copyStr as! String).stringByAppendingString(".png"), instruction:"", location:"", pid: copyStr as? String)
+                    let manager = ZGCImageDBManager()
+                    manager.addImage(image)
+                    
+                    self.picturesArr.addObject(ImageWithImageSimple(a!, scaledToSize: CGSizeMake((KScreenWidth - 40)/3, (KScreenWidth - 40)/3)))
+                    
+                    self.imageModelsArr.addObject(image)
+
                     
                     self.createArray2D()
 
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                        
-                        
-//                        if UserDefault.objectForKey("configImageIndexArr") == nil {
-//                            
-//                            let indexArr = NSMutableArray()
-//                            let d:Double = 0
-//                            indexArr.addObject(d)
-//                            UserDefault.setObject(NSArray(object: indexArr), forKey: "configImageIndexArr")
-//                        }else {
-//                            
-//                            let indexArr = (UserDefault.objectForKey("configImageIndexArr")?.lastObject)!.mutableCopy()
-//                            var d = indexArr.lastObject as! Double
-//                            d = d + 1
-//                            indexArr.addObject(d)
-//                            UserDefault.setObject(NSArray(object: indexArr), forKey: "configImageIndexArr")
-//                        }
-//                        UserDefault.synchronize()
-//                        
-//                        let indexArr = (UserDefault.objectForKey("configImageIndexArr")?.lastObject)!.mutableCopy()
-//                        let d = indexArr.lastObject as! Double
-                        
-                        let copyStr = (GetCurrentDateTransformToDateStrTwo() as NSString).mutableCopy() //使用mutableCopy深复制对象，是深复制后得到的变量不回受原变量的改变而变化
-                        
-                        print(copyStr)
-                        WriteImageDataToFile(a!, dir: self.dir, imgName:copyStr as! String)
-
-                        let image = Image(path: self.dir.stringByAppendingString("/").stringByAppendingString(copyStr as! String).stringByAppendingString(".png"), pid: copyStr as? String, instruction:"")
-                        let manager = ZGCImageDBManager()
-                        manager.addImage(image)
-                        
-                        self.imageModelArr.addObject(image)
+                        WriteImageDataToFile(a!, dir: self.dir, imgName:copyStr as! String)                      
                     })
                     
                 }
@@ -470,6 +509,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     }
     
     func deleteAllImage () {
+        self.imageModelsArr.removeAllObjects()
         self.picturesArr.removeAllObjects()
         self.createArray2D()
         self.photoDeleteBarView.hidden()
@@ -487,62 +527,53 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                     NSLog("\(error.localizedDescription)")
                 }
             })
-//            
-//            print(ZGCImageDBManager.shareInstance().selectImages())
-//            let currentDirArr:NSArray!
-//            do {
-//                try currentDirArr = FileManager.contentsOfDirectoryAtPath(self.dir)
-//                print(currentDirArr)
-//
-//            } catch let error as NSError {
-//                NSLog("\(error.localizedDescription)")
-//            }
+
         })
-        
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-//            let currentDirArr:NSArray!
-//            do {
-//                try currentDirArr = FileManager.contentsOfDirectoryAtPath(self.dir)
-//                self.picturesArr.removeLastObject()
-//
-//                currentDirArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-//                    let image = UIImage(named: self.dir.stringByAppendingString("/").stringByAppendingString(object as! String))
-//                    self.picturesArr.addObject(image!)
-//                })
-//
-//                self.createArray2D()
-//                if self.picturesArr.count > 1 {
-//                    self.rightBtn.hidden = false
-//                }else {
-//                    self.rightBtn.hidden = true
-//                }
-//
-//            } catch let error as NSError {
-//                NSLog("\(error.localizedDescription)")
-//            }
-//        })
+
     }
     
     func createArray2D () {
-        self.picturesArr.addObject(UIImage(named: "config_takePic")!)
         
-        let array2DCount:Int = 3
-        self.array2D.removeAllObjects()
-        
-        var array = NSMutableArray(capacity: array2DCount)
-        self.picturesArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            self.imageModelsArr.addObject(Image(path: "", instruction: "", location: "", pid: ""))
+            self.picturesArr.addObject(UIImage(named: "config_takePic")!)
             
-            array.addObject(object)
-            if array.count % array2DCount  == 0 && index != 0 {
-                self.array2D.addObject(array.mutableCopy())
-                array = NSMutableArray(capacity: array2DCount)
-            }else if self.picturesArr.count % array2DCount  < array2DCount && self.picturesArr.count == index + 1 {
-                self.array2D.addObject(array.mutableCopy())
+            let array2DCount:Int = 3
+            self.array2D.removeAllObjects()
+            self.arrayPic2D.removeAllObjects()
+
+            
+            var array = NSMutableArray(capacity: array2DCount)
+            self.imageModelsArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+                array.addObject(object)
+                if array.count % array2DCount  == 0 && index != 0 {
+                    self.array2D.addObject(array.mutableCopy())
+                    array = NSMutableArray(capacity: array2DCount)
+                }else if self.imageModelsArr.count % array2DCount  < array2DCount && self.imageModelsArr.count == index + 1 {
+                    self.array2D.addObject(array.mutableCopy())
+                }
             }
-        }
-        self.vehicleConfigTableView.reloadData()
+            
+            var arrayModel = NSMutableArray(capacity: array2DCount)
+            self.picturesArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                arrayModel.addObject(object)
+                if arrayModel.count % array2DCount  == 0 && index != 0 {
+                    self.arrayPic2D.addObject(arrayModel.mutableCopy())
+                    arrayModel = NSMutableArray(capacity: array2DCount)
+                }else if self.picturesArr.count % array2DCount  < array2DCount && self.picturesArr.count == index + 1 {
+                    self.arrayPic2D.addObject(arrayModel.mutableCopy())
+                }
+            })
+            
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.vehicleConfigTableView.reloadData()
+            })
+
+        })
 
     }
+    
 
     
     override func didReceiveMemoryWarning() {

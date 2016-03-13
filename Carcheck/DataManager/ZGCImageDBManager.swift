@@ -45,7 +45,7 @@ class ZGCImageDBManager: NSObject {
         
         //打开数据库
         if dbBase.open(){
-            let createSql:String = "CREATE TABLE IF NOT EXISTS T_Image (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, path TEXT, instruction TEXT, pid TEXT)"
+            let createSql:String = "CREATE TABLE IF NOT EXISTS T_Image (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, path TEXT, instruction TEXT, location TEXT, pid TEXT)"
             if dbBase.executeUpdate(createSql, withArgumentsInArray: nil){
                 print("数据库创建成功！")
             }else{
@@ -65,12 +65,12 @@ class ZGCImageDBManager: NSObject {
         
         dbBase.open();
         
-        let arr:[AnyObject] = [c.path!, c.pid!, c.instruction!];
+        let arr:[AnyObject] = [c.path!, c.instruction!, c.location!, c.pid!];
         
-        if !self.dbBase.executeUpdate("insert into T_Image (path ,instruction, pid) values (?, ?, ?)", withArgumentsInArray: arr) {
+        if !self.dbBase.executeUpdate("insert into T_Image (path , instruction,  location,pid) values (?, ?, ?, ?)", withArgumentsInArray: arr) {
             print("添加1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
-            print("添加1条数据成功！: \(c.path)")
+            print("添加1条数据成功！: \(c.instruction)")
             
         }
         
@@ -98,10 +98,10 @@ class ZGCImageDBManager: NSObject {
     func updateImage(c:Image) {
         dbBase.open();
         
-        let arr:[AnyObject] = [c.path!, c.pid!, c.instruction!];
+        let arr:[AnyObject] = [c.path!, c.instruction!, c.location!, c.pid!];
         
         
-        if !self.dbBase .executeUpdate("update T_Image set path = (?), instruction = (?) where pid = (?)", withArgumentsInArray:arr) {
+        if !self.dbBase .executeUpdate("update T_Image set path = (?), instruction = (?), location = (?) where pid = (?)", withArgumentsInArray:arr) {
             print("修改1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
             print("修改1条数据成功！: \(c.pid)")
@@ -116,15 +116,16 @@ class ZGCImageDBManager: NSObject {
         dbBase.open();
         var configs = [Image]()
         
-        if let rs = dbBase.executeQuery("select path, instruction, pid from T_Image", withArgumentsInArray: nil) {
+        if let rs = dbBase.executeQuery("select path, instruction, location ,pid from T_Image", withArgumentsInArray: nil) {
             while rs.next() {
                 
                 let path:String = rs.stringForColumn("path") as String
-                let pid:String = rs.stringForColumn("pid") as String
                 let instruction:String = rs.stringForColumn("instruction") as String
+                let location:String = rs.stringForColumn("location") as String
+                let pid:String = rs.stringForColumn("pid") as String
 
                 
-                let c:Image = Image(path: path , pid: pid, instruction:instruction)
+                let c:Image = Image(path: path , instruction:instruction, location:location, pid: pid)
                 configs.append(c)
             }
         } else {
@@ -156,14 +157,14 @@ class ZGCImageDBManager: NSObject {
             //增
             let arr:[AnyObject] = [c.path!, c.pid!];
             
-            if !self.dbBase.executeUpdate("insert into T_Image (name ,instruction) values (?, ?)", withArgumentsInArray: arr) {
+            if !self.dbBase.executeUpdate("insert into T_Image (path, instruction, location,pid) values (?, ?, ?, ?)", withArgumentsInArray: arr) {
                 print("添加1条数据失败！: \(db.lastErrorMessage())")
             }else{
                 print("添加1条数据成功！: \(c.pid)")
                 
             }
             //查
-            if let rs = db.executeQuery("select name, instruction from T_Image", withArgumentsInArray: nil) {
+            if let rs = db.executeQuery("select path, instruction, location ,pid from T_Image", withArgumentsInArray: nil) {
                 while rs.next() {
                     
                 }

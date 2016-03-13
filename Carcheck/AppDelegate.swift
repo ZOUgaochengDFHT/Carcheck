@@ -1,12 +1,22 @@
 //
 //  AppDelegate.swift
 //  Carcheck
-//
+///var/folders/p7/kdq0_hn15xd51j3zcrtnd8zr0000gn/T/AppIconMaker/appicon.png
 //  Created by GaoCheng.Zou on 16/2/14.
 //  Copyright © 2016年 GaoCheng.Zou. All rights reserved.
 //
 
 import UIKit
+//import Crashlytics
+//
+//func NSLog(format: String, args: CVarArgType...) {
+//    #if DEBUG
+//        CLSNSLogv(format, getVaList([]))
+//    #else
+//        CLSLogv(format, getVaList([]))
+//    #endif
+//}
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -52,4 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
+
+
 

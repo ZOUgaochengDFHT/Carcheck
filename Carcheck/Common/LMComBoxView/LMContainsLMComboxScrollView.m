@@ -14,7 +14,6 @@
 
 #import "LMContainsLMComboxScrollView.h"
 #import "LMComBoxView.h"
-
 @implementation LMContainsLMComboxScrollView
 
 - (id)initWithFrame:(CGRect)frame
@@ -51,6 +50,8 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    self.tapToClose();
+    [self endEditing:true];
     [self closeAllTheComBoxView];
 }
 /*

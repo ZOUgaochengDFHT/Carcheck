@@ -37,11 +37,19 @@ class ZGCSettingViewController: ZGCBaseViewController, UITableViewDelegate, UITa
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             
             let json = response.result.value
-            self.infoModel = ZGCInfoModel.init(contentWithDic: json?.objectForKey("data")?.objectForKey("data") as! [NSObject : AnyObject])
             
-            self.attriArr = [["pre":"用户姓名：", "content":self.infoModel.name], ["pre":"所属门店：", "content":self.infoModel.departmentName], ["pre":"员工级别：", "content":self.infoModel.roleName]]
+            print(json)
+            let staticsModel = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
+
+            if staticsModel.code == 0 && staticsModel.success == 1 {
+
+                self.infoModel = ZGCInfoModel.init(contentWithDic: staticsModel.data as [NSObject : AnyObject])
+                
+                self.attriArr = [["pre":"用户姓名：", "content":self.infoModel.name], ["pre":"所属门店：", "content":self.infoModel.departmentName], ["pre":"员工级别：", "content":self.infoModel.roleName]]
+                
+                self.settingListTableView.reloadData()
+            }
             
-            self.settingListTableView.reloadData()
         }
         
  
@@ -125,12 +133,17 @@ class ZGCSettingViewController: ZGCBaseViewController, UITableViewDelegate, UITa
         exitBtn.tag = 101
         bgView.addSubview(exitBtn)
         
-        submitBtn.addTarget(self, action: "btnAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        exitBtn.addTarget(self, action: "btnAction:", forControlEvents: UIControlEvents.TouchUpInside)
         return bgView
     }
     
     func btnAction(btn:UIButton) {
-        
+        if btn.tag == 100 {
+            
+        }else {
+            let loginVC = ZGCLoginViewController()
+            self.view.window?.rootViewController = loginVC
+        }
     }
 
 

@@ -9,7 +9,6 @@
 #ifndef Carcheck_Bridging_Header_h
 #define Carcheck_Bridging_Header_h
 #endif /* Carcheck_Bridging_Header_h */
-
 #import "UIView+Genie.h"
 #import "UIViewExt.h"
 #import "BaseModel.h"
@@ -23,3 +22,8 @@
 #import "ZGCStaticsModel.h"
 #import "ZGCCarBrandModel.h"
 #import "ZGCFieldsModel.h"
+#import "DataService.h"
+#import "Util.h"
+#import "ZGCAsyncImageReader.h"
+#import "ZGCImageCache.h"
+#import "UIImageView+AsyncReader.h"

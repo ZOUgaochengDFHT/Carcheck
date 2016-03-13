@@ -8,6 +8,7 @@
 
 import UIKit
 
+typealias ToVehicleBaseConfigVCBlock = () -> Void
 class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var vehicleConfigScrollView: ZGCVehicleConfigListScrollView!
@@ -32,6 +33,8 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
     
     var tar:AnyObject!
     var sel:Selector!
+    
+    var toVehicleBaseConfigVCHandler:ToVehicleBaseConfigVCBlock!
     
     var imageModelArr = NSMutableArray()
     override init(frame: CGRect, style: UITableViewStyle) {
@@ -94,7 +97,7 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
             cell.dataListArr = array2D[indexPath.row] as! NSMutableArray
             cell.takePhotoViewHidden = true
             cell.deleteOrAddImgHandler = {
-                (image:UIImage, isdelete:Bool) -> Void in
+                (image:UIImage, isdelete:Bool, imgView:ZGCPhotoImgView, tag:Int) -> Void in
                 if isdelete == true {
                     self.deleteOrAddImgArr.addObject(image)
                 }else {
@@ -174,7 +177,9 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
         return bgView
     }
     
-    
+    func btnAction(btn:UIButton) {
+        toVehicleBaseConfigVCHandler()
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

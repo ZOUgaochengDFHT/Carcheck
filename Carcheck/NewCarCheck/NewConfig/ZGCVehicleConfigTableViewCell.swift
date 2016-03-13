@@ -8,9 +8,47 @@
 
 import UIKit
 
+//extension UIImageView {
+//    /*- (void)setImageWithPath:(NSString *)path placeholderImage:(UIImage *)placeholder{
+//    // 给  ImageView 设置 tag, 指向当前 url
+//    self.tag = path;
+//    
+//    // 预设一个图片，可以为 nil
+//    // 主要是为了清除由于复用以前可能存在的图片
+//    self.image = placeholder;
+//    
+//    if (path) {
+//    // 异步读取图片
+//    ZGCAsyncImageReader *imageReader = [ZGCAsyncImageReader sharedImageReader];
+//    
+//    [imageReader downloadImageWithPath:path
+//    complete:^(UIImage *image, NSError *error, NSString *imagePath) {
+//    // 通过 tag 保证图片被正确的设置
+//    if (image && [self.tag isEqualToString:path]) {
+//    self.image = image;
+//    }else{
+//    NSLog(@"error when download:%@", error);
+//    }
+//    }];
+//    }
+//    }*/
+//    func setImageWithPath(imagePath:String , placeholderImage:UIImage) {
+////        self.tag = imagePath
+//        if imagePath != "" {
+//            let imageReader:ZGCAsyncImageReader = ZGCAsyncImageReader.sharedImageReader() as! ZGCAsyncImageReader
+//         
+//            imageReader.downloadImageWithPath(imagePath, complete: { in
+//                
+//            })
+//        }
+//    }
+//}
+
+
 class ZGCVehicleConfigTableViewCell: UITableViewCell {
     
     var dataListArr = NSMutableArray()
+    var modelListArr = NSMutableArray()
     var photoViewArr = NSMutableArray(capacity: 3)
     var titleLabelArr = NSMutableArray(capacity: 2)
     let photoViewWidth = (KScreenWidth - 40)/3
@@ -28,6 +66,7 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
 
     var takePhotoViewHidden = false
     var editImgViewhidden = false
+
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -82,16 +121,21 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
                     let iconImgView = self.photoViewArr[index] as! ZGCPhotoImgView
                     if index < self.dataListArr.count {
                         
-                        let iconImg = self.dataListArr[index] as? UIImage
+                        let image = self.dataListArr[index] as? UIImage
+                        let imgModel = self.modelListArr[index] as? Image
                         iconImgView.userInteractionEnabled = true
+                        iconImgView.pid = imgModel?.pid
                         //必须要有这行代码，否则复用会造成不一样的效果
-                        iconImgView.image = iconImg
                         iconImgView.hidden = false
-                        
+                        iconImgView.tag = self.tag * 3 + index + 1000
+                        if imgModel?.path != "" {
+                            iconImgView.setImageWithPath(imgModel?.path, placeholderImage: image)
+                        }
+
                         self.takePhotoView.userInteractionEnabled = false
 
                         if self.permitEditing == false {
-                            iconImgView.userInteractionEnabled = false
+//                            iconImgView.userInteractionEnabled = false
                             iconImgView.setSelectedImgViewHidden()
                             self.takePhotoView.userInteractionEnabled = true
                         }
@@ -110,8 +154,8 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
                         }
                         
                         iconImgView.deleteOrAddImgHandler = {
-                            (image:UIImage, isdelete:Bool) -> Void in
-                            self.deleteOrAddImgHandler(image:image, isdelete:isdelete)
+                            (image:UIImage, isdelete:Bool, imgView:ZGCPhotoImgView, tag:Int) -> Void in
+                            self.deleteOrAddImgHandler(image:image, isdelete:isdelete, imgView: imgView, tag: tag)
 
                         }
                         
@@ -135,6 +179,7 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
                     let iconImg = UIImage(named: "config_add")
                     addImgView.frame = CGRectMake(KScreenWidth - (iconImg?.size.width)! - 10 , (40 - (iconImg?.size.height)!)/2, (iconImg?.size.width)!, (iconImg?.size.height)!)
                     addImgView.image = iconImg
+                    
                     addImgView.userInteractionEnabled = true
                     if self.permitEditing == true {
                         addImgView.userInteractionEnabled = false
@@ -189,6 +234,8 @@ class ZGCVehicleConfigTableViewCell: UITableViewCell {
         }
         
     }
+    
+    
     
     func tapToTakePhotos () {
         

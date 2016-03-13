@@ -11,8 +11,11 @@
 // 发布代码于最专业的源码分享网站: Code4App.com
 
 #import <UIKit/UIKit.h>
+typedef void(^TapToCloseBlock)(void);
 
 @interface LMContainsLMComboxScrollView : UIScrollView
+
+@property (nonatomic, copy) TapToCloseBlock tapToClose;
 
 - (void)closeAllTheComBoxView;
 

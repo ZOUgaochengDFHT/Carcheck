@@ -52,8 +52,8 @@ class ZGCPhotosListTableViewCell: UITableViewCell {
                 let iconImg = self.dataListArr[index] as? UIImage
                 iconImgView.userInteractionEnabled = true
                 //必须要有这行代码，否则复用会造成不一样的效果
-                iconImgView.image = iconImg
                 iconImgView.hidden = false
+//                iconImgView.sd_setImageWithURL(NSURL(fileURLWithPath: <#T##String#>), placeholderImage: nil)
                 
                 if self.permitEditing == false {
                     iconImgView.userInteractionEnabled = false
@@ -74,8 +74,8 @@ class ZGCPhotosListTableViewCell: UITableViewCell {
 //                }
                 
                 iconImgView.deleteOrAddImgHandler = {
-                    (image:UIImage, isdelete:Bool) -> Void in
-                    self.deleteOrAddImgHandler(image:image, isdelete:isdelete)
+                    (image:UIImage, isdelete:Bool, imgView:ZGCPhotoImgView, tag:Int) -> Void in
+                    self.deleteOrAddImgHandler(image:image, isdelete:isdelete, imgView: imgView, tag: tag)
                     
                 }
                 

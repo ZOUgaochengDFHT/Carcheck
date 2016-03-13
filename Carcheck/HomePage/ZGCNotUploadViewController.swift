@@ -34,7 +34,7 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
         UserDefault.setObject(tableNameArr[index], forKey: "tableName")
         UserDefault.synchronize()
         
-        let unUploadArr = ZGCUnUploadManager().selectUnUploads() as NSArray
+        let unUploadArr = ZGCUnUploadManager().selectUnUploads(tableNameArr[index]) as NSArray
         if unUploadArr.count > 0 {
             unUploadArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                 self.modelArr.addObject(object)

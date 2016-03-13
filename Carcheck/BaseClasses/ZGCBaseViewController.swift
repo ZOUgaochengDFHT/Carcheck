@@ -78,9 +78,6 @@ class ZGCBaseViewController: UIViewController {
         }
     }
     
-    func upOrNextBtnAction(btn:UIButton) {
-        
-    }
     
     
     func homeButtonClicked() {

@@ -10,12 +10,14 @@ import UIKit
 
 class Image: NSObject {
     var path: String? //路径
-    var pid: String?
     var instruction: String? //概述说明
+    var location: String? //位置
+    var pid: String?
     
-    init(path:String?, pid: String?, instruction: String?) {
+    init(path:String?, instruction: String?, location: String?, pid: String?) {
         self.path = path
-        self.pid = pid
         self.instruction = instruction
+        self.location = location
+        self.pid = pid
     }
 }

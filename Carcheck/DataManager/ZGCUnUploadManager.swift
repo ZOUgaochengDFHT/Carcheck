@@ -33,7 +33,6 @@ class ZGCUnUploadManager: NSObject {
     override init() {
             
         let path = NSString(string: DocumentsDirectory).stringByAppendingPathComponent("item".stringByAppendingString(".sqlite"))
-        print(path)
         self.dbPath = path
         
         let tableName = UserDefault.objectForKey("tableName") as! String
@@ -109,12 +108,9 @@ class ZGCUnUploadManager: NSObject {
     }
     
     // MARK: >> 查
-    func selectUnUploads() -> Array<UnUpload> {
+    func selectUnUploads(tableName:String) -> Array<UnUpload> {
         dbBase.open();
         var unUploads = [UnUpload]()
-        
-        let tableName = UserDefault.objectForKey("tableName") as! String
-
         
         if let rs = dbBase.executeQuery("select name ,state, saveTime ,vehicleType, licenseNo, databasePath from ".stringByAppendingString(tableName), withArgumentsInArray: nil) {
             while rs.next() {

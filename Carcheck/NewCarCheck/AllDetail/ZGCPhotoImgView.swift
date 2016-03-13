@@ -8,13 +8,15 @@
 
 import UIKit
 
-typealias ZGCPassDeleteOrAddImgBlock = (image:UIImage, isdelete:Bool) -> Void
+typealias ZGCPassDeleteOrAddImgBlock = (image:UIImage, isdelete:Bool, imgView:ZGCPhotoImgView, tag:Int) -> Void
 class ZGCPhotoImgView: UIImageView {
 
     var tar: AnyObject!
     var sel: Selector!
 
-    var aframe:CGRect!
+    var aframe: CGRect!
+    
+    var pid: String!
     
     var deleteOrAddImgHandler :ZGCPassDeleteOrAddImgBlock!
     
@@ -68,11 +70,11 @@ class ZGCPhotoImgView: UIImageView {
         if selectedImgView.image == selectedImg {
 //            self.permitEditing = false
             selectedImgView.image = UIImage()
-             deleteOrAddImgHandler(image:self.image!, isdelete:false)
+             deleteOrAddImgHandler(image:self.image!, isdelete:false, imgView: self, tag: self.tag)
         }else {
             selectedImgView.image = selectedImg
 //            self.permitEditing = true
-            deleteOrAddImgHandler(image:self.image!, isdelete:true)
+            deleteOrAddImgHandler(image:self.image!, isdelete:true, imgView: self, tag: self.tag)
         }
     }
     

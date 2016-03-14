@@ -47,6 +47,10 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
             }
             self.contentArr.replaceObjectAtIndex(comboxIndex, withObject: comboxStr)
         }
+        
+        if self.isCreateNew == false {
+            self.updatePerson()
+        }
 
         self.view.endEditing(true)
         UIView.animateWithDuration(0.25) { () -> Void in
@@ -194,6 +198,10 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 self.conLabel = self.comboxScrollView.viewWithTag(409) as! UILabel
                 self.conLabel.text = str
                 self.contentArr.replaceObjectAtIndex(9, withObject: self.conLabel.text!)
+                
+                if self.isCreateNew == false {
+                    self.updatePerson()
+                }
             }
             
         }else {
@@ -265,7 +273,8 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: "UIKeyboardWillShowNotification", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeVehicleType", name: CHANGEVEHICLETYPE, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "textFieldTextDidChange:", name: "UITextFieldTextDidChangeNotification", object: nil)
+
 
         if self.isCreateNew == false {
             dbManager = ZGCPersonDBManager()
@@ -389,6 +398,8 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                                         
                                         self.resetRightTextFieldtext()
                                         self.resetComboxContent((model.data as NSDictionary).objectForKey("carnum")! as! String)
+                                        
+                                        self.updatePerson()
                                     }
                                 }
                                 
@@ -466,6 +477,10 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     func changeVehicleType() {
         self.conLabel = self.comboxScrollView.viewWithTag(408) as! UILabel
         conLabel.text = UserDefault.objectForKey("brand")?.stringByAppendingString((UserDefault.objectForKey("model") as! String).stringByAppendingString(UserDefault.objectForKey("style") as! String))
+        if self.isCreateNew == false {
+            contentArr.replaceObjectAtIndex(conLabel.tag - 400, withObject: conLabel.text!)
+            self.updatePerson()
+        }
     }
     
     override func tabBarTapAction(tap: UITapGestureRecognizer) {
@@ -520,14 +535,9 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 return
             }
             
-   
-            // -MARK:- 添加数据到数据库
-            let person = Person(type: contentArr[0] as? String, name: contentArr[1] as? String, phone: contentArr[2] as? String, licenseNo: contentArr[3] as? String, location: contentArr[4] as? String, vin: contentArr[5] as? String, engineNo: contentArr[6] as? String, regisDate: contentArr[7] as? String, vehicleType: contentArr[8] as? String, vehicleEmiss: contentArr[9] as? String, transmType: contentArr[10] as? String, driveWay: contentArr[11] as? String, fuelType: contentArr[12] as? String, manufacDate: contentArr[13] as? String, licenseType: contentArr[14] as? String, envirProStand: contentArr[15] as? String, mileage: contentArr[16] as? String, bodyColor: contentArr[17] as? String, carKeys: contentArr[18] as? String, pid:"person")
-            
             if self.isCreateNew == true {
                 
                 let subDir = CreateSubDocumentsDirectory()
-                self.dbManager = ZGCPersonDBManager()
                 
                 let dateStr = GetCurrentDateTransformToDateStr()
                 let unUpload = UnUpload(name: "", saveTime: dateStr, state: "未上传", licenseNo: "", vehicleType: "", databasePath:subDir)
@@ -537,7 +547,21 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 let otherDBManager = ZGCOtherDBManager()
                 otherDBManager.addOther(other)
                 
+                self.dbManager = ZGCPersonDBManager()
+                
+                self.updatePerson()
+                
             }
+            
+            if isCreateNew == true {
+                let vehicleConfigVC = ZGCVehicleConfigViewController()
+                vehicleConfigVC.isCreateNew = isCreateNew
+                self.navigationController?.pushViewController(vehicleConfigVC, animated: true)
+            }else {
+                let carvalueDetailVC = ZGCCarValueDetailViewController()
+                self.navigationController?.pushViewController(carvalueDetailVC, animated: true)
+            }
+
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                 
@@ -566,19 +590,28 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                         
                     })
                 }
-                
-       
-
-                if self.dbManager.selectPersons().count > 0 {
-                    self.dbManager.updatePerson(person)
-                }else {
-                    self.dbManager.addPerson(person)                    
-                }
             })
 
-            
-            let vehicleConfigVC = ZGCVehicleConfigViewController()
-            self.navigationController?.pushViewController(vehicleConfigVC, animated: true)
+
+        }
+    }
+    
+    func updatePerson () {
+        // -MARK:- 添加数据到数据库
+        let person = Person(type: contentArr[0] as? String, name: contentArr[1] as? String, phone: contentArr[2] as? String, licenseNo: contentArr[3] as? String, location: contentArr[4] as? String, vin: contentArr[5] as? String, engineNo: contentArr[6] as? String, regisDate: contentArr[7] as? String, vehicleType: contentArr[8] as? String, vehicleEmiss: contentArr[9] as? String, transmType: contentArr[10] as? String, driveWay: contentArr[11] as? String, fuelType: contentArr[12] as? String, manufacDate: contentArr[13] as? String, licenseType: contentArr[14] as? String, envirProStand: contentArr[15] as? String, mileage: contentArr[16] as? String, bodyColor: contentArr[17] as? String, carKeys: contentArr[18] as? String, pid:"person")
+        
+        if self.dbManager.selectPersons().count > 0 {
+            self.dbManager.updatePerson(person)
+        }else {
+            self.dbManager.addPerson(person)
+        }
+    }
+    
+    func textFieldTextDidChange(notification:NSNotification) {
+        let textField = notification.object as! UITextField!
+        if self.isCreateNew == false {
+            contentArr.replaceObjectAtIndex(textField.tag - 600, withObject: textField.text!)
+            self.updatePerson()
         }
     }
 

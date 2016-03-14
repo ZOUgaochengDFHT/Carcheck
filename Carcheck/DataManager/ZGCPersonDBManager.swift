@@ -37,9 +37,7 @@ class ZGCPersonDBManager: NSObject {
         let documentsFolder = UserDefault.objectForKey("subDir") as! String
 
         let path = NSString(string: documentsFolder).stringByAppendingPathComponent("data".stringByAppendingString(".sqlite"))
-        
-        print(path)
-        
+                
         self.dbPath = path
         
         

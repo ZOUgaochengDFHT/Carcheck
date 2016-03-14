@@ -23,6 +23,9 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
     
     var attri2DArr = NSMutableArray()
     
+    var arrayModel2D = NSMutableArray()
+
+    
     var selectedIndex: Int!
     
     var photoDeleteBarView: ZGCPhotoDeleteBarView!
@@ -95,6 +98,7 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
         }else {
             cell.maxCountThree = array2D.count - 1
             cell.dataListArr = array2D[indexPath.row] as! NSMutableArray
+            cell.modelListArr = arrayModel2D[indexPath.row] as! NSMutableArray
             cell.takePhotoViewHidden = true
             cell.deleteOrAddImgHandler = {
                 (image:UIImage, isdelete:Bool, imgView:ZGCPhotoImgView, tag:Int) -> Void in

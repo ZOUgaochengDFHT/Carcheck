@@ -25,6 +25,7 @@ class ZGCTakePhotosTableView: BaseTableView , UITextFieldDelegate {
     var photoImg: UIImage!
     var btnTitle: String!
     var currentStoreImgArr: NSMutableArray!
+    var currentImageModelArr = NSMutableArray()
     var clickImgViewToShowHandler: ClickImgViewToShowBlock!
 
 
@@ -68,6 +69,8 @@ class ZGCTakePhotosTableView: BaseTableView , UITextFieldDelegate {
         cell.row = indexPath.row 
         if currentStoreImgArr != nil && currentStoreImgArr.count > 0 {
             cell.dataListArr = currentStoreImgArr[indexPath.row] as! NSMutableArray
+            cell.modelListArr = currentImageModelArr[indexPath.row] as! NSMutableArray
+
         }
         cell.clickImgViewToShowHandler = {
             (tag:Int, imgView:ZGCEditPhotoView) -> Void in

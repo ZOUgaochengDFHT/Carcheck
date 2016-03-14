@@ -11,6 +11,7 @@ import UIKit
 class ZGCPhotosListTableViewCell: UITableViewCell {
 
     var dataListArr = NSMutableArray()
+    var modelListArr = NSMutableArray()
     var photoViewArr = NSMutableArray(capacity: 3)
     let photoViewWidth = (KScreenWidth - 40)/3
     var permitEditing:Bool!
@@ -50,10 +51,16 @@ class ZGCPhotosListTableViewCell: UITableViewCell {
             if index < self.dataListArr.count {
                 
                 let iconImg = self.dataListArr[index] as? UIImage
+                
+                let imgModel = self.modelListArr[index] as? Image
+
                 iconImgView.userInteractionEnabled = true
                 //必须要有这行代码，否则复用会造成不一样的效果
                 iconImgView.hidden = false
-//                iconImgView.sd_setImageWithURL(NSURL(fileURLWithPath: <#T##String#>), placeholderImage: nil)
+                if imgModel?.path != nil {
+                    iconImgView.setImageWithPath(imgModel?.path, placeholderImage: iconImg)
+                    iconImgView.pid = imgModel?.pid
+                }
                 
                 if self.permitEditing == false {
                     iconImgView.userInteractionEnabled = false

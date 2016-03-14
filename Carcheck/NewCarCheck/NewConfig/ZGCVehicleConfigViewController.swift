@@ -14,7 +14,7 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     @IBOutlet weak var carTypeTitleLabel: UILabel!
     var vehicleConfigScrollView: ZGCVehicleConfigListScrollView!
     var addConfigScrollView: ZGCAddConfigScrollView!
-    var isCreateNew = true
+    var isCreateNew = false
     var rightBtn:UIButton!
     var permitEditing = false
     
@@ -43,6 +43,8 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     var dir:String!
     
     var images = [SKPhoto]()
+    
+
 
     
     override func viewDidLoad() {
@@ -151,8 +153,14 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
     override func tabBarTapAction(tap: UITapGestureRecognizer) {
         super.tabBarTapAction(tap)
         if tap.view!.tag == 335 {
-            let takesPhotosListVC = ZGCTakesPhotosListViewController()
-            self.navigationController?.pushViewController(takesPhotosListVC, animated: true)
+            if isCreateNew == true {
+                let takesPhotosListVC = ZGCTakesPhotosListViewController()
+                self.navigationController?.pushViewController(takesPhotosListVC, animated: true)
+            }else {
+                let carvalueDetailVC = ZGCCarValueDetailViewController()
+                self.navigationController?.pushViewController(carvalueDetailVC, animated: true)
+            }
+
         }
     }
     
@@ -345,8 +353,10 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
 
     func btnAction (btn:UIButton) {
         if btn.tag == 99 {
-            let vehicleBaseConfigVC = ZGCVehicleBaseConfigViewController()
-            self.navigationController?.pushViewController(vehicleBaseConfigVC, animated: true)
+            if isCreateNew == true {
+                let vehicleBaseConfigVC = ZGCVehicleBaseConfigViewController()
+                self.navigationController?.pushViewController(vehicleBaseConfigVC, animated: true)
+            }
         }
     }
 
@@ -446,10 +456,10 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                                 }
                             })
                             
-                            copyDeleteIndexArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                                copyImgArr.removeObjectAtIndex(Int(object as! NSNumber))
-                                copyPicArr.removeObjectAtIndex(Int(object as! NSNumber))
-                            })
+                            for object in copyDeleteIndexArr.count - 1...0 {
+                                copyImgArr.removeObjectAtIndex(Int(object as NSNumber))
+                                copyPicArr.removeObjectAtIndex(Int(object as NSNumber))
+                            }
                             
                             self.deleteOrAddImgPidArr.removeAllObjects()
                             copyImgArr.removeLastObject()

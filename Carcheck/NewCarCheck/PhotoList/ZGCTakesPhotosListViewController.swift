@@ -15,6 +15,8 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
     var takesPhotosTableView: ZGCTakePhotosTableView!
     var takesPhotosTableViewArr = NSMutableArray()
     var window: UIWindow!
+    var isCreateNew = false
+
     var imagePicker: HImagePickerUtils!
     var selectedIndex: Int! = 0
     var takesPhotosFinished = false
@@ -24,6 +26,8 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
     
     var currentImageModelArr = NSMutableArray()
     var totalImageModelImgArr = NSMutableArray()
+    
+    var noCompressArr = NSMutableArray()
 
     var currentImg: UIImage!
     
@@ -107,6 +111,7 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
     func slideSwitchView(view: SUNSlideSwitchView!, didselectTab number: UInt) {
         selectedIndex = Int(number)
         
+        self.noCompressArr.removeAllObjects()
         self.currentStoreImgArr.removeAllObjects()
         self.currentImageModelArr.removeAllObjects()
         self.attri2DArr.removeAllObjects()
@@ -162,10 +167,11 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                     let imageModel = object as! Image
                     self.currentImageModelArr.addObject(imageModel)
                     self.attri2DArr.addObject(imageModel.instruction!)
-                    self.currentStoreImgArr.addObject(ImageWithImageSimple(UIImage(named: imageModel.path!)!, scaledToSize: CGSizeMake((KScreenWidth - 40)/3, (KScreenWidth - 40)/3)))
+                    self.noCompressArr.addObject(UIImage(named: imageModel.path!)!)
+                    self.currentStoreImgArr.addObject(UIImage(named: "config_takePic")!)
                     
                 })
-
+                
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.createArray2D()
@@ -182,6 +188,7 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                         let imageModel = object as! Image
                         currentImageModelArr.addObject(imageModel)
                         self.attri2DArr.addObject(imageModel.instruction!)
+                        self.noCompressArr.addObject(UIImage(named: imageModel.path!)!)
                         currentStoreImgArr.addObject(ImageWithImageSimple(UIImage(named: imageModel.path!)!, scaledToSize: CGSizeMake((KScreenWidth - 40)/3, (KScreenWidth - 40)/3)))
                         
                     })
@@ -201,6 +208,7 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
             self.currentImageModelArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                 let imageModel = object as! Image
                 self.attri2DArr.addObject(imageModel.instruction!)
+                self.noCompressArr.addObject(UIImage(named: imageModel.path!)!)
                 
             })
             self.createArray2D()
@@ -241,6 +249,7 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                 
                 self.currentImg = ImageWithImageSimple(a!, scaledToSize: CGSizeMake((KScreenWidth - 40)/3, (KScreenWidth - 40)/3))
                 self.currentStoreImgArr.addObject(self.currentImg)
+                self.noCompressArr.addObject(a!)
                 self.attri2DArr.addObject("")
                 
                 //当处于最后一项下
@@ -252,7 +261,6 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                     }
                 }
                 
-                self.createArray2D()
                 if self.currentStoreImgArr.count == 0 {
                     self.photoListBarView.setNextHidden(true)
                 }else {
@@ -265,18 +273,23 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                 let copyStr = (GetCurrentDateTransformToDateStrTwo() as NSString).mutableCopy() //使用mutableCopy深复制对象，是深复制后得到的变量不回受原变量的改变而变化
 
 
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    WriteImageDataToFile(a!, dir: copyDir as! String, imgName: copyStr as! String )
-                })
-                
                 let tableName = String("\("T_ImageTwo")\(index)")
-
+                
                 let image = Image(path: copyDir.stringByAppendingString("/").stringByAppendingString(copyStr as! String).stringByAppendingString(".png"), instruction:"", location:self.locationStr, pid: copyStr as? String)
                 let manager = ZGCImageTwoDBManager.shareInstance()
                 manager.addImage(image, tableName: tableName)
                 self.currentImageModelArr.addObject(image)
                 
-                print(ZGCImageTwoDBManager().selectImages(tableName).count)
+                
+                self.createArray2D()
+
+                
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                    WriteImageDataToFile(a!, dir: copyDir as! String, imgName: copyStr as! String )
+                })
+                
+
                 
                 //当处于最后一项下
                 if index + 1 == self.tabTitleArr.count {
@@ -354,9 +367,14 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
         
         let array2D = NSMutableArray()
         
+        let arrayModel2D = NSMutableArray()
+        
         let array2DCount:Int = 3
         
         var array = NSMutableArray(capacity: array2DCount)
+        
+
+        
         self.currentStoreImgArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
             
             array.addObject(object)
@@ -367,8 +385,23 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                 array2D.addObject(array.mutableCopy())
             }
         }
+        
+        var arrayModel = NSMutableArray(capacity: array2DCount)
+
+        self.currentImageModelArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
+            
+            arrayModel.addObject(object)
+            if arrayModel.count % array2DCount  == 0 && index != 0 {
+                arrayModel2D.addObject(arrayModel.mutableCopy())
+                arrayModel = NSMutableArray(capacity: array2DCount)
+            }else if self.currentStoreImgArr.count % array2DCount  < array2DCount && self.currentImageModelArr.count == index + 1 {
+                arrayModel2D.addObject(arrayModel.mutableCopy())
+            }
+        }
+        
         self.takesPhotosTableView = self.takesPhotosTableViewArr[self.selectedIndex] as! ZGCTakePhotosTableView
         self.takesPhotosTableView.currentStoreImgArr = array2D
+        self.takesPhotosTableView.currentImageModelArr = arrayModel2D
         self.takesPhotosTableView.reloadData()
         
         
@@ -394,14 +427,13 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
             }else {
                 self.images.removeAll()
                 
-                self.currentStoreImgArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                self.noCompressArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                     let photo = SKPhoto.photoWithImage(object as! UIImage)
                     self.images.append(photo)
                 })
                 let index = tag - 800
-                let browser = SKPhotoBrowser(originImage: self.currentStoreImgArr[index] as! UIImage, photos: self.images, animatedFromView: imgView)
+                let browser = SKPhotoBrowser(originImage: self.noCompressArr[index] as! UIImage, photos: self.images, animatedFromView: imgView)
                 browser.attri2DArr = self.attri2DArr
-                browser.currentImageModelArr = self.currentImageModelArr
                 browser.initializePageIndex(index)
                 browser.delegate = self
                 

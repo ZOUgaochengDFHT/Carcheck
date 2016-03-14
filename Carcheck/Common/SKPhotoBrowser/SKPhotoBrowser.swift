@@ -104,6 +104,8 @@ public class SKPhotoBrowser: UIViewController, UIScrollViewDelegate, UIActionShe
     
     var currentImageModelArr = NSMutableArray()
     
+    
+    
     var isExist = false
     
     var isNewConfig = false

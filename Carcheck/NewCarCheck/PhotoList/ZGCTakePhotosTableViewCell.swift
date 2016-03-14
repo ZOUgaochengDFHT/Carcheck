@@ -12,6 +12,7 @@ typealias ClickImgViewToShowBlock = (tag:Int, imgView:ZGCEditPhotoView) -> Void
 class ZGCTakePhotosTableViewCell: UITableViewCell {
 
     var dataListArr = NSMutableArray()
+    var modelListArr = NSMutableArray()
     var photoViewArr = NSMutableArray(capacity: 4)
     let photoViewWidth = (KScreenWidth - 40)/3
     var permitEditing:Bool!
@@ -60,8 +61,12 @@ class ZGCTakePhotosTableViewCell: UITableViewCell {
                 //必须要有这行代码，否则复用会造成不一样的效果
                 iconImgView.hidden = false
                 let iconImg = self.dataListArr[index] as? UIImage
+                let imgModel = self.modelListArr[index] as? Image
+
+                if imgModel?.path != "" {
+                    iconImgView.setImageWithPath(imgModel?.path, placeholderImage: iconImg)
+                }
                 iconImgView.height = (KScreenWidth - 40)/3
-                iconImgView.image = iconImg
             }else {
                 iconImgView.hidden = true
             }

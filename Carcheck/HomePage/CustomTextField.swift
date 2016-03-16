@@ -29,6 +29,7 @@ class CustomTextField: UITextField {
     override func rightViewRectForBounds(bounds: CGRect) -> CGRect {
         var textRect = super.rightViewRectForBounds(bounds)
         textRect.origin.x = self.frame.size.width-25;
+
         return textRect
     }
 }

@@ -328,27 +328,38 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
         return "删除"
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        let attriArr = self.attri2DArr[indexPath.row] as! NSMutableArray
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            let configDBManager =  ZGCConfigDBManager()
-            let config = Config(name: attriArr[0] as? String, instruction: attriArr[1] as? String, pid:String(indexPath.row))
-            configDBManager.deleteConfig(config)
-            //更新配置项pid、删除旧数据、重新写入
-            let newConfigsArr = NSMutableArray()
-            (configDBManager.selectConfigs() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                let config = object as! Config
-                newConfigsArr.addObject(Config(name: config.name, instruction: config.instruction, pid: String(index)))
-                configDBManager.deleteConfig(config)
-            })
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "删除" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
-            newConfigsArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                let config = object as! Config
-                configDBManager.addConfig(config)
+            let attriArr = self.attri2DArr[indexPath.row] as! NSMutableArray
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                let configDBManager =  ZGCConfigDBManager()
+                let config = Config(name: attriArr[0] as? String, instruction: attriArr[1] as? String, pid:String(indexPath.row))
+                configDBManager.deleteConfig(config)
+                //更新配置项pid、删除旧数据、重新写入
+                let newConfigsArr = NSMutableArray()
+                (configDBManager.selectConfigs() as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                    let config = object as! Config
+                    newConfigsArr.addObject(Config(name: config.name, instruction: config.instruction, pid: String(index)))
+                    configDBManager.deleteConfig(config)
+                })
+                
+                newConfigsArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                    let config = object as! Config
+                    configDBManager.addConfig(config)
+                })
             })
+            self.attri2DArr.removeObjectAtIndex(indexPath.row)
+            self.vehicleConfigTableView.reloadData()
         })
-        self.attri2DArr.removeObjectAtIndex(indexPath.row)
-        vehicleConfigTableView.reloadData()
+        
+        shareAction.backgroundColor = ButtonBackGroundColor
+        
+        return [shareAction]
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
     }
 
     func btnAction (btn:UIButton) {
@@ -507,7 +518,8 @@ class ZGCVehicleConfigViewController: ZGCBaseViewController, UITableViewDelegate
                     self.createArray2D()
 
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                        WriteImageDataToFile(a!, dir: self.dir, imgName:copyStr as! String)                      
+                        WriteImageDataToFile(a!, dir: self.dir, imgName:copyStr as! String)
+                        Util.convertPngToJpg(a!, path:self.dir, imageName:copyStr as! String)
                     })
                     
                 }

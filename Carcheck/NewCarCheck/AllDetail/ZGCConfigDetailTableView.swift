@@ -37,6 +37,9 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
     var tar:AnyObject!
     var sel:Selector!
     
+    var isEditingOrNot = true
+
+    
     var toVehicleBaseConfigVCHandler:ToVehicleBaseConfigVCBlock!
     
     var imageModelArr = NSMutableArray()
@@ -155,6 +158,8 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
             
             let editTap = UITapGestureRecognizer(target: tar, action:sel)
             bgView.addGestureRecognizer(editTap)
+            
+            bgView.hidden = !self.isEditingOrNot
         }
         
         return bgView
@@ -180,6 +185,7 @@ class ZGCConfigDetailTableView: UITableView, UITableViewDelegate, UITableViewDat
         
         return bgView
     }
+
     
     func btnAction(btn:UIButton) {
         toVehicleBaseConfigVCHandler()

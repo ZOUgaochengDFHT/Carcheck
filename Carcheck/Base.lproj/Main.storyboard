@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="PWp-Qd-vNf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="PWp-Qd-vNf">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Base Tab Bar Controller-->
         <scene sceneID="7eb-bk-WUT">
             <objects>
-                <tabBarController id="PWp-Qd-vNf" customClass="ZGCBaseTabBarController" customModule="Carcheck" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="baseTabBar" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PWp-Qd-vNf" customClass="ZGCBaseTabBarController" customModule="Carcheck" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="6BD-8Y-Ln2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -24,10 +24,10 @@
             </objects>
             <point key="canvasLocation" x="477.86666666666667" y="752.60000000000002"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Base Navigation Controller-->
         <scene sceneID="9fl-LS-wW7">
             <objects>
-                <navigationController id="979-ck-GLL" sceneMemberID="viewController">
+                <navigationController id="979-ck-GLL" customClass="ZGCBaseNavigationController" customModule="Carcheck" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="tabbar_home_n" selectedImage="tabbar_home_h" id="Pk6-Un-N4a">
                         <inset key="imageInsets" minX="-40" minY="7" maxX="40" maxY="-7"/>
                     </tabBarItem>
@@ -111,10 +111,10 @@
             </objects>
             <point key="canvasLocation" x="1293" y="1117"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Base Navigation Controller-->
         <scene sceneID="bM3-GE-Mwh">
             <objects>
-                <navigationController id="yxP-Kv-pBD" sceneMemberID="viewController">
+                <navigationController id="yxP-Kv-pBD" customClass="ZGCBaseNavigationController" customModule="Carcheck" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="tabbar_setting_n" selectedImage="tabbar_setting_h" id="Wbw-eq-Cmh">
                         <inset key="imageInsets" minX="40" minY="7" maxX="-40" maxY="-7"/>
                     </tabBarItem>

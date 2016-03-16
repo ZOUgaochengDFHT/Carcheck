@@ -103,6 +103,17 @@
 		BC77BD741C8E9B9900C64AC7 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC77BD731C8E9B9900C64AC7 /* Image.swift */; };
 		BC77BD761C8E9C0500C64AC7 /* ZGCImageDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC77BD751C8E9C0500C64AC7 /* ZGCImageDBManager.swift */; };
 		BC77BD781C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC77BD771C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift */; };
+		BC78A2E01C97CF3E0000727E /* ZGCUploadDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC78A2DF1C97CF3E0000727E /* ZGCUploadDataManager.swift */; };
+		BC78A2E61C97DB5D0000727E /* ZGCItemListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BC78A2E51C97DB5D0000727E /* ZGCItemListModel.m */; };
+		BC78A2EA1C9802710000727E /* ZGCPWDChangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC78A2E91C9802710000727E /* ZGCPWDChangeViewController.swift */; };
+		BC78A2ED1C9806000000727E /* ZGCValuationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC78A2EB1C9806000000727E /* ZGCValuationViewController.swift */; };
+		BC78A2F11C9848EA0000727E /* ZGCValuationResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC78A2EF1C9848EA0000727E /* ZGCValuationResultViewController.swift */; };
+		BC78A2F21C9848EA0000727E /* ZGCValuationResultViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC78A2F01C9848EA0000727E /* ZGCValuationResultViewController.xib */; };
+		BC78A2F81C99355A0000727E /* jpush-ios-2.1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC78A2F61C99355A0000727E /* jpush-ios-2.1.0.a */; };
+		BC78A2FA1C9935C20000727E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC78A2F91C9935C20000727E /* CFNetwork.framework */; };
+		BC78A2FC1C9935D00000727E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC78A2FB1C9935D00000727E /* CoreFoundation.framework */; };
+		BC78A2FE1C9935E80000727E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC78A2FD1C9935E80000727E /* Security.framework */; };
+		BC78A3001C99367A0000727E /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC78A2FF1C99367A0000727E /* PushConfig.plist */; };
 		BC7F052C1C91286F00C7635A /* ZGCillegalValueDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7F052B1C91286F00C7635A /* ZGCillegalValueDBManager.swift */; };
 		BC7F052E1C91299600C7635A /* ValueOrIllegal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7F052D1C91299600C7635A /* ValueOrIllegal.swift */; };
 		BC7FC43C1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7FC43B1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift */; };
@@ -274,6 +285,19 @@
 		BC77BD731C8E9B9900C64AC7 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		BC77BD751C8E9C0500C64AC7 /* ZGCImageDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCImageDBManager.swift; sourceTree = "<group>"; };
 		BC77BD771C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCImageTwoDBManager.swift; sourceTree = "<group>"; };
+		BC78A2DF1C97CF3E0000727E /* ZGCUploadDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCUploadDataManager.swift; sourceTree = "<group>"; };
+		BC78A2E41C97DB5D0000727E /* ZGCItemListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCItemListModel.h; sourceTree = "<group>"; };
+		BC78A2E51C97DB5D0000727E /* ZGCItemListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZGCItemListModel.m; sourceTree = "<group>"; };
+		BC78A2E91C9802710000727E /* ZGCPWDChangeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCPWDChangeViewController.swift; sourceTree = "<group>"; };
+		BC78A2EB1C9806000000727E /* ZGCValuationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCValuationViewController.swift; sourceTree = "<group>"; };
+		BC78A2EF1C9848EA0000727E /* ZGCValuationResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCValuationResultViewController.swift; sourceTree = "<group>"; };
+		BC78A2F01C9848EA0000727E /* ZGCValuationResultViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZGCValuationResultViewController.xib; sourceTree = "<group>"; };
+		BC78A2F61C99355A0000727E /* jpush-ios-2.1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "jpush-ios-2.1.0.a"; sourceTree = "<group>"; };
+		BC78A2F71C99355A0000727E /* JPUSHService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUSHService.h; sourceTree = "<group>"; };
+		BC78A2F91C9935C20000727E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		BC78A2FB1C9935D00000727E /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		BC78A2FD1C9935E80000727E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BC78A2FF1C99367A0000727E /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
 		BC7F052B1C91286F00C7635A /* ZGCillegalValueDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCillegalValueDBManager.swift; sourceTree = "<group>"; };
 		BC7F052D1C91299600C7635A /* ValueOrIllegal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueOrIllegal.swift; sourceTree = "<group>"; };
 		BC7FC43B1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZGCGeneralDetailView.swift; sourceTree = "<group>"; };
@@ -322,6 +346,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC78A2FE1C9935E80000727E /* Security.framework in Frameworks */,
+				BC78A2FC1C9935D00000727E /* CoreFoundation.framework in Frameworks */,
+				BC78A2FA1C9935C20000727E /* CFNetwork.framework in Frameworks */,
+				BC78A2F81C99355A0000727E /* jpush-ios-2.1.0.a in Frameworks */,
 				BC126AE91C84255500897F03 /* libsqlite3.0.tbd in Frameworks */,
 				BC301BF01C7AD10A00E8F4B7 /* libz.tbd in Frameworks */,
 				BC301BEE1C7AD10000E8F4B7 /* CoreGraphics.framework in Frameworks */,
@@ -358,6 +386,9 @@
 		6E5C6FA464350E2ABD955E76 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BC78A2FD1C9935E80000727E /* Security.framework */,
+				BC78A2FB1C9935D00000727E /* CoreFoundation.framework */,
+				BC78A2F91C9935C20000727E /* CFNetwork.framework */,
 				BC126AE81C84255500897F03 /* libsqlite3.0.tbd */,
 				BC301BEF1C7AD10A00E8F4B7 /* libz.tbd */,
 				BC301BED1C7AD10000E8F4B7 /* CoreGraphics.framework */,
@@ -440,6 +471,7 @@
 				BC126AB01C841AF500897F03 /* ZGCPhotosListTableViewCell.swift */,
 				BC7FC43D1C8D7845008CA7A8 /* ZGCPhotoImgView.swift */,
 				BC126AB11C841AF500897F03 /* ZGCVehicleConfigDetailScrollView.swift */,
+				BC78A2DF1C97CF3E0000727E /* ZGCUploadDataManager.swift */,
 			);
 			path = AllDetail;
 			sourceTree = "<group>";
@@ -600,6 +632,7 @@
 				BC63376F1C70204200E0A3E7 /* Info.plist */,
 				BC6337941C70530400E0A3E7 /* Common.swift */,
 				BCD579041C742C85000D7EE8 /* Carcheck-Bridging-Header.h */,
+				BC78A2FF1C99367A0000727E /* PushConfig.plist */,
 			);
 			path = Carcheck;
 			sourceTree = "<group>";
@@ -645,6 +678,11 @@
 				BCD5791A1C744DB7000D7EE8 /* ZGCNotUploadTableViewCell.swift */,
 				BCBDFF761C8FFEEA001D4C03 /* CustomTextField.swift */,
 				BCBDFF771C8FFEEA001D4C03 /* CustomSearchBar.swift */,
+				BC78A2E41C97DB5D0000727E /* ZGCItemListModel.h */,
+				BC78A2E51C97DB5D0000727E /* ZGCItemListModel.m */,
+				BC78A2EB1C9806000000727E /* ZGCValuationViewController.swift */,
+				BC78A2EF1C9848EA0000727E /* ZGCValuationResultViewController.swift */,
+				BC78A2F01C9848EA0000727E /* ZGCValuationResultViewController.xib */,
 			);
 			name = HomePage;
 			path = Carcheck/HomePage;
@@ -657,6 +695,7 @@
 				BC9E0B9B1C740F7E0017ED00 /* ZGCIconTableViewCell.swift */,
 				BCD579311C7597EE000D7EE8 /* ZGCInfoModel.h */,
 				BCD579321C7597EE000D7EE8 /* ZGCInfoModel.m */,
+				BC78A2E91C9802710000727E /* ZGCPWDChangeViewController.swift */,
 			);
 			name = Setting;
 			path = Carcheck/Setting;
@@ -677,6 +716,15 @@
 			path = Carcheck/Login;
 			sourceTree = "<group>";
 		};
+		BC78A2F51C99355A0000727E /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				BC78A2F61C99355A0000727E /* jpush-ios-2.1.0.a */,
+				BC78A2F71C99355A0000727E /* JPUSHService.h */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
 		BCCC89291C72E5790056DDF4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -694,6 +742,7 @@
 				BCE7C7021C921F7200607485 /* DataService.m */,
 				BCE7C7081C926FBE00607485 /* Util.h */,
 				BCE7C7091C926FBE00607485 /* Util.m */,
+				BC78A2F51C99355A0000727E /* lib */,
 				BC05EA9C1C954948008BE0A1 /* SUNSlideSwitchView */,
 				BC05EA951C95491D008BE0A1 /* LMComBoxView */,
 				BC05EA8B1C9542F5008BE0A1 /* ZGCImageReader */,
@@ -775,7 +824,12 @@
 				TargetAttributes = {
 					BC63375F1C70204200E0A3E7 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = PQ9V6NYB7C;
+						DevelopmentTeam = 8JJ9XYR4HC;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					BC6337731C70204200E0A3E7 = {
 						CreatedOnToolsVersion = 7.2;
@@ -822,6 +876,7 @@
 				BC71E42F1C852CAA0080E7E5 /* ZGCVehicleBaseConfigViewController.xib in Resources */,
 				BC63376E1C70204200E0A3E7 /* LaunchScreen.storyboard in Resources */,
 				BC126AD81C841AF500897F03 /* ZGCVehicleStyleViewController.xib in Resources */,
+				BC78A3001C99367A0000727E /* PushConfig.plist in Resources */,
 				BC126ADC1C841AF500897F03 /* ZGCVehicleTypeTableViewCell.xib in Resources */,
 				BC71E4361C8543380080E7E5 /* ZGCBaseConfigTableViewCell.xib in Resources */,
 				BC301BA71C76F48000E8F4B7 /* whiteArrow@2x.png in Resources */,
@@ -834,6 +889,7 @@
 				BC126ADE1C841AF500897F03 /* ZGCVehicleTypeViewController.xib in Resources */,
 				BC6904FE1C86B41000C2877E /* ZGCVehicleConfigViewController.xib in Resources */,
 				BC63376B1C70204200E0A3E7 /* Carcheck.xcassets in Resources */,
+				BC78A2F21C9848EA0000727E /* ZGCValuationResultViewController.xib in Resources */,
 				BC6337691C70204200E0A3E7 /* Main.storyboard in Resources */,
 				BC126ADA1C841AF500897F03 /* ZGCVehicleTypeListViewController.xib in Resources */,
 				BC6905021C86B4EC00C2877E /* ZGCVehicleConfigTableViewCell.xib in Resources */,
@@ -923,6 +979,7 @@
 				BC126AD11C841AF500897F03 /* ZGCAddCarCheckViewController.swift in Sources */,
 				BC6905011C86B4EC00C2877E /* ZGCVehicleConfigTableViewCell.swift in Sources */,
 				BCD5791E1C7454E7000D7EE8 /* BaseModel.m in Sources */,
+				BC78A2ED1C9806000000727E /* ZGCValuationViewController.swift in Sources */,
 				BC7FC43C1C8D3E13008CA7A8 /* ZGCGeneralDetailView.swift in Sources */,
 				BC6337951C70530400E0A3E7 /* Common.swift in Sources */,
 				BCE7C7031C921F7200607485 /* DataService.m in Sources */,
@@ -949,6 +1006,8 @@
 				BC4F42041C802ED100C023F2 /* ZGCCarItemView.swift in Sources */,
 				BC4B3B951C7C1C91007CDE24 /* SKPhotoBrowser.swift in Sources */,
 				BC126ADF1C841AF500897F03 /* ZGCAddConfigScrollView.swift in Sources */,
+				BC78A2EA1C9802710000727E /* ZGCPWDChangeViewController.swift in Sources */,
+				BC78A2F11C9848EA0000727E /* ZGCValuationResultViewController.swift in Sources */,
 				BC126ACB1C841AF500897F03 /* ZGCCarBaseScrollView.swift in Sources */,
 				BC05EA931C9542F5008BE0A1 /* ZGCAsyncImageReader.m in Sources */,
 				BC77BD761C8E9C0500C64AC7 /* ZGCImageDBManager.swift in Sources */,
@@ -970,6 +1029,7 @@
 				BCE7C70C1C928E9100607485 /* ZGCCustomPickerView.swift in Sources */,
 				BC71E4291C84F77E0080E7E5 /* ZGCPersonDBManager.swift in Sources */,
 				BC126AD51C841AF500897F03 /* ZGCVehicleStyleTableViewCell.swift in Sources */,
+				BC78A2E61C97DB5D0000727E /* ZGCItemListModel.m in Sources */,
 				BC4B3B8F1C7C1C91007CDE24 /* SKCaptionView.swift in Sources */,
 				BCD5792C1C756479000D7EE8 /* ZGCLoginViewController.swift in Sources */,
 				BC05EA921C9542F5008BE0A1 /* UIImageView+AsyncReader.m in Sources */,
@@ -988,6 +1048,7 @@
 				BC05EA941C9542F5008BE0A1 /* ZGCImageCache.m in Sources */,
 				BC6904FD1C86B41000C2877E /* ZGCVehicleConfigViewController.swift in Sources */,
 				BC126AD71C841AF500897F03 /* ZGCVehicleStyleViewController.swift in Sources */,
+				BC78A2E01C97CF3E0000727E /* ZGCUploadDataManager.swift in Sources */,
 				BC77BD781C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift in Sources */,
 				BC61C7311C7C3607000D413B /* ZGCStaticsModel.m in Sources */,
 				BC126AD21C841AF500897F03 /* ZGCCarBrandListTableViewCell.swift in Sources */,
@@ -1139,15 +1200,22 @@
 			baseConfigurationReference = FF2E46ED2C637A24AF54E5CD /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gaocheng Zou (94V8E9Q33N)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gaocheng Zou (94V8E9Q33N)";
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Carcheck/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carcheck/Common/lib",
+				);
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zrxh.ios.chejian;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Carcheck/Carcheck-Bridging-Header.h";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -1157,13 +1225,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Carcheck/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carcheck/Common/lib",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zrxh.ios.chejian;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Carcheck/Carcheck-Bridging-Header.h";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

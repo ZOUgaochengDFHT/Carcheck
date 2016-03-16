@@ -157,6 +157,50 @@ class ZGCPersonDBManager: NSObject {
         
     }
     
+    // MARK: >> 查
+    func selectPerson() -> Array<Person>  {
+        dbBase.open();
+        var persons = [Person]()
+        
+        if let rs = dbBase.executeQuery("select type, name, phone,licenseNo, location, vin,engineNo, regisDate, vehicleType,vehicleEmiss, transmType, driveWay,fuelType, manufacDate, licenseType,envirProStand,mileage, bodyColor, carKeys, pid from T_Person", withArgumentsInArray: nil) {
+            while rs.next() {
+                
+                let type:String = rs.stringForColumn("type") as String
+                let name:String = rs.stringForColumn("name") as String
+                let phone:String = rs.stringForColumn("phone") as String
+                let licenseNo:String = rs.stringForColumn("licenseNo") as String
+                let location:String = rs.stringForColumn("location") as String
+                let vin:String = rs.stringForColumn("vin") as String
+                let engineNo:String = rs.stringForColumn("engineNo") as String
+                let regisDate:String = rs.stringForColumn("regisDate") as String
+                let vehicleType:String = rs.stringForColumn("vehicleType") as String
+                let vehicleEmiss:String = rs.stringForColumn("vehicleEmiss") as String
+                let transmType:String = rs.stringForColumn("transmType") as String
+                let driveWay:String = rs.stringForColumn("driveWay") as String
+                let fuelType:String = rs.stringForColumn("fuelType") as String
+                let manufacDate:String = rs.stringForColumn("manufacDate") as String
+                let licenseType:String = rs.stringForColumn("licenseType") as String
+                let envirProStand:String = rs.stringForColumn("envirProStand") as String
+                let mileage:String = rs.stringForColumn("mileage") as String
+                let bodyColor:String = rs.stringForColumn("bodyColor") as String
+                let carKeys:String = rs.stringForColumn("carKeys") as String
+                let pid:String = rs.stringForColumn("pid") as String
+                
+                
+                let p:Person = Person(type: type, name: name, phone: phone, licenseNo: licenseNo, location: location, vin: vin, engineNo: engineNo, regisDate: regisDate, vehicleType: vehicleType, vehicleEmiss: vehicleEmiss, transmType: transmType, driveWay: driveWay, fuelType: fuelType, manufacDate: manufacDate, licenseType:licenseType, envirProStand: envirProStand, mileage: mileage, bodyColor: bodyColor, carKeys: carKeys, pid:pid)
+                persons.append(p)
+            }
+        } else {
+            
+            print("查询失败 failed: \(dbBase.lastErrorMessage())")
+            
+        }
+        dbBase.close();
+        
+        return persons
+        
+    }
+    
     
     // MARK: >> 保证线程安全
     // TODO: 示例-增,查

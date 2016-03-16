@@ -109,9 +109,16 @@ class ZGCCarItemView: UIView {
     }
     
     func dismiss () {
-        UIView.animateWithDuration(0.25) { () -> Void in
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
             self.alpha = 0.0
             self.carItemView.top = KScreenHeight
+
+            }) { (finished) -> Void in
+             self.carItemView.removeFromSuperview()
+            self.backgroundView.removeFromSuperview()
+                self.backgroundView = nil
+            self.carItemView = nil
+                self.removeFromSuperview()
         }
     }
     

@@ -13,10 +13,9 @@
  *  png to jpg
  *
  */
-+ (UIImage *)convertPngToJpg:(UIImage *)pngImage {
++ (UIImage *)convertPngToJpg:(UIImage *)pngImage path:(NSString *)path imageName:(NSString *)imageName {
     NSData *data_jpgfromjpg = UIImageJPEGRepresentation(pngImage, 0.5);
-    NSString *documents = [NSHomeDirectory() stringByAppendingString:@"/Documents/"];
-    NSString *pathjpgfromjpg = [documents stringByAppendingString:@"license.jpg"];
+    NSString *pathjpgfromjpg = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", imageName]];
     [data_jpgfromjpg writeToFile:pathjpgfromjpg atomically:YES];
     UIImage *jpgImage = [UIImage imageNamed:pathjpgfromjpg];
     return jpgImage;
@@ -44,5 +43,28 @@
     NSString *carRegex = @"^[A-Za-z]{1}[A-Za-z_0-9]{5}$";
     NSPredicate *carTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",carRegex];
     return [carTest evaluateWithObject:carNo];
+}
+/**
+  *  获取工单状态
+  *
+  */
++ (NSString *)getNumWithStatus:(int)num {
+    NSString *status = @"pendding";
+    if (num == 2) {
+        status = @"unpass";
+    }else if (num == 3) {
+        status = @"pass";
+    }
+    return status;
+}
+
++ (NSString *)getWordWithStatus:(NSString *)word {
+    NSString *status = @"待审核";
+    if ([word isEqualToString:@"unpass"]) {
+        status = @"审核未通过";
+    }else if ([word isEqualToString:@"pass"]) {
+        status = @"审核通过";
+    }
+    return status;
 }
 @end

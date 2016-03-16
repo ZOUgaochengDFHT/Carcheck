@@ -24,12 +24,14 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     
     var customPickerView: ZGCCustomPickerView!
 
-    var licenseTypeNum = 0
+    var licenseTypeNum: String!
     
     var isCreateNew = false
     var dbManager: ZGCPersonDBManager!
     
     var conArr = NSArray()
+    
+    var chepaiKeyArr = NSMutableArray()
     
     let preTitleArr = ["业务类型", "车主姓名", "联系方式", "车牌号", "车辆所在地", "车辆VIN码", "发动机号", "注册日期", "车辆型号", "车辆排量", "变速器类型", "驱动方式", "燃油类型", "出厂日期", "车牌类型", "环保标准", "行驶里程", "车身颜色", "车钥匙"] as NSArray
 
@@ -43,7 +45,7 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
             self.contentArr.replaceObjectAtIndex(comboxIndex, withObject: mStr)
         }else {
             if comboxIndex == 14 {
-                licenseTypeNum = Int(index)
+                licenseTypeNum = self.chepaiKeyArr[Int(index)] as! String
             }
             self.contentArr.replaceObjectAtIndex(comboxIndex, withObject: comboxStr)
         }
@@ -61,7 +63,7 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     func setUpBgScrollView () {
         var i = 0
         preTitleArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
-            var comBoxWidth = KScreenWidth*2/3
+            var comBoxWidth = KScreenWidth*2/3 - 10
             var leftMargin:CGFloat = 100.00
             let height:CGFloat = 0.0
             if index == 0 || index == 3 || index == 18 || (index >= 14 && index <= 15) || (index >= 10 && index <= 12) {
@@ -71,7 +73,7 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 if index == 3 {
                     comBoxWidth = KScreenWidth/6
                     leftMargin = leftMargin + comBoxWidth + 10
-                    self.initrightTextField(KScreenWidth*2/3 - comBoxWidth - 10, index: index, leftMargin: leftMargin, height: height)
+                    self.initrightTextField(KScreenWidth*2/3 - comBoxWidth - 20, index: index, leftMargin: leftMargin, height: height)
                 }
                 let comBox = LMComBoxView.init(frame: CGRectMake(100, 20 + 50 * CGFloat(index) + height, comBoxWidth, 30))
                 comBox.backgroundColor = UIColor.clearColor()
@@ -171,7 +173,11 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         rightTextField.rightView = rightImgView
         rightTextField.rightViewMode = UITextFieldViewMode.Always
         let tap = UITapGestureRecognizer(target: self, action: "tapAction:")
-        rightImgView.addGestureRecognizer(tap)
+        if rightTextField.tag == 603 {
+            rightImgView.addGestureRecognizer(tap)
+        }else {
+            rightTextField.addGestureRecognizer(tap)
+        }
     }
     
     func tapAction(tap:UITapGestureRecognizer) {
@@ -275,20 +281,22 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeVehicleType", name: CHANGEVEHICLETYPE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "textFieldTextDidChange:", name: "UITextFieldTextDidChangeNotification", object: nil)
 
-
+        
         if self.isCreateNew == false {
             dbManager = ZGCPersonDBManager()
             conArr = dbManager.selectPersons()
         }
 
-        self.showLoadingStatusHUD("")
-        
+        self.showLoadingStatusHUD("数据加载中...")
+                
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         Alamofire.request(.GET, BaseURLString.stringByAppendingString("dict/baseinfo"), parameters: nil, encoding: .JSON, headers: ["token":UserDefault.objectForKey("token") as! String]).responseJSON {
             response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             self.removeHUD()
             if let json = response.result.value {
+                print(json)
+
                 self.staticsModel = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
                 
                 let dic = self.staticsModel.data as NSDictionary
@@ -327,6 +335,8 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 (dic.objectForKey("chepai") as! NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                     let value = object.objectForKey("value")
                     chepaiArray.addObject(value!)
+                    let key = object.objectForKey("key")
+                    self.chepaiKeyArr.addObject(key!)
                 })
                 
                 let chepaiArr = ["京", "沪", "津","渝", "冀", "晋","辽", "吉", "黑","苏", "浙", "皖","闽", "赣", "鲁","豫", "鄂", "琼","川","贵", "云", "陕","甘", "青", "蒙","桂", "藏","宁", "新", "港","澳", "台"] as NSMutableArray
@@ -376,13 +386,18 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
         imagePicker.pickPhotoEnd = {a,b,c in
             if b == HTakeStatus.Success {
                 
-                let jpgImage = Util.convertPngToJpg(UIImage(named: "base_license")!)
+                self.showLoadingStatusHUD("数据加载中...")
+
+                let copyStr = (GetCurrentDateTransformToDateStrTwo() as NSString).mutableCopy() //使用mutableCopy深复制对象，是深复制后得到的变量不回受原变量的改变而变化
+                
+                let jpgImage = Util.convertPngToJpg(UIImage(named: "base_license")!, path: DocumentsDirectory, imageName: "\(copyStr)\(".jpg")")
                 let image = ImageWithImageSimple(jpgImage, scaledToSize: CGSizeMake(KScreenWidth, KScreenWidth))
                 Alamofire.upload(.POST, BaseURLString.stringByAppendingString("recognize/drivingLicense"), headers: ["token":UserDefault.objectForKey("token") as! String], multipartFormData: { multipartFormData in
                     
                     multipartFormData.appendBodyPart(data: UIImageJPEGRepresentation(image, 0.5)!, name: "image", fileName: "license.jpg", mimeType: "image/jpg")
                     
                     }, encodingMemoryThreshold: 0) { encodingResult in
+                        self.removeHUD()
                         switch encodingResult {
                         case .Success(let upload, _, _):
                             upload.responseJSON { response in
@@ -398,8 +413,9 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                                         
                                         self.resetRightTextFieldtext()
                                         self.resetComboxContent((model.data as NSDictionary).objectForKey("carnum")! as! String)
-                                        
-                                        self.updatePerson()
+                                        if self.isCreateNew == false {
+                                            self.updatePerson()
+                                        }
                                     }
                                 }
                                 
@@ -440,6 +456,9 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
 
     func scrollViewDidScroll(scrollView: UIScrollView) {
         self.view.endEditing(true)
+        UIView.animateWithDuration(0.25) { () -> Void in
+            self.setSelfViewBoundsOriginY(0)
+        }
     }
     
     // - MARK -
@@ -452,6 +471,7 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
+    
         self.view.endEditing(true)
         UIView.animateWithDuration(0.25) { () -> Void in
             self.setSelfViewBoundsOriginY(0)
@@ -462,6 +482,15 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     
     //监听键盘显示的方法实现
     func keyboardWillShow(notification: NSNotification!) {
+        
+        if self.txtFieldTag != nil {
+            let textField = self.comboxScrollView.viewWithTag(self.txtFieldTag) as! ZGCCustomTxtField
+            
+            if self.txtFieldTag == 607 ||  self.txtFieldTag ==  613 {
+                textField.resignFirstResponder()
+            }
+        }
+        
         let keyboardSize = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue()
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             var YOffset:CGFloat!
@@ -535,15 +564,21 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 return
             }
             
+            
+            
+            
             if self.isCreateNew == true {
                 
                 let subDir = CreateSubDocumentsDirectory()
                 
                 let dateStr = GetCurrentDateTransformToDateStr()
-                let unUpload = UnUpload(name: "", saveTime: dateStr, state: "未上传", licenseNo: "", vehicleType: "", databasePath:subDir)
+                let unUpload = UnUpload(name: self.contentArr[1] as? String, saveTime: dateStr, state: "未上传", licenseNo: self.contentArr[3] as? String, vehicleType: self.contentArr[8] as? String, formatStr: "", itemId: "", databasePath:subDir)
                 ZGCUnUploadManager().addUnUpload(unUpload, tableName: "T_UnUpload")
                 
-                let other = Other(styleId:UserDefault.objectForKey("Value") as? String, licenseTypeNum: String(licenseTypeNum))
+                if licenseTypeNum == nil {
+                    licenseTypeNum = self.chepaiKeyArr[0] as! String
+                }
+                let other = Other(styleId:UserDefault.objectForKey("Value") as? String, licenseTypeNum: licenseTypeNum)
                 let otherDBManager = ZGCOtherDBManager()
                 otherDBManager.addOther(other)
                 
@@ -561,16 +596,19 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                 let carvalueDetailVC = ZGCCarValueDetailViewController()
                 self.navigationController?.pushViewController(carvalueDetailVC, animated: true)
             }
+            
+            self.checkValuationAndIllegal()
 
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                 
-                if self.isCreateNew == true {
-                    self.isCreateNew = false
-
+                let dir = (UserDefault.objectForKey("subDir")?.stringByAppendingPathComponent("拍照列表"))!
+                if !FileManager.isExecutableFileAtPath(dir) {
                     CreateSubDirectories((UserDefault.objectForKey("subDir")?.stringByAppendingPathComponent("拍照列表"))!)
+//                    let tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度","右前45度","车辆铭牌","发动机舱内车架号","组合仪表","仪表台","前排座椅","后排座椅","后备箱备胎工具","发动机舱","发动机舱后侧防火墙","左前大灯框架","右前大灯框架","左前减震座","右前减震座","左纵梁","右纵梁"] as NSArray
+                    
+                    let tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度"] as NSArray
 
-                    let tabTitleArr = ["车辆正面车主合照","左前45度","左后45度","右后45度","右前45度"] as NSArray
                     
                     
                     let imgTwoTableNameArr = NSMutableArray(capacity: tabTitleArr.count)
@@ -586,11 +624,14 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
                         UserDefault.synchronize()
                         let manager = ZGCImageTwoDBManager()
                         print(manager)
-                        
-                        
                     })
+                    
+                    
                 }
+                
             })
+            
+            
 
 
         }
@@ -608,11 +649,82 @@ class ZGCAddCarCheckViewController: ZGCBaseViewController, LMComBoxViewDelegate,
     }
     
     func textFieldTextDidChange(notification:NSNotification) {
-        let textField = notification.object as! UITextField!
-        if self.isCreateNew == false {
-            contentArr.replaceObjectAtIndex(textField.tag - 600, withObject: textField.text!)
-            self.updatePerson()
+        if self.txtFieldTag != nil {
+            let textField = notification.object as! UITextField!
+            if self.isCreateNew == false {
+                contentArr.replaceObjectAtIndex(textField.tag - 600, withObject: textField.text!)
+                self.updatePerson()
+            }
         }
+
+    }
+    
+    func checkValuationAndIllegal () {
+        //["username":self.contentArr[1], "styleId":(ZGCOtherDBManager().selectOthers().last! as Other).styleId!,"date":self.contentArr[7],"milage":self.contentArr[16]]
+        Alamofire.request(.POST, BaseURLString.stringByAppendingString("brand/valuation"), parameters: ["username":"zgc", "styleId":"3361","date":"2015-02-12","milage":"2000"], encoding: .JSON, headers: ["token":UserDefault.objectForKey("token") as! String]).responseJSON {response in
+            
+            if let json = response.result.value {
+                let staticModel = ZGCStaticsModel(contentWithDic:json as! [NSObject : AnyObject])
+                if staticModel.success == 1 {
+                    let b2cArr = NSMutableArray()
+                    (staticModel.data as NSDictionary).objectForKey("B2CLevelPrice")?.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                        b2cArr.addObject(object)
+                    })
+                    b2cArr.addObject((staticModel.data as NSDictionary).objectForKey("newCarPrice")!)
+                    
+                    
+                    
+                    let request = NSMutableURLRequest(URL: NSURL(string: BaseURLString.stringByAppendingString("pingche/illegal"))!)
+                    request.HTTPMethod = "POST"
+                    let postString = "carnum=冀JKX715&vin=A1D9867B2794016&type=02"
+//                    let postString = "carnum=\(self.contentArr[3])&vin=\(self.contentArr[5])&type=\((ZGCOtherDBManager().selectOthers().last! as Other).licenseTypeNum)"
+                    request.setValue(UserDefault.objectForKey("token") as? String, forHTTPHeaderField: "token")
+                    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+                    
+                    request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
+//                    request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    
+                    let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
+                        guard error == nil && data != nil else {
+                            return
+                        }
+                        
+                        if let httpStatus = response as? NSHTTPURLResponse where httpStatus.statusCode != 200 {
+       
+                        }
+                        
+                        do {
+                            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)
+                            let staticsModel = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
+                            if staticsModel.success == 1 {
+                                var demandLoans = ""
+                                if ZGCillegalValueDBManager().selectValueOrIllegals().count > 0 {
+                                    demandLoans = ((ZGCillegalValueDBManager().selectValueOrIllegals() as NSArray).lastObject as! ValueOrIllegal).demandLoans!
+                                }
+                                
+                                let valueOrIllegalModel = ValueOrIllegal(illegalScore:String((staticsModel.data as NSDictionary).objectForKey("score") as! NSNumber), illegalTimes:String((staticsModel.data as NSDictionary).objectForKey("num") as! NSNumber), illegalPenalty:String((staticsModel.data as NSDictionary).objectForKey("price") as! NSNumber), valueBad: b2cArr[0] as? String, valueNormal: b2cArr[1] as? String, valueGood: b2cArr[2] as? String, valueNew: b2cArr[3] as? String, demandLoans: demandLoans)
+                                if ZGCillegalValueDBManager().selectValueOrIllegals().count > 0 {
+                                    ZGCillegalValueDBManager().updateValueOrIllegal(valueOrIllegalModel)
+                                }else {
+                                    ZGCillegalValueDBManager().addValueOrIllegal(valueOrIllegalModel)
+                                }
+                            }
+                        }catch {
+                            
+                        }
+                        
+                    }
+                    task.resume()
+                    
+                    
+                    
+                }
+            }
+            
+        }
+        
+        
+        
     }
 
     override func didReceiveMemoryWarning() {

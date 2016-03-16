@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import ZipArchive
 
 class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate,  UITextFieldDelegate {
     
@@ -42,9 +43,19 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
     var arrayModel2D = NSMutableArray()
     
     var totalImageModelImgArr = NSMutableArray()
-
     
-    var tabTitleArr = ["车辆正面车主合照","左前45度","左后45度","右后45度","右前45度"] as NSArray
+    var isEditingOrNot = true
+    
+    //参数字符串
+    var formatStr = ""
+    
+    var person: Person!
+    
+    var l_zipfile = "" //zip包路径
+
+    let tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度"] as NSArray
+
+//    let tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度","右前45度","车辆铭牌","发动机舱内车架号","组合仪表","仪表台","前排座椅","后排座椅","后备箱备胎工具","发动机舱","发动机舱后侧防火墙","左前大灯框架","右前大灯框架","左前减震座","右前减震座","左纵梁","右纵梁"] as NSArray
 
     
     let preTitleArr = ["业务类型", "车主姓名", "联系方式", "车牌号", "车辆所在地", "车辆VIN码", "发动机号", "注册日期", "车辆型号", "车辆排量", "变速器类型", "驱动方式", "燃油类型", "出厂日期", "车牌类型", "环保标准", "行驶里程", "车身颜色", "车钥匙"] as NSArray
@@ -54,6 +65,9 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         
         UserDefault.setObject(preTitleArr, forKey: "baseInfoPreTitleArr")
         UserDefault.synchronize()
+        
+        let tap = UITapGestureRecognizer(target: self, action: "tapClose")
+        self.view.addGestureRecognizer(tap)
         
         
         self.initHomeButton()
@@ -79,43 +93,9 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         
         self.initRightBtn()
         
-        
-        photosListTableView.delegate = self
-        photosListTableView.dataSource = self
-        photosListTableView.registerClass(ZGCPhotosListTableViewCell.self, forCellReuseIdentifier: identifier)
-        photosListTableView.rowHeight = (KScreenWidth - 40)/3 + 10
-        photosListTableView.tableFooterView = UIView()
-        photosListTableView.hidden = true
-        photosListTableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        photosListTableView.delaysContentTouches = false
-        
-        
-        
-        carBaseScrollView = ZGCCarBaseScrollView.init(frame: CGRectMake(0, 49, KScreenWidth, KScreenHeight - NavAndStausHeight - 98), tar:self, sel:"tapAction:")
-        carBaseScrollView.backgroundColor = UIColor.clearColor()
-        self.view.addSubview(carBaseScrollView)
-        carBaseScrollView.delegate = self
-        
-
-        
-        configDetailTableView = ZGCConfigDetailTableView(frame: CGRectMake(0, carBaseScrollView.top, KScreenWidth, carBaseScrollView.height), style: UITableViewStyle.Plain)
-        configDetailTableView.tar = self
-        configDetailTableView.sel = "tapAction:"
-        self.configDetailTableView.array2D = array2D
-        self.configDetailTableView.attri2DArr = attri2DArr
-        self.configDetailTableView.arrayModel2D = arrayModel2D
-        configDetailTableView.hidden = true
-        self.view.addSubview(configDetailTableView)
-        
-        configDetailTableView.toVehicleBaseConfigVCHandler = {
-            let vehicleBaseConfigVC = ZGCVehicleBaseConfigViewController()
-            self.navigationController?.pushViewController(vehicleBaseConfigVC, animated: true)
-        }
-        
-        self.initKeepOrUploadView(["detail_save", "detail_upload"])
-        
         let bgView = UIView(frame: CGRectMake(0, 0, KScreenWidth, 49))
         bgView.backgroundColor = UIColor(red: 89/255.0, green: 79/255.0, blue: 77/255.0, alpha: 1.0)
+        bgView.hidden = !self.isEditingOrNot
         self.view.addSubview(bgView)
         
         let preTitleLabel = UILabel()
@@ -141,6 +121,7 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         bgView.addSubview(rightTextField)
         
         
+        
         let suffixTitleLabel = UILabel()
         suffixTitleLabel.frame = CGRectMake(rightTextField.right + 10 , rightTextField.top, (KScreenWidth - 20)/4, preTitleLabel.height)
         suffixTitleLabel.font = UIFont.systemFontOfSize(13.0)
@@ -149,7 +130,60 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         suffixTitleLabel.text = "万元"
         bgView.addSubview(suffixTitleLabel)
         
+        photosListTableView.delegate = self
+        photosListTableView.dataSource = self
+        photosListTableView.registerClass(ZGCPhotosListTableViewCell.self, forCellReuseIdentifier: identifier)
+        photosListTableView.rowHeight = (KScreenWidth - 40)/3 + 10
+        photosListTableView.tableFooterView = UIView()
+        photosListTableView.hidden = true
+        photosListTableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        photosListTableView.delaysContentTouches = false
         
+        var topBegin:CGFloat = 49
+        if self.isEditingOrNot == false {
+            photosListTableView.translatesAutoresizingMaskIntoConstraints = false
+            topBegin = 0
+            
+            let metrics = ["tbWidth":KScreenWidth , "tbHeight":KScreenHeight - NavAndStausHeight]
+            
+            var viewBindingsDict = [String: AnyObject]()
+            viewBindingsDict["photosListTableView"] = photosListTableView
+            
+            let tbWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[photosListTableView(==tbWidth)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: viewBindingsDict)
+            
+            let tbHeightConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[photosListTableView(==tbHeight)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: viewBindingsDict)
+            
+            self.view.addConstraints(tbWidthConstraints)
+            self.view.addConstraints(tbHeightConstraints)            
+        }
+        
+        
+        
+        carBaseScrollView = ZGCCarBaseScrollView.init(frame: CGRectMake(0, topBegin, KScreenWidth, KScreenHeight - NavAndStausHeight - topBegin), tar:self, sel:"tapAction:", isEditingOrNot:isEditingOrNot)
+        carBaseScrollView.backgroundColor = UIColor.clearColor()
+        self.view.addSubview(carBaseScrollView)
+        carBaseScrollView.delegate = self
+        
+
+        
+        configDetailTableView = ZGCConfigDetailTableView(frame: CGRectMake(0, carBaseScrollView.top, KScreenWidth, carBaseScrollView.height), style: UITableViewStyle.Plain)
+        configDetailTableView.tar = self
+        configDetailTableView.isEditingOrNot = isEditingOrNot
+        configDetailTableView.sel = "tapAction:"
+        self.configDetailTableView.array2D = array2D
+        self.configDetailTableView.attri2DArr = attri2DArr
+        self.configDetailTableView.arrayModel2D = arrayModel2D
+        configDetailTableView.hidden = true
+        self.view.addSubview(configDetailTableView)
+        
+        configDetailTableView.toVehicleBaseConfigVCHandler = {
+            let vehicleBaseConfigVC = ZGCVehicleBaseConfigViewController()
+            self.navigationController?.pushViewController(vehicleBaseConfigVC, animated: true)
+        }
+        
+        if self.isEditingOrNot == true {
+            self.initKeepOrUploadView(["detail_save", "detail_upload"])
+        }
         
         // Do any additional setup after loading the view.
     }
@@ -158,8 +192,6 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         photoListBarView = ZGCPhotoListBarView(frame: CGRectMake(0, KScreenHeight - 49 - NavAndStausHeight, KScreenWidth, 49), target: self, sel: "tabBarTapAction:", imgNameArr: imgArr, tapArr: NSArray())
         self.view.addSubview(photoListBarView)
     }
-    
-    
     
     
     override func viewWillAppear(animated: Bool) {
@@ -215,7 +247,16 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
             self.totalImageModelImgArr.addObject(currentImageModelArr.mutableCopy())
         }
         
+        if self.totalImageModelImgArr.count > 0 {
+            if self.isEditingOrNot == true {
+                self.rightBtn.hidden = false
+            }
+        }else {
+            self.rightBtn.hidden = true
+        }
+        
         self.createArray3D()
+        
     }
     
     func initRightBtn() {
@@ -269,7 +310,9 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
             photosListTableView.hidden = false
             carBaseScrollView.hidden = true
             if self.totalStoreImgArr.count > 0 {
-                rightBtn.hidden = false
+                if self.isEditingOrNot == true {
+                    self.rightBtn.hidden = false
+                }
             }else {
                 rightBtn.hidden = true
             }
@@ -344,6 +387,7 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         let editTap = UITapGestureRecognizer(target: self, action:"tapAction:")
         bgView.addGestureRecognizer(editTap)
         
+        bgView.hidden = !self.isEditingOrNot
         return view
     }
     
@@ -370,9 +414,6 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if rightTextField.text != nil {
-            carBaseScrollView.setLastStr(rightTextField.text!)
-        }
         self.view.endEditing(true)
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             self.setSelfViewBoundsOriginY(0)
@@ -381,12 +422,34 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
     
     override func tabBarTapAction(tap: UITapGestureRecognizer) {
         if tap.view?.tag == 333 {
-            self.showHUD("数据已保存，请前往未上传列表查看和修改", image: UIImage(), withHiddenDelay: 2.0)
-            self.navigationController?.popToRootViewControllerAnimated(true)
+            carBaseScrollView.setLastStr(rightTextField.text!)
+            self.showHUD("已保存贷款数据", image: UIImage(), withHiddenDelay: 1.0)
         }else {
             
+            let value = (ZGCillegalValueDBManager().selectValueOrIllegals() as NSArray).lastObject as! ValueOrIllegal
+            if value.demandLoans == "" {
+                self.showHUD("请填写贷款需求再上传", image: UIImage(), withHiddenDelay: 1.0)
+                return
+            }else {
+                
+                self.showLoadingStatusHUD("数据上传中...")
+                let uploadData = ZGCUploadDataManager()
+                uploadData.requestDataHandler = {
+                    (isSuccess:Bool) -> Void in
+                    self.removeHUD()
+                    if isSuccess == true {
+                        self.showHUD("数据上传成功！", image: UIImage(), withHiddenDelay: 1.0)
+                        self.navigationController?.popToRootViewControllerAnimated(true)
+                    }else {
+                        self.showHUD("数据上传失败！请检查网络！", image: UIImage(), withHiddenDelay: 1.0)
+                    }
+                    
+                }
+            }
         }
     }
+    
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -444,13 +507,10 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
                                 
                             })
                             
-                            
                             self.deleteOrAddImgPidArr.removeAllObjects()
                             self.totalImageModelImgArr.removeAllObjects()
                             self.totalStoreImgArr.removeAllObjects()
-
                             self.setTotalStoreImgArrAndTotalImageModelImgArr()
-
                             
                         }
                     })
@@ -479,6 +539,8 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         self.deleteOrAddImgPidArr.removeAllObjects()
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            
+            
             
             self.tabTitleArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
                 let tableName = String("\("T_ImageTwo")\(index)")
@@ -597,14 +659,18 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         self.configDetailTableView.reloadData()
 
     }
+    
+
 
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        carBaseScrollView.setLastStr(textField.text!)
         self.view.endEditing(true)
         return true
     }
     
+    func tapClose () {
+        self.view.endEditing(true)
+    }
     
     /*
     // MARK: - Navigation

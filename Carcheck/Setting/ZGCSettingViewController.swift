@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import SDWebImage
 class ZGCSettingViewController: ZGCBaseViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var settingListTableView: UITableView!
@@ -32,10 +33,11 @@ class ZGCSettingViewController: ZGCBaseViewController, UITableViewDelegate, UITa
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         // MARK: -
-        print(UserDefault.objectForKey("token") as! String)
+        self.showLoadingStatusHUD("数据加载中...")
+
         Alamofire.request(.GET, BaseURLString.stringByAppendingString("user/info"), parameters: nil, encoding: .JSON, headers: ["token":UserDefault.objectForKey("token") as! String]).responseJSON { (response) -> Void in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            
+            self.removeHUD()
             let json = response.result.value
             
             print(json)
@@ -76,18 +78,18 @@ class ZGCSettingViewController: ZGCBaseViewController, UITableViewDelegate, UITa
 
                 let settingPortraitImg = UIImage(named: "setting_portrait")
                 let iconImgView = UIImageView.init(frame: CGRectMake((KScreenWidth - (settingPortraitImg?.size.width)!)/2, (240 - (settingPortraitImg?.size.height)!)/2, (settingPortraitImg?.size.width)!, (settingPortraitImg?.size.height)!))
-                iconImgView.image = settingPortraitImg
+                iconImgView.sd_setImageWithURL(NSURL(string: self.infoModel.img), placeholderImage: nil)
                 cell.contentView.addSubview(iconImgView)
             }else {
-                let attriDic = attriArr[indexPath.row-1]
+                let attriDic = attriArr[indexPath.row - 1]
                 
                 let preLabel = UILabel.init(frame: CGRectMake(40, 10, 80, 20))
-                preLabel.font = UIFont.systemFontOfSize(13.0)
+                preLabel.font = UIFont.systemFontOfSize(14.0)
                 preLabel.text = attriDic.objectForKey("pre") as? String
                 cell.contentView.addSubview(preLabel);
                 
-                let txtLabel = UILabel.init(frame: CGRectMake(100, 10, 100, 20))
-                txtLabel.font = UIFont.systemFontOfSize(13.0)
+                let txtLabel = UILabel.init(frame: CGRectMake(120, 10, 100, 20))
+                txtLabel.font = UIFont.systemFontOfSize(14.0)
                 txtLabel.text = attriDic.objectForKey("content") as? String
                 cell.contentView.addSubview(txtLabel);
             }
@@ -139,13 +141,15 @@ class ZGCSettingViewController: ZGCBaseViewController, UITableViewDelegate, UITa
     
     func btnAction(btn:UIButton) {
         if btn.tag == 100 {
-            
+            let passwordChangeVC = ZGCPWDChangeViewController()
+            passwordChangeVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(passwordChangeVC, animated: true)
         }else {
             let loginVC = ZGCLoginViewController()
             self.view.window?.rootViewController = loginVC
         }
     }
-
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

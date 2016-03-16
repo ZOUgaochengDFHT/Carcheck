@@ -33,23 +33,42 @@ class ZGCBaseTabBarController: UITabBarController {
     
         let carItemView = ZGCCarItemView(frame: CGRectZero)
         carItemView.show()
+        
+        
         carItemView.didClickButtonAtIndexHandler = {
             (tag:String)-> Void in
-            let dic = ["tag":tag]
-            NSNotificationCenter.defaultCenter().postNotificationName(TAPTOPUSHVIEWCONTROLLER, object: dic)
+            let nav = self.viewControllers![self.selectedIndex] as! UINavigationController
+
+            if tag == "104" {
+                let addCarCheckVC = ZGCAddCarCheckViewController()
+                addCarCheckVC.isCreateNew = true
+                addCarCheckVC.hidesBottomBarWhenPushed = true
+                nav.pushViewController(addCarCheckVC, animated: true)
+            }else if tag == "105" {
+                let addCarCheckVC = ZGCValuationViewController()
+                addCarCheckVC.hidesBottomBarWhenPushed = true
+                nav.pushViewController(addCarCheckVC, animated: true)
+                
+            }else {
+                let titleArr = ["未上传车检", "待审核车检", "未通过车检", "已通过车检"]
+                let notuploadVC = ZGCNotUploadViewController()
+                notuploadVC.hidesBottomBarWhenPushed = true
+                notuploadVC.index = Int(tag)! - 100
+                notuploadVC.navigationItem.title = titleArr[Int(tag)! - 100]
+                nav.pushViewController(notuploadVC, animated: true)
+            }
+            
             self.vehicleBtn.selected = !self.vehicleBtn.selected
+            
         }
-        
         carItemView.didClickHiddenBlockHandler = {
             self.vehicleBtn.selected = !self.vehicleBtn.selected
-        }
 
-    }
-    
-    
-    func itemBtnAction(itemBtn:UIButton) {
+        }
+        
         
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

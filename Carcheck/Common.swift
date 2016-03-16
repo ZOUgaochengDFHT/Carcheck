@@ -10,24 +10,24 @@ import Foundation
 import UIKit
 
 public let NavAndStausHeight:CGFloat  = 64.0
-public let TabBarHeight:CGFloat  = 49.0
+public let TabBarHeight:CGFloat       = 49.0
 
-public let KeyWindow = UIApplication.sharedApplication().keyWindow
-
-
+public let KeyWindow   = UIApplication.sharedApplication().keyWindow
 public let UserDefault = NSUserDefaults.standardUserDefaults()
-
 public let FileManager = NSFileManager.defaultManager()
 
 // MARK: - BaseURL
 public let BaseURLString: String = "https://api.zrlh.net/"
+//JPush key
+public let appKey: String    = "44dc4963ecbe4dd0e8c51707"
+public let channel: String   = "Publish channel"
 
 
 //public let documentsFolder = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
 
 
 // MARK: - 设备屏幕宽高
-public let KScreenWidth = UIScreen.mainScreen().bounds.size.width
+public let KScreenWidth  = UIScreen.mainScreen().bounds.size.width
 public let KScreenHeight = UIScreen.mainScreen().bounds.size.height
 
 // MARK: - 获取系统版本
@@ -38,22 +38,18 @@ func SYSTEM_VERSION_LESS_THAN(versionStr:String) -> Bool {
     return UIDevice.currentDevice().systemVersion.compare(versionStr, options: NSStringCompareOptions.NumericSearch, range: nil, locale: nil) != NSComparisonResult.OrderedDescending
 }
 // MARK: - 颜色值
-public let kBorderColor = UIColor(red: 166/255.0, green: 166/255.0, blue: 177/255.0, alpha: 1.0)
+public let kBorderColor          = UIColor(red: 166/255.0, green: 166/255.0, blue: 177/255.0, alpha: 1.0)
 public let ButtonBackGroundColor = UIColor(red: 212/255.0, green: 13/255.0, blue: 9/255.0, alpha: 1.0)
 public let LoginBottomLayerColor = UIColor(red: 212/255.0, green: 213/255.0, blue: 213/255.0, alpha: 1.0)
-
-public let CellBgColor = UIColor(red: 235/255.0, green: 235/255.0, blue: 235/255.0, alpha: 1.0)
+public let CellBgColor           = UIColor(red: 235/255.0, green: 235/255.0, blue: 235/255.0, alpha: 1.0)
 
 
 // MARK: - 
-public let TAPTOPUSHVIEWCONTROLLER = "TAPTOPUSHVIEWCONTROLLER"
-
-public let SETBUTTONENABLEDFALSE = "SETBUTTONENABLEDFALSE"
-public let SETBUTTONENABLEDTRUE = "SETBUTTONENABLEDTRUE"
-
-public let CHANGEVEHICLETYPE = "CHANGEVEHICLETYPE"
-
-public let DELETECHOOSEIMG  = "DELETECHOOSEIMG"
+public let TAPTOPUSHVIEWCONTROLLER  = "TAPTOPUSHVIEWCONTROLLER"
+public let SETBUTTONENABLEDFALSE    = "SETBUTTONENABLEDFALSE"
+public let SETBUTTONENABLEDTRUE     = "SETBUTTONENABLEDTRUE"
+public let CHANGEVEHICLETYPE        = "CHANGEVEHICLETYPE"
+public let DELETECHOOSEIMG          = "DELETECHOOSEIMG"
 
 public let DocumentsDirectory = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
 

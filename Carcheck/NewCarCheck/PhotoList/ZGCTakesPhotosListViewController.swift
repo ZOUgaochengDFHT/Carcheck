@@ -31,16 +31,18 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
 
     var currentImg: UIImage!
     
-    var tabTitleArr = ["车辆正面车主合照","左前45度","左后45度","右后45度","右前45度"] as NSArray
     var images = [SKPhoto]()
     var isFirst = false
 
-    var dir: String!
+    var dir = ""
     var attri2DArr =  NSMutableArray()
     
-    var locationStr:String!
+    var locationStr = ""
     
-    var copySelectedIndex:Int!
+    var copySelectedIndex = 0
+    
+    let tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度"] as NSArray
+
     
 //    let tabTitleArr = ["车辆正面与车主合照","左前45度","左后45度","右后45度","右前45度","车辆铭牌","发动机舱内车架号","组合仪表","仪表台","前排座椅","后排座椅","后备箱备胎工具","发动机舱","发动机舱后侧防火墙","左前大灯框架","右前大灯框架","左前减震座","右前减震座","左纵梁","右纵梁"] as NSArray
     
@@ -56,7 +58,7 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
         
         Alamofire.request(.GET, GetLocationURL).responseJSON { response in
             if let json = response.result.value {
-                self.locationStr = json.objectForKey("province")?.stringByAppendingString((json.objectForKey("city"))! as! String).stringByAppendingString((json.objectForKey("district"))! as! String)
+                self.locationStr = (json.objectForKey("province")?.stringByAppendingString((json.objectForKey("city"))! as! String).stringByAppendingString((json.objectForKey("district"))! as! String))!
             }
         }
         
@@ -187,8 +189,6 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                     (ZGCImageTwoDBManager().selectImages(tableName) as NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                         let imageModel = object as! Image
                         currentImageModelArr.addObject(imageModel)
-                        self.attri2DArr.addObject(imageModel.instruction!)
-                        self.noCompressArr.addObject(UIImage(named: imageModel.path!)!)
                         currentStoreImgArr.addObject(ImageWithImageSimple(UIImage(named: imageModel.path!)!, scaledToSize: CGSizeMake((KScreenWidth - 40)/3, (KScreenWidth - 40)/3)))
                         
                     })
@@ -287,6 +287,7 @@ class ZGCTakesPhotosListViewController: ZGCBaseViewController, BaseTableViewDele
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                     WriteImageDataToFile(a!, dir: copyDir as! String, imgName: copyStr as! String )
+                    Util.convertPngToJpg(a!, path: copyDir as! String, imageName:copyStr as! String)
                 })
                 
 

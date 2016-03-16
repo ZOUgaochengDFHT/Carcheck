@@ -40,6 +40,9 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
             
         })
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "networkDidRegister:", name: kJPFNetworkDidRegisterNotification, object: nil)
+
+
 
         
         addImgViewWidth = KScreenWidth/2 < (addImg?.size.width)! ? KScreenWidth/2 : (addImg?.size.width)!
@@ -57,10 +60,15 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
         homeTableView.rowHeight = addImgViewWidth + 350
         homeTableView.separatorStyle = UITableViewCellSeparatorStyle.None
         
+        
+        self.showLoadingStatusHUD("数据加载中...")
+
+        
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
         Alamofire.request(.GET, BaseURLString.stringByAppendingString("pingche/statistic"), parameters: nil, encoding: .JSON, headers: ["token":UserDefault.objectForKey("token") as! String]).responseJSON {
             response in
+            self.removeHUD()
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if let json = response.result.value {
                 self.staticsModel = ZGCStaticsModel(contentWithDic: json as! [NSObject : AnyObject])
@@ -73,40 +81,13 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
         }
         
         
-//        let request = NSMutableURLRequest(URL: NSURL(string: BaseURLString.stringByAppendingString("pingche/illegal"))!)
-//        request.HTTPMethod = "POST"
-//        let postString = "carnum=冀JKX715&vin=A1D9867B2794016&type=02"
-//        request.setValue(UserDefault.objectForKey("token") as? String, forHTTPHeaderField: "token")
-//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-//
-//        request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
-//        request.addValue("application/json", forHTTPHeaderField: "Accept")
-//
-//        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { data, response, error in
-//            guard error == nil && data != nil else {                                                          // check for fundamental networking error
-//                print("error=\(error)")
-//                return
-//            }
-//            
-//            if let httpStatus = response as? NSHTTPURLResponse where httpStatus.statusCode != 200 {           // check for http errors
-//                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-//                print("response = \(response)")
-//            }
-//            
-//            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//            print("responseString = \(responseString)")
-//        }
-//        task.resume()
-        
-        
         
     }
     
-    
-   
 
-
-
+    func networkDidRegister(notification:NSNotification) {
+        print("RegistrationID\((notification.userInfo! as NSDictionary).objectForKey("RegistrationID"))")
+    }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -131,13 +112,16 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
         addBtn.setImage(addImg, forState: UIControlState.Normal)
         cell.contentView.addSubview(addBtn)
         addBtn.addTarget(self, action: "addBtnAction", forControlEvents: UIControlEvents.TouchUpInside)
-        let titLabel = UILabel.init(frame: CGRectMake(0, addBtn.bottom + 50, KScreenWidth, 20))
-        titLabel.font = UIFont.systemFontOfSize(20.0)
-        titLabel.textAlignment = NSTextAlignment.Center
-        titLabel.text = "我的工作统计"
-        cell.contentView.addSubview(titLabel);
+      
         
         if attriArr.count > 0 {
+            
+            let titLabel = UILabel.init(frame: CGRectMake(0, addBtn.bottom + 50, KScreenWidth, 20))
+            titLabel.font = UIFont.systemFontOfSize(20.0)
+            titLabel.textAlignment = NSTextAlignment.Center
+            titLabel.text = "我的工作统计"
+            cell.contentView.addSubview(titLabel);
+            
             attriArr.enumerateObjectsUsingBlock { (object, index, stop) -> Void in
                 
                 let attriDic = self.attriArr[index]
@@ -157,6 +141,7 @@ class ZGCHomePageViewController: ZGCBaseViewController, UITableViewDataSource, U
         return cell
     }
     
+
     func addBtnAction() {
         let addCarCheckVC = ZGCAddCarCheckViewController()
         addCarCheckVC.isCreateNew = true

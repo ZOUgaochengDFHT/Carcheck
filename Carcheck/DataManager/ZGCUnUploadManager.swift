@@ -41,7 +41,7 @@ class ZGCUnUploadManager: NSObject {
         
         //打开数据库
         if dbBase.open(){
-            let createSql:String = "CREATE TABLE IF NOT EXISTS ".stringByAppendingString(tableName).stringByAppendingString(" (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT,saveTime TEXT, licenseNo TEXT,state TEXT, vehicleType TEXT, databasePath TEXT)")
+            let createSql:String = "CREATE TABLE IF NOT EXISTS ".stringByAppendingString(tableName).stringByAppendingString(" (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT,saveTime TEXT, licenseNo TEXT,state TEXT, vehicleType TEXT,formatStr TEXT, itemId TEXT, databasePath TEXT)")
             if dbBase.executeUpdate(createSql, withArgumentsInArray: nil){
                 print("数据库创建成功！")
             }else{
@@ -61,9 +61,9 @@ class ZGCUnUploadManager: NSObject {
         
         dbBase.open();
         
-        let arr:[AnyObject] = [u.name!, u.state!, u.saveTime!, u.vehicleType!, u.licenseNo!, u.databasePath!];
+        let arr:[AnyObject] = [u.name!, u.state!, u.saveTime!, u.vehicleType!, u.licenseNo!, u.formatStr!, u.itemId!,u.databasePath!];
         
-        if !self.dbBase.executeUpdate("insert into ".stringByAppendingString(tableName).stringByAppendingString("(name ,state, saveTime ,vehicleType, licenseNo, databasePath) values (?, ?, ?, ?, ?, ?)"), withArgumentsInArray: arr) {
+        if !self.dbBase.executeUpdate("insert into ".stringByAppendingString(tableName).stringByAppendingString("(name ,state, saveTime ,vehicleType, licenseNo, formatStr, itemId,databasePath) values (?, ?, ?, ?, ?, ?, ?, ?)"), withArgumentsInArray: arr) {
             print("添加1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
             print("添加1条数据成功！: \(u.databasePath)")
@@ -94,10 +94,10 @@ class ZGCUnUploadManager: NSObject {
     func updateUnUpload(u:UnUpload, tableName:String) {
         dbBase.open();
         
-        let arr:[AnyObject] = [u.name!, u.state!, u.saveTime!, u.vehicleType!, u.licenseNo!, u.databasePath!];
+        let arr:[AnyObject] = [u.name!, u.state!, u.saveTime!, u.vehicleType!, u.licenseNo!, u.formatStr!, u.itemId!,u.databasePath!];
         
         
-        if !self.dbBase .executeUpdate("update ".stringByAppendingString(tableName).stringByAppendingString(" set name = (?), state = (?), saveTime = (?), vehicleType = (?), licenseNo = (?), databasePath = (?)"), withArgumentsInArray:arr) {
+        if !self.dbBase .executeUpdate("update ".stringByAppendingString(tableName).stringByAppendingString(" set name = (?), state = (?), saveTime = (?), vehicleType = (?), licenseNo = (?), formatStr = (?), itemId = (?), databasePath = (?)"), withArgumentsInArray:arr) {
             print("修改1条数据失败！: \(dbBase.lastErrorMessage())")
         }else{
             print("修改1条数据成功！: \(u.databasePath)")
@@ -112,7 +112,7 @@ class ZGCUnUploadManager: NSObject {
         dbBase.open();
         var unUploads = [UnUpload]()
         
-        if let rs = dbBase.executeQuery("select name ,state, saveTime ,vehicleType, licenseNo, databasePath from ".stringByAppendingString(tableName), withArgumentsInArray: nil) {
+        if let rs = dbBase.executeQuery("select name ,state, saveTime ,vehicleType, licenseNo, formatStr, itemId,databasePath from ".stringByAppendingString(tableName), withArgumentsInArray: nil) {
             while rs.next() {
                 
                 let name:String = rs.stringForColumn("name") as String
@@ -120,10 +120,12 @@ class ZGCUnUploadManager: NSObject {
                 let state:String = rs.stringForColumn("state") as String
                 let licenseNo:String = rs.stringForColumn("licenseNo") as String
                 let vehicleType:String = rs.stringForColumn("vehicleType") as String
+                let formatStr:String = rs.stringForColumn("formatStr") as String
+                let itemId:String = rs.stringForColumn("itemId") as String
                 let databasePath:String = rs.stringForColumn("databasePath") as String
 
                 
-                let c:UnUpload = UnUpload(name: name, saveTime: saveTime, state: state, licenseNo: licenseNo, vehicleType: vehicleType, databasePath: databasePath)
+                let c:UnUpload = UnUpload(name: name, saveTime: saveTime, state: state, licenseNo: licenseNo, vehicleType: vehicleType, formatStr:formatStr,itemId:itemId, databasePath: databasePath)
                 unUploads.append(c)
             }
         } else {
@@ -155,14 +157,14 @@ class ZGCUnUploadManager: NSObject {
             //增
             let arr:[AnyObject] = [u.name!, u.state!, u.saveTime!, u.vehicleType!, u.licenseNo!, u.databasePath!];
             
-            if !self.dbBase.executeUpdate("insert into ".stringByAppendingString(tableName).stringByAppendingString(" (name ,state, saveTime ,vehicleType, licenseNo, databasePath) values (?, ?, ?, ?, ?, ?)"), withArgumentsInArray: arr) {
+            if !self.dbBase.executeUpdate("insert into ".stringByAppendingString(tableName).stringByAppendingString(" (name ,state, saveTime ,vehicleType, licenseNo, formatStr, itemId, databasePath) values (?, ?, ?, ?, ?, ?, ?, ?)"), withArgumentsInArray: arr) {
                 print("添加1条数据失败！: \(db.lastErrorMessage())")
             }else{
                 print("添加1条数据成功！: \(u.databasePath)")
                 
             }
             //查
-            if let rs = db.executeQuery("select name ,state, saveTime ,vehicleType, licenseNo, databasePath from ".stringByAppendingString(tableName), withArgumentsInArray: nil) {
+            if let rs = db.executeQuery("select name ,state, saveTime ,vehicleType, licenseNo, formatStr, itemId, databasePath from ".stringByAppendingString(tableName), withArgumentsInArray: nil) {
                 while rs.next() {
                     
                 }

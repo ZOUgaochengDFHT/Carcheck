@@ -27,3 +27,5 @@
 #import "ZGCAsyncImageReader.h"
 #import "ZGCImageCache.h"
 #import "UIImageView+AsyncReader.h"
+#import "ZGCItemListModel.h"
+#import "JPUSHService.h"

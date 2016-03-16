@@ -12,7 +12,8 @@ class ZGCCarBaseScrollView: UIScrollView {
 
     let conArr = NSMutableArray()
 
-    init(frame: CGRect, tar:AnyObject, sel:Selector) {
+
+    init(frame: CGRect, tar:AnyObject, sel:Selector, isEditingOrNot:Bool) {
         super.init(frame: frame)
         
         if ZGCillegalValueDBManager().selectValueOrIllegals().count == 0 {
@@ -38,22 +39,23 @@ class ZGCCarBaseScrollView: UIScrollView {
         
         conArr.removeLastObject()
         
-        let publishArr = ["", "", ""] as NSMutableArray
+        let valueOrIllegalModel = (ZGCillegalValueDBManager().selectValueOrIllegals() as NSArray).lastObject as! ValueOrIllegal
         
-        let valueArr = ["", "", "", ""] as NSMutableArray
+//        let array = [, valueOrIllegalModel.illegalTimes, valueOrIllegalModel.illegalPenalty!, valueOrIllegalModel.valueBad!,valueOrIllegalModel.valueNormal!, valueOrIllegalModel.valueGood!, valueOrIllegalModel.valueNew!, valueOrIllegalModel.demandLoans!] as NSArray
         
-        
-        (publishArr as NSMutableArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
-            self.conArr.addObject(object)
+        self.conArr.addObject("\(valueOrIllegalModel.illegalScore!)\("分")")
+        self.conArr.addObject("\(valueOrIllegalModel.illegalTimes!)\("次")")
+        self.conArr.addObject("\(valueOrIllegalModel.illegalPenalty!)\("元")")
+        self.conArr.addObject("\(valueOrIllegalModel.valueBad!)\("万")")
+        self.conArr.addObject("\(valueOrIllegalModel.valueNormal!)\("万")")
+        self.conArr.addObject("\(valueOrIllegalModel.valueGood!)\("万")")
+        self.conArr.addObject("\(valueOrIllegalModel.valueNew!)\("万")")
+        var str = ""
+        if valueOrIllegalModel.demandLoans! != "" {
+            str = "\(valueOrIllegalModel.demandLoans!)\("万")"
         }
-        
+        self.conArr.addObject(str)
 
-        (valueArr as NSMutableArray).enumerateObjectsUsingBlock { (object, index, stop) -> Void in
-            self.conArr.addObject(object)
-        }
-        
-        conArr.addObject("")
-        
         
                 
         var j = 0
@@ -71,8 +73,6 @@ class ZGCCarBaseScrollView: UIScrollView {
                 j = j + 1
                 if index == 0 {
                     let editImg = UIImage(named: "detail_edit")
-                    
-                    
                     let bgView = UIView(frame: CGRectMake(KScreenWidth - 60, 0, 60, 40))
                     self.addSubview(bgView)
                     bgView.tag = 777
@@ -85,6 +85,8 @@ class ZGCCarBaseScrollView: UIScrollView {
                     
                     let editTap = UITapGestureRecognizer(target: tar, action:sel)
                     bgView.addGestureRecognizer(editTap)
+                    
+                    bgView.hidden = !isEditingOrNot
                 }
                 
             }
@@ -103,10 +105,6 @@ class ZGCCarBaseScrollView: UIScrollView {
             preTitleLabel.textColor = UIColor.darkGrayColor()
             preTitleLabel.text = mPreArr[index] as? String
             self.addSubview(preTitleLabel)
-            
-           
-
-
             
             let contentLabel = UILabel()
             contentLabel.frame = CGRectMake(preTitleLabel.right , preTitleLabel.top, KScreenWidth*2/3, 40)
@@ -129,44 +127,30 @@ class ZGCCarBaseScrollView: UIScrollView {
         self.contentSize = CGSizeMake(KScreenWidth, CGFloat(mPreArr.count)*40 + 120)
         
         
-        Alamofire.request(.POST, BaseURLString.stringByAppendingString("brand/valuation"), parameters: ["username":"zgc", "styleId":3361,"date":"2015-12-12","milage":2000], encoding: .JSON, headers: ["token":UserDefault.objectForKey("token") as! String]).responseJSON {response in
-            if let json = response.result.value {
-                let staticModel = ZGCStaticsModel(contentWithDic:json as! [NSObject : AnyObject])
-                if staticModel.code == 200 {
-                    let b2cArr = NSMutableArray()
-                    (staticModel.data as NSDictionary).objectForKey("B2CLevelPrice")?.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                        b2cArr.addObject(object)
-                    })
-                    b2cArr.addObject((staticModel.data as NSDictionary).objectForKey("newCarPrice")!)
-                    
-                    b2cArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
-                        let contentLabel = self.viewWithTag(500 + self.conArr.count - b2cArr.count + index - 1) as! UILabel
-                        contentLabel.text = (object as? String)?.stringByAppendingString("万元")
-                        valueArr.addObject(contentLabel.text!)
-                    })
-                    
-                    let valueOrIllegalModel = ValueOrIllegal(illegalScore: publishArr[0] as? String, illegalTimes: publishArr[1] as? String, illegalPenalty: publishArr[2] as? String, valueBad: valueArr[0] as? String, valueNormal: valueArr[1] as? String, valueGood: valueArr[2] as? String, valueNew: valueArr[3] as? String, demandLoans: "")
-                    
-                    ZGCillegalValueDBManager().updateValueOrIllegal(valueOrIllegalModel)
-                }
-            }
-            
-        }
         
     }
     
-    func setLastStr(str:String) {
-        if str != "" {
+    func setLastStr(demandLoans:String) {
+        if demandLoans != "" {
             let contentLabel = self.viewWithTag(500 + conArr.count - 1) as! UILabel
-            contentLabel.text = str.stringByAppendingString("万元")
-            
-            
+            contentLabel.text = "\(demandLoans)\("万")"
         }
+        
+        let valueOrIllegalModel = (ZGCillegalValueDBManager().selectValueOrIllegals() as NSArray).lastObject as! ValueOrIllegal
+        
+        ZGCillegalValueDBManager().deleteValueOrIllegal(valueOrIllegalModel)
+
+        let changeValueOrIllegalModel = ValueOrIllegal(illegalScore: valueOrIllegalModel.illegalScore, illegalTimes: valueOrIllegalModel.illegalScore, illegalPenalty: valueOrIllegalModel.illegalPenalty, valueBad: valueOrIllegalModel.valueBad, valueNormal: valueOrIllegalModel.valueNormal, valueGood: valueOrIllegalModel.valueGood, valueNew: valueOrIllegalModel.valueNew, demandLoans: demandLoans)
+        
+        ZGCillegalValueDBManager().addValueOrIllegal(changeValueOrIllegalModel)
+
     }
+
     
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 
 }

@@ -21,7 +21,14 @@ class ZGCBaseViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "tapToPushViewController:", name: TAPTOPUSHVIEWCONTROLLER, object: nil)
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
 
-
+        
+//        self.navigationController?.interactivePopGestureRecognizer?.enabled = true
+        
+        /**
+        *@利用手势控制键盘的收起
+        */
+        let tap = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tap)
 
         self.navigationController?.navigationBar.translucent = false
         // Do any additional setup after loading the view.
@@ -63,6 +70,18 @@ class ZGCBaseViewController: UIViewController {
         self.navigationItem.leftBarButtonItems = [negativeSpacer, backBarBtn]
     }
     
+    func initEmptyImageView () {
+        let emptyImg = UIImage(named: "ic_empty")
+        let emptyWidth = emptyImg?.size.width
+        
+        let iconImgView:UIImageView = UIImageView()
+        iconImgView.frame = CGRectMake((KScreenWidth - emptyWidth!)/2, (KScreenHeight - NavAndStausHeight - emptyWidth!)/2, emptyWidth!, emptyWidth!)
+        iconImgView.userInteractionEnabled = true
+        self.view.addSubview(iconImgView)
+        iconImgView.image = emptyImg
+
+    }
+    
     func initUpOrNextView (tapArr:NSArray, imgArr:NSArray) {
         var imgNameArr = imgArr
         if imgArr.count == 0 {
@@ -97,30 +116,7 @@ class ZGCBaseViewController: UIViewController {
         self.navigationController?.popViewControllerAnimated(true)
 //        self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
 
-
-    func tapToPushViewController(notification:NSNotification) {
-        let dic = notification.object
-        
-        let tagStr = dic!.objectForKey("tag")! as! String
-        if tagStr == "104" {
-            let addCarCheckVC = ZGCAddCarCheckViewController()
-            addCarCheckVC.isCreateNew = true
-            addCarCheckVC.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(addCarCheckVC, animated: true)
-        }else if tagStr == "105" {
-            
-        }else {
-            let titleArr = ["未上传车检", "待审核车检", "未通过车检", "已通过车检"]
-            let notuploadVC = ZGCNotUploadViewController()
-            notuploadVC.hidesBottomBarWhenPushed = true
-            notuploadVC.index = Int(tagStr)! - 100
-            notuploadVC.navigationItem.title = titleArr[Int(tagStr)! - 100]
-            self.navigationController?.pushViewController(notuploadVC, animated: true)
-        }
-        
-    }
     
     func showHUD(title:String, image:UIImage, withHiddenDelay delay:NSTimeInterval) {
         self.initCustomWindow()
@@ -185,6 +181,11 @@ class ZGCBaseViewController: UIViewController {
         }))
         alert.view.tintColor = ButtonBackGroundColor
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func dismissKeyboard () {
+        self.view.endEditing(true)
+        self.setSelfViewBoundsOriginY(0)
     }
 
     override func didReceiveMemoryWarning() {

@@ -15,8 +15,7 @@
  *  png to jpg
  *
  */
-+ (UIImage *)convertPngToJpg:(UIImage *)pngImage;
-
++ (UIImage *)convertPngToJpg:(UIImage *)pngImage path:(NSString *)path imageName:(NSString *)imageName;
 /**
  *  验证手机号（手机号是否正确）
  *
@@ -30,4 +29,12 @@
 
  */
 + (BOOL)validateCarNo:(NSString*)carNo;
+
+
+/**
+ *  获取工单状态
+ *
+ */
++ (NSString *)getNumWithStatus:(int)num;
++ (NSString *)getWordWithStatus:(NSString *)word;
 @end

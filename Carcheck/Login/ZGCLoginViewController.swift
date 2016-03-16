@@ -25,6 +25,11 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
     var customWindow: UIWindow!
     var loginTxtFieldTag: Int!
 
+    var isRemeber = false
+    var isAuto = false
+    
+    var check1: ZGCCheckBox!
+    var check2: ZGCCheckBox!
     
     @IBAction func deleteBtnAction(sender: UIButton) {
         if sender.tag == 100 {
@@ -40,24 +45,41 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: "UIKeyboardWillShowNotification", object: nil)
-
+        
+        /**
+         *@利用手势控制键盘的收起
+         */
+        let tap = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tap)
         
         // Do any additional setup after loading the view.
-        let check1 = ZGCCheckBox()
+        check1 = ZGCCheckBox()
         check1.initWithDelegate(self)
         check1.frame = CGRectMake(60, pwdTxtField.bottom + 2, 80, 40)
         check1.setTitle("记住账号", forState: UIControlState.Normal)
+        check1.tag = 100
         check1.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
         check1.titleLabel?.font = UIFont.systemFontOfSize(13.0)
         loginBgScrollView.addSubview(check1)
         
-        let check2 = ZGCCheckBox()
+        check2 = ZGCCheckBox()
         check2.initWithDelegate(self)
         check2.frame = CGRectMake(check1.right + 10, pwdTxtField.bottom + 2, 80, 40)
         check2.setTitle("自动登录", forState: UIControlState.Normal)
+        check2.tag = 101
         check2.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
         check2.titleLabel?.font = UIFont.systemFontOfSize(13.0)
         loginBgScrollView.addSubview(check2)
+        
+        if UserDefault.objectForKey("username") != nil {
+            userTxtField.text = UserDefault.objectForKey("username") as? String
+            check1.selected = true
+            if UserDefault.objectForKey("isLogined") as! Bool == true {
+                check2.selected = true
+            }
+
+        }
+        
         
         loginButton.backgroundColor = ButtonBackGroundColor
         loginButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
@@ -96,26 +118,20 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
         verticalLayer.position = CGPointMake(userTxtField.left - 5, userImgView.top + 3)
 
         
-//        let bgView = UIView(frame: CGRectZero)
-//        bgView.backgroundColor = UIColor.clearColor()
-//        bgView.translatesAutoresizingMaskIntoConstraints = false
-//        loginBgScrollView.insertSubview(bgView, belowSubview: logoImgView)
-////        loginBgScrollView.translatesAutoresizingMaskIntoConstraints = false
-//    
-//        
-//        //使用AutoLayout时，设置UiScrollView的contentSize只能用子视图的constraints
-//        
-//        var viewBindingsDict = [String: AnyObject]()
-//        viewBindingsDict["bgView"] = bgView
-//        let bgViewWidthMetrics = ["margin":(KScreenWidth)]
-//        let bgViewWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[bgView(==margin)]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: bgViewWidthMetrics, views:viewBindingsDict)
-//        loginBgScrollView.addConstraints(bgViewWidthConstraints)
-//        
-//        
-//        let bgViewHeightMetrics = ["height":(700)]
-//        let bgViewHeightConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[bgView(==height)]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: bgViewHeightMetrics, views:viewBindingsDict)
-//        loginBgScrollView.addConstraints(bgViewHeightConstraints)
-//
+        let metrics = ["tbWidth":KScreenWidth , "tbHeight":KScreenHeight*2]
+        
+        var viewBindingsDict = [String: AnyObject]()
+        viewBindingsDict["loginBgScrollView"] = loginBgScrollView
+        
+        loginBgScrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        let tbWidthConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[loginBgScrollView(==tbWidth)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: viewBindingsDict)
+        
+        let tbHeightConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[loginBgScrollView(==tbHeight)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: viewBindingsDict)
+        
+        self.view.addConstraints(tbWidthConstraints)
+        self.view.addConstraints(tbHeightConstraints)
+
 //        //关键点。非常重要.设置contentsize以滚动。
 //        let size = bgView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
 //        print(size)
@@ -124,27 +140,35 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
     }
     
     func didSelectedCheckBox(checkBox: ZGCCheckBox, checked: Bool) {
-        
+        if checkBox.tag == 101 {
+            check2.selected = checked
+            if checked == true {
+                check1.selected = checked
+            }
+        }
     }
     
     @IBAction func loginAction(sender: UIButton) {
         
         if userTxtField.text == "" {
-            self.showHUD("用户名不能为空", image: UIImage(), withHiddenDelay: 2)
+            self.showHUD("用户名不能为空", image: UIImage(), withHiddenDelay: 1.0)
             return
         }
         
         if pwdTxtField.text == "" {
-            self.showHUD("密码不能为空", image: UIImage(), withHiddenDelay: 2)
+            self.showHUD("密码不能为空", image: UIImage(), withHiddenDelay: 1.0)
             return
         }
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        self.showLoadingStatusHUD("登录中...")
         // MARK: - 登录
         Alamofire.request(.POST, BaseURLString.stringByAppendingString("user/auth"), parameters: ["username":userTxtField.text!,"password":pwdTxtField.text!], encoding: .JSON).responseJSON {
             response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if let json = response.result.value {
+                self.removeHUD()
                 let loginResponseModel = ZGCLoginResonseModel.init(contentWithDic: json as! [NSObject : AnyObject])
                 if loginResponseModel.success == 1 {
                     UserDefault.setObject(loginResponseModel.data, forKey: "token")
@@ -152,6 +176,20 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
                     let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
                     self.view.window?.rootViewController = mainStoryBoard.instantiateInitialViewController()
                     
+                    if self.check2.selected == true {
+                        UserDefault.setBool(true, forKey: "isLogined")
+                        UserDefault.setObject(self.userTxtField.text!, forKey: "username")  
+                    }else {
+                        if self.check1.selected == true {
+                            UserDefault.setObject(self.userTxtField.text!, forKey: "username")
+                        }else {
+                            if UserDefault.objectForKey("username") != nil {
+                                UserDefault.removeObjectForKey("username")
+                            }
+                        }
+                        UserDefault.setBool(false, forKey: "isLogined")
+                    }
+                    UserDefault.synchronize()
                 }else {
                     self.showHUD(loginResponseModel.message, image: UIImage(), withHiddenDelay: 2.0)
                     return
@@ -161,10 +199,7 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
     }
     
     func showHUD(title:String, image:UIImage, withHiddenDelay delay:NSTimeInterval) {
-        customWindow = UIWindow(frame: CGRectMake(0, 64, KScreenWidth, KScreenHeight))
-        customWindow.windowLevel = UIWindowLevelNormal
-        customWindow.backgroundColor = UIColor.clearColor()
-        customWindow.makeKeyAndVisible()
+        self.initCustomWindow()
         
         let hud = MBProgressHUD()
         customWindow.addSubview(hud)
@@ -182,6 +217,33 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
         }
         
     }
+    
+    
+    func initCustomWindow() {
+        customWindow = UIWindow(frame: CGRectMake(0, 64, KScreenWidth, KScreenHeight))
+        customWindow.windowLevel = UIWindowLevelNormal
+        customWindow.backgroundColor = UIColor.clearColor()
+        customWindow.makeKeyAndVisible()
+    }
+    
+    func showLoadingStatusHUD (title:String) {
+        self.initCustomWindow()
+        let hud = MBProgressHUD()
+        customWindow.addSubview(hud)
+        hud.tag = 333
+        hud.mode = MBProgressHUDMode.Indeterminate
+        hud.labelFont = UIFont.systemFontOfSize(13.0)
+        hud.labelText = title
+        hud.show(true)
+    }
+    
+    func removeHUD () {
+        let hud = customWindow.viewWithTag(333) as! MBProgressHUD
+        hud.removeFromSuperview()
+        customWindow.removeFromSuperview()
+        customWindow = nil
+    }
+    
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         self.view.endEditing(true)
@@ -214,6 +276,13 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
             
         })
         
+    }
+    
+    func dismissKeyboard () {
+        self.view.endEditing(true)
+        UIView.animateWithDuration(0.35) { () -> Void in
+            self.view.bounds = CGRectMake(0, 0, KScreenWidth, KScreenHeight)
+        }
     }
 
     override func didReceiveMemoryWarning() {

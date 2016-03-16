@@ -22,6 +22,22 @@ extension UITextField {
         }
     }
 }
+
+//extension UIImageView {
+//    @IBInspectable var gc_cornerRadius: CGFloat? {
+//        get {
+//            if let cornerRadius = layer.cornerRadius {
+//                return  4
+//            }
+//            return nil
+//        }
+//        
+//        set {
+//            layer.cornerRadius = newValue!
+//        }
+//    }
+//}
+
 class ZGCCustomTxtField: UITextField {
 
     /*
@@ -36,5 +52,6 @@ class ZGCCustomTxtField: UITextField {
         textRect.origin.x -= 5
         return textRect
     }
+    
 
 }

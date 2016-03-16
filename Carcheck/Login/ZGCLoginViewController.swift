@@ -159,6 +159,11 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
             self.showHUD("密码不能为空", image: UIImage(), withHiddenDelay: 1.0)
             return
         }
+       
+        self.doLogining()
+    }
+    
+    func doLogining () {
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
@@ -178,7 +183,7 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
                     
                     if self.check2.selected == true {
                         UserDefault.setBool(true, forKey: "isLogined")
-                        UserDefault.setObject(self.userTxtField.text!, forKey: "username")  
+                        UserDefault.setObject(self.userTxtField.text!, forKey: "username")
                     }else {
                         if self.check1.selected == true {
                             UserDefault.setObject(self.userTxtField.text!, forKey: "username")
@@ -196,6 +201,7 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
                 }
             }
         }
+
     }
     
     func showHUD(title:String, image:UIImage, withHiddenDelay delay:NSTimeInterval) {
@@ -246,6 +252,9 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
     
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if userTxtField.text != "" && pwdTxtField.text != "" {
+            self.doLogining() 
+        }
         self.view.endEditing(true)
         UIView.animateWithDuration(0.35) { () -> Void in
             self.view.bounds = CGRectMake(0, 0, KScreenWidth, KScreenHeight)

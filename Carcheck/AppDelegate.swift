@@ -92,9 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         JPUSHService.registerDeviceToken(deviceToken)
         JPUSHService.setAlias(appKey, callbackSelector: "tagsAliasCallback:tags:alias:", object: self)
         
-        print("deviceToken\(deviceToken)")
-        
-        print("RegistrationID\(JPUSHService.registrationID())")
+        print("RegistrationID  \(JPUSHService.registrationID())")
         
 
     }
@@ -113,7 +111,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         completionHandler(UIBackgroundFetchResult.NewData)
         
         self.userInfo = userInfo
-
         self.showNotificationStatusBar()
 
     }

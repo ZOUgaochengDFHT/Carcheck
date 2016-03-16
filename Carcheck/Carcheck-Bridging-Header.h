@@ -29,3 +29,5 @@
 #import "UIImageView+AsyncReader.h"
 #import "ZGCItemListModel.h"
 #import "JPUSHService.h"
+#import "ChineseInclude.h"
+#import "PinYinForObjc.h"

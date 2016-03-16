@@ -21,6 +21,8 @@ class ZGCCarItemView: UIView {
     let bgImg = UIImage(named: "item_bg")
     var bgImgWidth:CGFloat!
     var bgImgHeight:CGFloat!
+    let tableNameArr = ["T_UnUpload", "T_ToAudit", "T_UnPass", "T_Pass"]
+
 
     var rightTextField: UITextField!
 
@@ -83,6 +85,25 @@ class ZGCCarItemView: UIView {
             iconImgView.userInteractionEnabled = true
             bgView.addSubview(iconImgView)
             iconImgView.image = iconImg
+            
+
+            if index <= 3 {
+                let badgeLabel = UILabel(frame: CGRectMake(bgView.width - 25, 5, 20, 20))
+                badgeLabel.backgroundColor = ButtonBackGroundColor
+                badgeLabel.font = UIFont.systemFontOfSize(10.0)
+                badgeLabel.textColor = UIColor.whiteColor()
+                badgeLabel.textAlignment = NSTextAlignment.Center
+                badgeLabel.layer.cornerRadius = 10
+                badgeLabel.clipsToBounds = true
+                badgeLabel.hidden = true
+                bgView.addSubview(badgeLabel)
+                
+                let unUploadArr = ZGCUnUploadManager().selectUnUploads(self.tableNameArr[index]) as NSArray
+                if unUploadArr.count > 0 {
+                    badgeLabel.text = "\(unUploadArr.count)"
+                    badgeLabel.hidden = false
+                }
+            }
             
             let txtLabel = UILabel.init(frame: CGRectMake(0, iconImgView.bottom, bgView.width, bgView.height - iconImgView.height - 20))
             txtLabel.font = UIFont.systemFontOfSize(10.0)

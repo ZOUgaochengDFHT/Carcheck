@@ -32,15 +32,15 @@ class CustomSearchBar: UIView , UITextFieldDelegate {
         textField.font = UIFont.systemFontOfSize(15.0)
         textField.tintColor = tintColor
         textField.tag == 345;
-        textField.layer.cornerRadius = self.frame.size.height/2
-        textField.becomeFirstResponder()
-        let leftImgView = UIImageView.init(frame: CGRectMake(0, 0, 15, 16))
-        leftImgView.image = UIImage(named: "ic_action_search_gray")
-        textField.leftView = leftImgView
-        textField.leftViewMode = UITextFieldViewMode.Always
+        textField.layer.cornerRadius = self.frame.size.height/5
+//        textField.becomeFirstResponder()
+//        let leftImgView = UIImageView.init(frame: CGRectMake(0, 0, 15, 16))
+//        leftImgView.image = UIImage(named: "ic_action_search_gray")
+//        textField.leftView = leftImgView
+//        textField.leftViewMode = UITextFieldViewMode.Always
         
-        let rightImgView = UIImageView.init(frame: CGRectMake(0, 0, 15, 20))
-        rightImgView.image = UIImage(named: "ic_action_voice_gray")
+        let rightImgView = UIImageView.init(frame: CGRectMake(0, 0, 20, 20))
+        rightImgView.image = UIImage(named: "item_search")
         textField.rightView = rightImgView
         rightImgView.userInteractionEnabled = true
         textField.rightViewMode = UITextFieldViewMode.Always
@@ -56,6 +56,7 @@ class CustomSearchBar: UIView , UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool  {
+        self.endEditing(true)
         searchBtnHandler(textField.text!)
         return true;
     }// called when 'return' key pressed. return NO to ignore.

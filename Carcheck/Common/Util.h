@@ -30,7 +30,11 @@
  */
 + (BOOL)validateCarNo:(NSString*)carNo;
 
-
+/**
+ *  车辆VIN码验证
+ *
+ */
++ (BOOL)validateVinNo:(NSString*)vinNo;
 /**
  *  获取工单状态
  *

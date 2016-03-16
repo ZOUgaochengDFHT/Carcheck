@@ -27,6 +27,7 @@ class ZGCVehicleTypeListViewController: ZGCBaseViewController, UITableViewDataSo
         let cellNib:UINib = UINib(nibName: identifier, bundle: nil)
         carBrandListTableView.registerNib(cellNib, forCellReuseIdentifier: identifier)
         carBrandListTableView.tableFooterView = UIView()
+        carBrandListTableView.sectionIndexColor = ButtonBackGroundColor
 
         self.navigationItem.title = "基本信息-车辆型号"
 

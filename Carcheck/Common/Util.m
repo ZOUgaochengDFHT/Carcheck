@@ -44,6 +44,16 @@
     NSPredicate *carTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",carRegex];
     return [carTest evaluateWithObject:carNo];
 }
+
+/**
+ *  车辆VIN码验证
+ *
+ */
++ (BOOL)validateVinNo:(NSString*)vinNo {
+    NSString *carRegex = @"^[A-Za-z_0-9]{17}$";
+    NSPredicate *carTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",carRegex];
+    return [carTest evaluateWithObject:vinNo];
+}
 /**
   *  获取工单状态
   *

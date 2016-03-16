@@ -275,7 +275,7 @@ class ZGCLoginViewController: UIViewController, ZGCCheckBoxDelegate, UITextField
             var YOffset:CGFloat!
             if self.loginTxtFieldTag != nil {
                 if self.pwdTxtField.bottom > KScreenHeight - (keyboardSize?.height)! {
-                    YOffset = (keyboardSize?.height)! - (KScreenHeight - self.pwdTxtField.bottom)
+                    YOffset = (keyboardSize?.height)! - (KScreenHeight - self.check1.bottom + 10)
                     UIView.animateWithDuration(0.35) { () -> Void in
                         self.view.bounds = CGRectMake(0, YOffset, KScreenWidth, KScreenHeight)
                     }

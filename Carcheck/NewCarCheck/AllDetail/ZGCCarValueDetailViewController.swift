@@ -159,7 +159,7 @@ class ZGCCarValueDetailViewController: ZGCBaseViewController, UITableViewDataSou
         
         
         
-        carBaseScrollView = ZGCCarBaseScrollView.init(frame: CGRectMake(0, topBegin, KScreenWidth, KScreenHeight - NavAndStausHeight - topBegin), tar:self, sel:"tapAction:", isEditingOrNot:isEditingOrNot)
+        carBaseScrollView = ZGCCarBaseScrollView.init(frame: CGRectMake(0, topBegin, KScreenWidth, KScreenHeight - NavAndStausHeight - topBegin * 2), tar:self, sel:"tapAction:", isEditingOrNot:isEditingOrNot)
         carBaseScrollView.backgroundColor = UIColor.clearColor()
         self.view.addSubview(carBaseScrollView)
         carBaseScrollView.delegate = self

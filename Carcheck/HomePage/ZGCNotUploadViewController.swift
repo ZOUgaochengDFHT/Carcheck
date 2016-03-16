@@ -27,6 +27,10 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
     var keyword: String = ""
     
     var searchBar: CustomSearchBar!
+    
+    var emptyImgView: UIImageView!
+    
+    var unUploadArr: NSArray!
 
     
     override func viewDidLoad() {
@@ -51,6 +55,12 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
         
         
         self.initBackButton()
+        
+        self.initCustomSearchBar()
+    }
+    
+    override func initDismissKeyboardTap() {
+        
     }
     
     override func backButtonClicked() {
@@ -60,7 +70,7 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
     func reloadUnUploadData () {
         self.modelArr.removeAllObjects()
         
-        let unUploadArr = ZGCUnUploadManager().selectUnUploads(tableNameArr[index]) as NSArray
+        unUploadArr = ZGCUnUploadManager().selectUnUploads(tableNameArr[index]) as NSArray
         if unUploadArr.count > 0 {
             unUploadArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                 self.modelArr.addObject(object)
@@ -80,25 +90,37 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
         Alamofire.request(.POST, BaseURLString.stringByAppendingString("pingche/searchlist"), parameters: paramDic, encoding: .JSON, headers: ["token":UserDefault.objectForKey("token") as! String]).responseJSON {response in
             
             if let json = response.result.value {
-                let modelArr = NSMutableArray()
                 if json.objectForKey("success") as! NSNumber == 1 {
                     (json.objectForKey("data") as! NSArray).enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
                         let itemListModel = ZGCItemListModel(contentWithDic: object as! [NSObject : AnyObject])
-                        modelArr.addObject(itemListModel)
+                        self.modelArr.addObject(itemListModel)
                     })
                     
-                    self.modelArr.addObject(modelArr)
                     
                     if self.modelArr.count == 0 {
                         self.initEmptyImageView()
+                    }else {
+                        if self.emptyImgView != nil {
+                            self.emptyImgView.removeFromSuperview()
+                        }
                     }
-                    
                     self.notUploadTableView.reloadData()
                     
                 }
                 
             }
         }
+    }
+    
+    func initEmptyImageView () {
+        let emptyImg = UIImage(named: "ic_empty")
+        let emptyWidth = emptyImg?.size.width
+        
+        emptyImgView = UIImageView()
+        emptyImgView.frame = CGRectMake((KScreenWidth - emptyWidth!)/2, (KScreenHeight - NavAndStausHeight - emptyWidth!)/2, emptyWidth!, emptyWidth!)
+        self.view.addSubview(emptyImgView)
+        emptyImgView.image = emptyImg
+        
     }
     
     
@@ -127,7 +149,9 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
         cell.contentView.backgroundColor = CellBgColor
         
         cell.uploadCarCheckMessageHandler = {(tag:Int, model:UnUpload) -> Void in
-            
+            if ZGCillegalValueDBManager().selectValueOrIllegals().count == 0 {
+                
+            }
             let value = (ZGCillegalValueDBManager().selectValueOrIllegals() as NSArray).lastObject as! ValueOrIllegal
             if value.demandLoans == "" {
                 self.showHUD("请填写贷款需求再上传", image: UIImage(), withHiddenDelay: 1.0)
@@ -234,27 +258,71 @@ class ZGCNotUploadViewController: ZGCBaseViewController, UITableViewDelegate, UI
     
     func initCustomSearchBar () {
         
-        UISearchBar
-        
-        searchBar = CustomSearchBar(frame: CGRectMake(0, 0, KScreenWidth/4, 30))
-        searchBar.textField.tag = 300
+        searchBar = CustomSearchBar(frame: CGRectMake(0, 0, KScreenWidth*5/16, 30))
         searchBar.setPlaceholder("", tintColor: ButtonBackGroundColor, sel: "customSearchBarVoiceButtonClicked", target: self)
+
+        let btn = UIBarButtonItem(customView: searchBar)
+        let negativeSpacer = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace, target: nil, action: nil)
+        negativeSpacer.width = -10
+        self.navigationItem.rightBarButtonItems = [negativeSpacer, btn]
+        
+        
         searchBar.searchBtnHandler = {
             (searchStr:String) -> Void in
-            
-            if searchStr != "" {
-                self.loadDataBySearchCondition(searchStr)
-            }
+            self.loadDataBySearchCondition(searchStr)
+
         }
     }
     
     func loadDataBySearchCondition (searchStr:String) {
-        self.requestData("0", status: self.status, keyWord: searchStr)
+        self.modelArr.removeAllObjects()
+        if index != 0 {
+            self.requestData("0", status: self.status, keyWord: searchStr)
+        }else {
+            let resultArr = NSMutableArray()
+            if searchStr != "" {
+                if ChineseInclude.isIncludeChineseInString(searchStr) == false {
+                    unUploadArr.enumerateObjectsUsingBlock({ (object, index, stop) -> Void in
+                        let unUploadModel = object as! UnUpload
+                        let contentStr = "\(unUploadModel.name)\(unUploadModel.licenseNo)\(unUploadModel.vehicleType)"
+                        if ChineseInclude.isIncludeChineseInString(contentStr) {
+                            let tempPinYinStr:NSString = PinYinForObjc.chineseConvertToPinYin(contentStr)
+                            let titleResult:NSRange = tempPinYinStr.rangeOfString(searchStr, options: NSStringCompareOptions.CaseInsensitiveSearch)
+                            if titleResult.length > 0 {
+                                resultArr.addObject(unUploadModel)
+                            }
+                            
+                            let tempPinYinHeadStr:NSString = PinYinForObjc.chineseConvertToPinYinHead(contentStr)
+                            let titleHeadResult:NSRange = tempPinYinHeadStr.rangeOfString(searchStr, options: NSStringCompareOptions.CaseInsensitiveSearch)
+                            if titleHeadResult.length > 0 {
+                                resultArr.addObject(unUploadModel)
+                            }
+                        }else {
+                            let titleResult:NSRange = NSString(string: contentStr).rangeOfString(searchStr, options: NSStringCompareOptions.CaseInsensitiveSearch)
+                            if titleResult.length > 0 {
+                                resultArr.addObject(unUploadModel)
+                            }
+                        }
+                        
+                    })
+                }
+                self.modelArr = resultArr.mutableCopy() as! NSMutableArray
+                notUploadTableView.reloadData()
+            }else {
+                self.reloadUnUploadData()
+            }
+            
+          
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.view.endEditing(true)
     }
     
 

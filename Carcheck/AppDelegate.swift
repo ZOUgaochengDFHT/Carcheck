@@ -16,7 +16,9 @@ import UIKit
 //        CLSLogv(format, getVaList([]))
 //    #endif
 //}
-
+ enum NotificationAccept {
+    case isAccept //   推送已接受
+ }
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationWindow: UIWindow!
     
     var userInfo:[NSObject : AnyObject]!
+    
+    var notiAccept : NotificationAccept!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -111,8 +115,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         completionHandler(UIBackgroundFetchResult.NewData)
         
         self.userInfo = userInfo
-        self.showNotificationStatusBar()
-
+        if notiAccept != NotificationAccept.isAccept {
+            self.showNotificationStatusBar()
+        }
     }
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
@@ -126,6 +131,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func pushViewControllerWithUserInfo(userinfo:[NSObject : AnyObject]) {
+    
+        notiAccept = NotificationAccept.isAccept
         let stausStr = (userinfo as NSDictionary).objectForKey("status") as! String
         var index = 0
         switch stausStr {

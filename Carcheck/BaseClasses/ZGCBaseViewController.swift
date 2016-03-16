@@ -24,11 +24,7 @@ class ZGCBaseViewController: UIViewController {
         
 //        self.navigationController?.interactivePopGestureRecognizer?.enabled = true
         
-        /**
-        *@利用手势控制键盘的收起
-        */
-        let tap = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
-        self.view.addGestureRecognizer(tap)
+        self.initDismissKeyboardTap()
 
         self.navigationController?.navigationBar.translucent = false
         // Do any additional setup after loading the view.
@@ -41,6 +37,14 @@ class ZGCBaseViewController: UIViewController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
 
+    }
+    
+    func initDismissKeyboardTap () {
+        /**
+         *@利用手势控制键盘的收起
+         */
+        let tap = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tap)
     }
     
     //创建返回按钮
@@ -70,17 +74,6 @@ class ZGCBaseViewController: UIViewController {
         self.navigationItem.leftBarButtonItems = [negativeSpacer, backBarBtn]
     }
     
-    func initEmptyImageView () {
-        let emptyImg = UIImage(named: "ic_empty")
-        let emptyWidth = emptyImg?.size.width
-        
-        let iconImgView:UIImageView = UIImageView()
-        iconImgView.frame = CGRectMake((KScreenWidth - emptyWidth!)/2, (KScreenHeight - NavAndStausHeight - emptyWidth!)/2, emptyWidth!, emptyWidth!)
-        iconImgView.userInteractionEnabled = true
-        self.view.addSubview(iconImgView)
-        iconImgView.image = emptyImg
-
-    }
     
     func initUpOrNextView (tapArr:NSArray, imgArr:NSArray) {
         var imgNameArr = imgArr

@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		53B6FF881C99F7B700A7D6B4 /* ChineseInclude.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B6FF7A1C99F7B700A7D6B4 /* ChineseInclude.m */; };
+		53B6FF891C99F7B700A7D6B4 /* ChineseToPinyinResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B6FF7C1C99F7B700A7D6B4 /* ChineseToPinyinResource.m */; };
+		53B6FF8B1C99F7B700A7D6B4 /* NSString+PinYin4Cocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B6FF801C99F7B700A7D6B4 /* NSString+PinYin4Cocoa.m */; };
+		53B6FF8C1C99F7B700A7D6B4 /* PinyinFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B6FF821C99F7B700A7D6B4 /* PinyinFormatter.m */; };
+		53B6FF8D1C99F7B700A7D6B4 /* PinYinForObjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B6FF841C99F7B700A7D6B4 /* PinYinForObjc.m */; };
+		53B6FF8E1C99F7B700A7D6B4 /* PinyinHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B6FF861C99F7B700A7D6B4 /* PinyinHelper.m */; };
+		53B6FF8F1C99F7B700A7D6B4 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 53B6FF871C99F7B700A7D6B4 /* unicode_to_hanyu_pinyin.txt */; };
+		53B6FF951C99F85B00A7D6B4 /* HanyuPinyinOutputFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 53B6FF941C99F85B00A7D6B4 /* HanyuPinyinOutputFormat.m */; };
 		8E79F5B5FA2F46FDACC7DE06 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F150C6E80DD9E533C818FC7 /* Pods.framework */; };
 		BC05EA921C9542F5008BE0A1 /* UIImageView+AsyncReader.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA8D1C9542F5008BE0A1 /* UIImageView+AsyncReader.m */; };
 		BC05EA931C9542F5008BE0A1 /* ZGCAsyncImageReader.m in Sources */ = {isa = PBXBuildFile; fileRef = BC05EA8F1C9542F5008BE0A1 /* ZGCAsyncImageReader.m */; };
@@ -167,6 +175,21 @@
 
 /* Begin PBXFileReference section */
 		4F150C6E80DD9E533C818FC7 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		53B6FF791C99F7B700A7D6B4 /* ChineseInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChineseInclude.h; sourceTree = "<group>"; };
+		53B6FF7A1C99F7B700A7D6B4 /* ChineseInclude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChineseInclude.m; sourceTree = "<group>"; };
+		53B6FF7B1C99F7B700A7D6B4 /* ChineseToPinyinResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChineseToPinyinResource.h; sourceTree = "<group>"; };
+		53B6FF7C1C99F7B700A7D6B4 /* ChineseToPinyinResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChineseToPinyinResource.m; sourceTree = "<group>"; };
+		53B6FF7F1C99F7B700A7D6B4 /* NSString+PinYin4Cocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PinYin4Cocoa.h"; sourceTree = "<group>"; };
+		53B6FF801C99F7B700A7D6B4 /* NSString+PinYin4Cocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PinYin4Cocoa.m"; sourceTree = "<group>"; };
+		53B6FF811C99F7B700A7D6B4 /* PinyinFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinyinFormatter.h; sourceTree = "<group>"; };
+		53B6FF821C99F7B700A7D6B4 /* PinyinFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinyinFormatter.m; sourceTree = "<group>"; };
+		53B6FF831C99F7B700A7D6B4 /* PinYinForObjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinYinForObjc.h; sourceTree = "<group>"; };
+		53B6FF841C99F7B700A7D6B4 /* PinYinForObjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinYinForObjc.m; sourceTree = "<group>"; };
+		53B6FF851C99F7B700A7D6B4 /* PinyinHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinyinHelper.h; sourceTree = "<group>"; };
+		53B6FF861C99F7B700A7D6B4 /* PinyinHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinyinHelper.m; sourceTree = "<group>"; };
+		53B6FF871C99F7B700A7D6B4 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
+		53B6FF931C99F85B00A7D6B4 /* HanyuPinyinOutputFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HanyuPinyinOutputFormat.h; sourceTree = "<group>"; };
+		53B6FF941C99F85B00A7D6B4 /* HanyuPinyinOutputFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HanyuPinyinOutputFormat.m; sourceTree = "<group>"; };
 		916A3067ABD04C107A4F304C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BC05EA8C1C9542F5008BE0A1 /* UIImageView+AsyncReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AsyncReader.h"; sourceTree = "<group>"; };
 		BC05EA8D1C9542F5008BE0A1 /* UIImageView+AsyncReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AsyncReader.m"; sourceTree = "<group>"; };
@@ -383,6 +406,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		53B6FF781C99F7B700A7D6B4 /* PinYin */ = {
+			isa = PBXGroup;
+			children = (
+				53B6FF791C99F7B700A7D6B4 /* ChineseInclude.h */,
+				53B6FF7A1C99F7B700A7D6B4 /* ChineseInclude.m */,
+				53B6FF7B1C99F7B700A7D6B4 /* ChineseToPinyinResource.h */,
+				53B6FF7C1C99F7B700A7D6B4 /* ChineseToPinyinResource.m */,
+				53B6FF931C99F85B00A7D6B4 /* HanyuPinyinOutputFormat.h */,
+				53B6FF941C99F85B00A7D6B4 /* HanyuPinyinOutputFormat.m */,
+				53B6FF7F1C99F7B700A7D6B4 /* NSString+PinYin4Cocoa.h */,
+				53B6FF801C99F7B700A7D6B4 /* NSString+PinYin4Cocoa.m */,
+				53B6FF811C99F7B700A7D6B4 /* PinyinFormatter.h */,
+				53B6FF821C99F7B700A7D6B4 /* PinyinFormatter.m */,
+				53B6FF831C99F7B700A7D6B4 /* PinYinForObjc.h */,
+				53B6FF841C99F7B700A7D6B4 /* PinYinForObjc.m */,
+				53B6FF851C99F7B700A7D6B4 /* PinyinHelper.h */,
+				53B6FF861C99F7B700A7D6B4 /* PinyinHelper.m */,
+				53B6FF871C99F7B700A7D6B4 /* unicode_to_hanyu_pinyin.txt */,
+			);
+			path = PinYin;
+			sourceTree = "<group>";
+		};
 		6E5C6FA464350E2ABD955E76 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -742,6 +787,7 @@
 				BCE7C7021C921F7200607485 /* DataService.m */,
 				BCE7C7081C926FBE00607485 /* Util.h */,
 				BCE7C7091C926FBE00607485 /* Util.m */,
+				53B6FF781C99F7B700A7D6B4 /* PinYin */,
 				BC78A2F51C99355A0000727E /* lib */,
 				BC05EA9C1C954948008BE0A1 /* SUNSlideSwitchView */,
 				BC05EA951C95491D008BE0A1 /* LMComBoxView */,
@@ -824,7 +870,7 @@
 				TargetAttributes = {
 					BC63375F1C70204200E0A3E7 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 8JJ9XYR4HC;
+						DevelopmentTeam = PQ9V6NYB7C;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -874,6 +920,7 @@
 				BC126AD61C841AF500897F03 /* ZGCVehicleStyleTableViewCell.xib in Resources */,
 				BC301BA61C76F48000E8F4B7 /* whiteArrow.png in Resources */,
 				BC71E42F1C852CAA0080E7E5 /* ZGCVehicleBaseConfigViewController.xib in Resources */,
+				53B6FF8F1C99F7B700A7D6B4 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				BC63376E1C70204200E0A3E7 /* LaunchScreen.storyboard in Resources */,
 				BC126AD81C841AF500897F03 /* ZGCVehicleStyleViewController.xib in Resources */,
 				BC78A3001C99367A0000727E /* PushConfig.plist in Resources */,
@@ -997,6 +1044,7 @@
 				BCBDFF781C8FFEEA001D4C03 /* CustomTextField.swift in Sources */,
 				BCD5791B1C744DB7000D7EE8 /* ZGCNotUploadTableViewCell.swift in Sources */,
 				BC63379F1C705CA500E0A3E7 /* ZGCHomePageViewController.swift in Sources */,
+				53B6FF8B1C99F7B700A7D6B4 /* NSString+PinYin4Cocoa.m in Sources */,
 				BC301B8C1C76F27B00E8F4B7 /* BaseTableView.m in Sources */,
 				BC71E42B1C84F7B30080E7E5 /* ZGCConfigDBManager.swift in Sources */,
 				BC301B8F1C76F28900E8F4B7 /* UIView+Additions.m in Sources */,
@@ -1010,6 +1058,7 @@
 				BC78A2F11C9848EA0000727E /* ZGCValuationResultViewController.swift in Sources */,
 				BC126ACB1C841AF500897F03 /* ZGCCarBaseScrollView.swift in Sources */,
 				BC05EA931C9542F5008BE0A1 /* ZGCAsyncImageReader.m in Sources */,
+				53B6FF951C99F85B00A7D6B4 /* HanyuPinyinOutputFormat.m in Sources */,
 				BC77BD761C8E9C0500C64AC7 /* ZGCImageDBManager.swift in Sources */,
 				BCD579301C75872D000D7EE8 /* ZGCLoginResonseModel.m in Sources */,
 				BC9898801C8940E7009AF856 /* ZGCPhotoDeleteBarView.swift in Sources */,
@@ -1017,6 +1066,7 @@
 				BCE7C70A1C926FBE00607485 /* Util.m in Sources */,
 				BCBDFF791C8FFEEA001D4C03 /* CustomSearchBar.swift in Sources */,
 				BC126ACC1C841AF500897F03 /* ZGCCarValueDetailViewController.swift in Sources */,
+				53B6FF881C99F7B700A7D6B4 /* ChineseInclude.m in Sources */,
 				BC126AD01C841AF500897F03 /* ZGCVehicleConfigDetailScrollView.swift in Sources */,
 				BC63379B1C705C3900E0A3E7 /* ZGCBaseViewController.swift in Sources */,
 				BC126ACF1C841AF500897F03 /* ZGCPhotosListTableViewCell.swift in Sources */,
@@ -1029,6 +1079,7 @@
 				BCE7C70C1C928E9100607485 /* ZGCCustomPickerView.swift in Sources */,
 				BC71E4291C84F77E0080E7E5 /* ZGCPersonDBManager.swift in Sources */,
 				BC126AD51C841AF500897F03 /* ZGCVehicleStyleTableViewCell.swift in Sources */,
+				53B6FF8C1C99F7B700A7D6B4 /* PinyinFormatter.m in Sources */,
 				BC78A2E61C97DB5D0000727E /* ZGCItemListModel.m in Sources */,
 				BC4B3B8F1C7C1C91007CDE24 /* SKCaptionView.swift in Sources */,
 				BCD5792C1C756479000D7EE8 /* ZGCLoginViewController.swift in Sources */,
@@ -1041,6 +1092,7 @@
 				BC77BD701C8E601300C64AC7 /* ZGCUnUploadManager.swift in Sources */,
 				BC4B3B931C7C1C91007CDE24 /* SKPhoto.swift in Sources */,
 				BC9369EB1C73275A003E829C /* ZGCCheckBox.swift in Sources */,
+				53B6FF8E1C99F7B700A7D6B4 /* PinyinHelper.m in Sources */,
 				BC126AD91C841AF500897F03 /* ZGCVehicleTypeListViewController.swift in Sources */,
 				BC7FC43E1C8D7845008CA7A8 /* ZGCPhotoImgView.swift in Sources */,
 				BC05EA9A1C95491D008BE0A1 /* LMComBoxView.m in Sources */,
@@ -1049,6 +1101,7 @@
 				BC6904FD1C86B41000C2877E /* ZGCVehicleConfigViewController.swift in Sources */,
 				BC126AD71C841AF500897F03 /* ZGCVehicleStyleViewController.swift in Sources */,
 				BC78A2E01C97CF3E0000727E /* ZGCUploadDataManager.swift in Sources */,
+				53B6FF891C99F7B700A7D6B4 /* ChineseToPinyinResource.m in Sources */,
 				BC77BD781C8EAE0500C64AC7 /* ZGCImageTwoDBManager.swift in Sources */,
 				BC61C7311C7C3607000D413B /* ZGCStaticsModel.m in Sources */,
 				BC126AD21C841AF500897F03 /* ZGCCarBrandListTableViewCell.swift in Sources */,
@@ -1058,6 +1111,7 @@
 				BC4B3B921C7C1C91007CDE24 /* SKIndicatorView.swift in Sources */,
 				BC77BD721C8E604100C64AC7 /* UnUpload.swift in Sources */,
 				BC6905041C86CBD600C2877E /* ZGCTakePhotoView.swift in Sources */,
+				53B6FF8D1C99F7B700A7D6B4 /* PinYinForObjc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1200,7 +1254,7 @@
 			baseConfigurationReference = FF2E46ED2C637A24AF54E5CD /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Gaocheng Zou (94V8E9Q33N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gaocheng Zou (94V8E9Q33N)";
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = Carcheck/Info.plist;
